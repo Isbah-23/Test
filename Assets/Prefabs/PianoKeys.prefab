@@ -2965,7 +2965,6 @@ GameObject:
   - component: {fileID: 6153490653335696001}
   - component: {fileID: 1598198422929600775}
   - component: {fileID: 8651715208353392646}
-  - component: {fileID: 5975185467512068629}
   m_Layer: 0
   m_Name: PianoKey.028
   m_TagString: Untagged
@@ -3076,23 +3075,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0019113588, y: 0.0033643171, z: 0.0128904255}
   m_Center: {x: 0.00024991395, y: -0.0015821639, z: -0.0064452128}
---- !u!114 &5975185467512068629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2015830311152114249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationAngle: 10
-  releaseSpeed: 5
-  keyboardKey: 97
-  pianoSound: {fileID: 8300000, guid: 54eda1b07fa118543b8da45b4007e356, type: 3}
-  pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &2033517899820976179
 GameObject:
   m_ObjectHideFlags: 0
@@ -6302,7 +6284,6 @@ GameObject:
   - component: {fileID: 6379146001955663382}
   - component: {fileID: 2772420707320142578}
   - component: {fileID: 5976919036623990625}
-  - component: {fileID: 4514815111035824020}
   - component: {fileID: 3988850883543126738}
   - component: {fileID: 2878814960547982873}
   m_Layer: 0
@@ -6377,23 +6358,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4514815111035824020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4555533419544547130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationAngle: 10
-  releaseSpeed: 5
-  keyboardKey: 97
-  pianoSound: {fileID: 8300000, guid: 54eda1b07fa118543b8da45b4007e356, type: 3}
-  pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!65 &3988850883543126738
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8903,7 +8867,6 @@ GameObject:
   - component: {fileID: 5621062383687960716}
   - component: {fileID: 7343118756014479748}
   - component: {fileID: 808462826101357297}
-  - component: {fileID: 4825347995013828373}
   - component: {fileID: 2432360826157168080}
   - component: {fileID: 4179997713985289332}
   m_Layer: 0
@@ -8978,23 +8941,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4825347995013828373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6942541630636525342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationAngle: 10
-  releaseSpeed: 5
-  keyboardKey: 115
-  pianoSound: {fileID: 8300000, guid: 54eda1b07fa118543b8da45b4007e356, type: 3}
-  pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!65 &2432360826157168080
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9030,7 +8976,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationAngle: 10
   releaseSpeed: 5
-  keyboardKey: 97
+  keyboardKey: 115
   pianoSound: {fileID: 8300000, guid: 54eda1b07fa118543b8da45b4007e356, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &6955548166582053323
@@ -9538,7 +9484,6 @@ GameObject:
   - component: {fileID: 4905266970032501875}
   - component: {fileID: 5269781767646054836}
   - component: {fileID: 5439054219924574334}
-  - component: {fileID: 4467109819868803220}
   m_Layer: 0
   m_Name: PianoKey.036
   m_TagString: Untagged
@@ -9649,23 +9594,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.00094741106, y: 0.0014158051, z: 0.0066094026}
   m_Center: {x: 0, y: 0.0007079, z: -0.0033047013}
---- !u!114 &4467109819868803220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7861126670020342380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationAngle: 10
-  releaseSpeed: 5
-  keyboardKey: 97
-  pianoSound: {fileID: 8300000, guid: 54eda1b07fa118543b8da45b4007e356, type: 3}
-  pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &8175403697348089893
 GameObject:
   m_ObjectHideFlags: 0
@@ -10306,7 +10234,7 @@ Transform:
   m_GameObject: {fileID: 8453853161920125255}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.8199997, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

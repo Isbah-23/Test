@@ -4,8 +4,8 @@ public class PianoKey : MonoBehaviour
 {
     // Parameters for key press and release
     private Quaternion originalRotation; 
-    public float rotationAngle = 5f; // angle of rotation for key press
-    public float releaseSpeed = 7f;
+    private float rotationAngle = 7f; // angle of rotation for key press
+    private float releaseSpeed = 10f;
     public KeyCode keyboardKey; // temporary
     private bool isPressed = false;
     
