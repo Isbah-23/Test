@@ -42,7 +42,7 @@ public class PianoKey : MonoBehaviour
     void Update()
     {
         // check for input
-        if (Input.GetMouseButtonDown(0) /*Input.GetKeyDown(keyboardKey)*/ && !isPressed)
+        if (/*Input.GetKeyDown(keyboardKey)*/ Input.GetMouseButtonDown(0) && !isPressed)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit) && hit.transform == transform)

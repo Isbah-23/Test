@@ -481,7 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 0
+  keyboardKey: 101
   pianoSound: {fileID: 8300000, guid: b9f3527ecf10630469d278b086ce6ea8, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &349116076733195024
@@ -844,7 +844,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 99
+  keyboardKey: 120
   pianoSound: {fileID: 8300000, guid: 2841485faf09c804186a9ffbc326b679, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &513776508267310540
@@ -965,7 +965,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 0
+  keyboardKey: 111
   pianoSound: {fileID: 8300000, guid: 73b0d87224cd4c846bba2d6afa434aa5, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &535139490648142974
@@ -2175,7 +2175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 0
+  keyboardKey: 116
   pianoSound: {fileID: 8300000, guid: 8898ab86e61e12545ad74fe2d2c60ca1, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &1659456123132010765
@@ -2538,7 +2538,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 98
+  keyboardKey: 99
   pianoSound: {fileID: 8300000, guid: 7dec697cd1be9744294eac72f0081605, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &1972186619413866689
@@ -3748,7 +3748,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 120
+  keyboardKey: 0
   pianoSound: {fileID: 8300000, guid: 70cb84b14de9f214b87c3242b61b19b1, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &2710540936005875937
@@ -4353,7 +4353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 0
+  keyboardKey: 121
   pianoSound: {fileID: 8300000, guid: 9cf64a023650f2347ae36f6ba59acbbb, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &3044573893910308404
@@ -4716,7 +4716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 0
+  keyboardKey: 44
   pianoSound: {fileID: 8300000, guid: fb6a097ae1f3b214e87c6d4926fa4681, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &3274195920133403346
@@ -5563,7 +5563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 0
+  keyboardKey: 98
   pianoSound: {fileID: 8300000, guid: 1684a52154c105642a55dad1e4a77943, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &4036314417232511561
@@ -5684,7 +5684,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 0
+  keyboardKey: 117
   pianoSound: {fileID: 8300000, guid: 9d7ada1430a5a49488ba02572b6f618a, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &4274924586590865484
@@ -6410,7 +6410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 0
+  keyboardKey: 110
   pianoSound: {fileID: 8300000, guid: 306198b5a6655f443b1032c0280ae00c, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &4722468091092531325
@@ -6531,7 +6531,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 0
+  keyboardKey: 114
   pianoSound: {fileID: 8300000, guid: b8c761977e8d23a43b6a5cae4dda815a, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &4782542530206014082
@@ -6773,7 +6773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 109
+  keyboardKey: 0
   pianoSound: {fileID: 8300000, guid: 6234d05e72845c24d8d656e53c640130, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &4815175028178261042
@@ -6894,7 +6894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 0
+  keyboardKey: 105
   pianoSound: {fileID: 8300000, guid: d2190691c8af2e149bc0089094c0c134, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &4907965656307794885
@@ -9193,7 +9193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 0
+  keyboardKey: 112
   pianoSound: {fileID: 8300000, guid: 60f57230ec2a05d45b620da278b67afc, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &7823977609078843597
@@ -9556,7 +9556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 0
+  keyboardKey: 109
   pianoSound: {fileID: 8300000, guid: 048969376d7a0c94996ec2d3538b7bc0, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &8235815258692229468
@@ -9677,7 +9677,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 110
+  keyboardKey: 118
   pianoSound: {fileID: 8300000, guid: 1355575aca01adb459de199fb448e5e6, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &8253749584739340951
@@ -10401,7 +10401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 0
+  keyboardKey: 46
   pianoSound: {fileID: 8300000, guid: cb49da92a295e724f9289acbabd45d5c, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &8663336635051298014
@@ -10764,6 +10764,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81fcd05cc7d6a4faaeac1dd828a736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardKey: 118
+  keyboardKey: 0
   pianoSound: {fileID: 8300000, guid: c02e053edae964842a55e223b87913e8, type: 3}
   pressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
