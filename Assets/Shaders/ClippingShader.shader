@@ -8,8 +8,9 @@ Shader "Custom/ClippingShader"
         _Smoothness ("Smoothness", Range(0, 1)) = 0.5
         _Alpha ("Alpha", Range(0, 1)) = 1.0
         _AlphaClipThreshold ("Alpha Clip Threshold", Range(0, 1)) = 0.5
+        _ClipPlane ("Clip Plane", Vector) = (0, 1, 0, -1.7) // Default clipping plane (x, y, z, w)
     }
-
+    
     SubShader
     {
         Tags { "RenderType"="Opaque" }
@@ -26,16 +27,23 @@ Shader "Custom/ClippingShader"
         half _Smoothness;
         float _Alpha;
         float _AlphaClipThreshold;
+        float4 _ClipPlane; // Clipping plane (x, y, z, w)
 
         struct Input
         {
             float2 uv_MainTex;
-            float3 worldPos; // Position for fresnel
+            float3 worldPos; // World position for clipping and fresnel
             float3 viewDir; // View direction for fresnel
         };
 
         void surf(Input IN, inout SurfaceOutputStandard o)
         {
+            // Clipping based on the clipping plane
+            if (dot(float4(IN.worldPos, 1.0), _ClipPlane) < 0)
+            {
+                discard; // Discard the pixel if it's outside the clipping plane
+            }
+
             // Albedo (set base color to orange)
             o.Albedo = _BaseColor.rgb;
 
@@ -47,7 +55,7 @@ Shader "Custom/ClippingShader"
             float fresnel = pow(1.0 - dot(normalize(IN.viewDir), normalize(IN.worldPos)), 3.0);
 
             // Emission: Multiply fresnel with emission color (Intensity of red glow)
-            o.Emission = fresnel * _EmissionColor.rgb * 3.5; // Intensity = 1.5
+            o.Emission = fresnel * _EmissionColor.rgb * 3.5; // Intensity = 3.5
 
             // Alpha and Alpha clipping (optional)
             o.Alpha = _Alpha;
