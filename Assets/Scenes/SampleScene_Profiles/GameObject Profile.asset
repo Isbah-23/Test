@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e6292b2c06870d4495f009f912b9600, type: 3}
-  m_Name: Main Camera Profile
+  m_Name: GameObject Profile
   m_EditorClassIdentifier: 
   settings:
-  - {fileID: 1354703633830285349}
---- !u!114 &1354703633830285349
+  - {fileID: 5042528912559141356}
+--- !u!114 &5042528912559141356
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -32,12 +32,12 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 0.14
+    value: 7.64
   threshold:
     overrideState: 0
-    value: 2
+    value: 1
   softKnee:
-    overrideState: 1
+    overrideState: 0
     value: 0.5
   clamp:
     overrideState: 0
