@@ -1,14 +1,14 @@
-Shader "Custom/ClippingShader"
+Shader "Custom/ClippingShaderPurple"
 {
     Properties
     {
-        _BaseColor ("Base Color", Color) = (1, 1, 1, 1)
-        _EmissionColor ("Emission Color", Color) = (1, 1, 1, 1)
+        _BaseColor ("Base Color", Color) = (0.5, 0.165, 0.749, 1)   // RGB(68, 42, 191) color
+        _EmissionColor ("Emission Color", Color) = (0.5, 0.165, 0.749, 1)   // RGB(68, 42, 191) color
         _Metallic ("Metallic", Range(0, 1)) = 0.0
         _Smoothness ("Smoothness", Range(0, 1)) = 0.5
         _Alpha ("Alpha", Range(0, 1)) = 1.0
         _AlphaClipThreshold ("Alpha Clip Threshold", Range(0, 1)) = 0.5
-        _ClipPlane ("Clip Plane", Vector) = (0, 1, 0, -1.7) // Default clipping plane (x, y, z, w)
+        _ClipPlane ("Clip Plane", Vector) = (0, 1, 0, -2) // Default clipping plane (x, y, z, w)
     }
     
     SubShader
@@ -55,7 +55,7 @@ Shader "Custom/ClippingShader"
             float fresnel = pow(1.0 - dot(normalize(IN.viewDir), normalize(IN.worldPos)), 3.0);
 
             // Emission: Multiply fresnel with emission color (Intensity of red glow)
-            o.Emission = fresnel * _EmissionColor.rgb * 10.5; // Intensity = 3.5
+            o.Emission = fresnel * _EmissionColor.rgb * 0.7; // Intensity = 3.5
 
             // Alpha and Alpha clipping (optional)
             o.Alpha = _Alpha;
