@@ -8,19 +8,19 @@ public class NoteSpawningScript : MonoBehaviour
     public float spawnTimestamp = 2f;
     public float givenSpawnLength;
     public float zOffset = 0;
-    private float timer = 0f;
-    private bool spawn = true;
+    //private float timer = 0f;
+    //private bool spawn = true;
 
     void Update() // Logic check, remove when done making spawner control script in parent
     {
-        timer += Time.deltaTime;
-        if (spawn && timer >= 2f)
-        {
-            SpawnNote(givenSpawnLength);
-            spawn = false;
-        }
+        //timer += Time.deltaTime;
+        //if (spawn && timer >= 2f)
+        //{
+        //    SpawnNote(givenSpawnLength);
+        //    spawn = false;
+        //}
     }
-    void SpawnNote(float spawnLength)
+    public void SpawnNote(float spawnLength)
     {
         Vector3 spawnPosition = transform.position;
         // Adjust the spawn position to align the bottom edges of notes

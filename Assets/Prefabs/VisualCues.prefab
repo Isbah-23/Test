@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8420217539931534547}
+  - component: {fileID: 5639148293155833924}
   m_Layer: 0
   m_Name: VisualCues
   m_TagString: Untagged
@@ -119,6 +120,19 @@ Transform:
   - {fileID: 2686924338284951159}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5639148293155833924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9125909308711621593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5296332372d11b34897a1611f3e64668, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  midiFilePath: Beethoven - Moonlight Sonata.midi
 --- !u!1001 &14075866838011754
 PrefabInstance:
   m_ObjectHideFlags: 0

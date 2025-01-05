@@ -3,24 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
-using System;
 
 public class MidiReader : MonoBehaviour
 {
     public string midiFilePath; // Path to your MIDI file (relative to StreamingAssets)
-    public float readFrequency = 10f; // How many times per second to read (e.g., 10 times per second)
-    private MidiFile midiFile;
-    private float currentTime = 0f; // Current simulated playback time (in seconds)
-    private float interval; // Time interval between reads (1/readFrequency)
 
-    private IEnumerable<Note> notes; // All notes in the MIDI file
+    private MidiFile midiFile;
     private TempoMap tempoMap; // Tempo information of the MIDI file
+
+    private float currentTime = 0f; // Current playback time in seconds
+    private float timeStep = 0.01f; // Time update interval (0.01s)
+
+    private float accumulatedTime = 0f; // Accumulator for time step tracking
+
+    private List<float> startTimes = new List<float>();
+    private List<float> endTimes = new List<float>();
+    private List<int> noteNumbers = new List<int>();
+    private List<bool> playedNotes = new List<bool>();
+
+    private Dictionary<int, Transform> noteSpawners; // Maps note numbers to their spawners
 
     void Start()
     {
-        // Calculate interval for the desired frequency
-        interval = 1f / readFrequency;
-
         // Load the MIDI file
         string fullPath = Application.streamingAssetsPath + "/" + midiFilePath;
         try
@@ -30,7 +34,35 @@ public class MidiReader : MonoBehaviour
 
             // Get tempo map and notes
             tempoMap = midiFile.GetTempoMap();
-            notes = midiFile.GetNotes();
+            var notes = midiFile.GetNotes();
+
+            // Populate the arrays with note data
+            foreach (var note in notes)
+            {
+                float startTime = (float)TimeConverter.ConvertTo<MetricTimeSpan>(note.Time, tempoMap).TotalSeconds;
+                float endTime = (float)TimeConverter.ConvertTo<MetricTimeSpan>(note.EndTime, tempoMap).TotalSeconds;
+
+                startTimes.Add(startTime);
+                endTimes.Add(endTime);
+                noteNumbers.Add(note.NoteNumber - 21); // Map MIDI note numbers to 1-88 range
+                playedNotes.Add(false); // Initialize all notes as not played
+            }
+
+            // Initialize the note spawner mapping
+            noteSpawners = new Dictionary<int, Transform>();
+            for (int i = 1; i <= 88; i++)
+            {
+                Transform spawner = transform.Find($"NoteSpawner{i}");
+                if (spawner != null)
+                {
+                    noteSpawners.Add(i, spawner);
+                }
+                else
+                {
+                    Debug.LogWarning($"NoteSpawner{i} not found in the hierarchy!");
+                }
+            }
+
         }
         catch (System.Exception ex)
         {
@@ -40,45 +72,46 @@ public class MidiReader : MonoBehaviour
 
     void Update()
     {
-        // Simulate playback at the desired frequency
-        currentTime += Time.deltaTime;
+        accumulatedTime += Time.deltaTime;
 
-        // Check for notes playing at the current time
-        if (midiFile != null)
+        if (accumulatedTime >= timeStep)
         {
-            ReadNotesAtTime(currentTime);
+            currentTime += accumulatedTime;
+            accumulatedTime = 0f;
+            ProcessNotesAtCurrentTime();
         }
     }
 
-    void ReadNotesAtTime(float timeInSeconds)
+    void ProcessNotesAtCurrentTime()
     {
-        // Convert seconds to MIDI ticks using the tempoMap
-        var metricTime = new MetricTimeSpan(0, 0, Mathf.FloorToInt(timeInSeconds)); // Convert seconds to integer
-        long midiTime = TimeConverter.ConvertFrom(metricTime, tempoMap); // Convert to MIDI ticks
-
-        Debug.Log($"Current Time: {timeInSeconds:F2}s -> MIDI Ticks: {midiTime}");
-
-        List<Note> playingNotes = new List<Note>();
-
-        foreach (var note in notes)
+        for (int i = 0; i < startTimes.Count; i++)
         {
-            // Debugging note information
-            Debug.Log($"Note Start: {note.Time}, Note End: {note.EndTime}");
-
-            // Compare ticks
-            if (note.Time <= midiTime && note.EndTime > midiTime)
+            // Check if the note's start time is less than or equal to the current time and hasn't been played
+            if (startTimes[i] <= currentTime && !playedNotes[i])
             {
-                playingNotes.Add(note);
-            }
-        }
+                // Calculate note duration and play the note
+                float noteDuration = endTimes[i] - startTimes[i];
+                if (noteSpawners.TryGetValue(noteNumbers[i], out Transform spawner))
+                {
+                    NoteSpawningScript spawnerScript = spawner.GetComponent<NoteSpawningScript>();
+                    if (spawnerScript != null)
+                    {
+                        spawnerScript.givenSpawnLength = noteDuration;
+                        spawnerScript.SpawnNote(noteDuration);
+                    }
+                    else
+                    {
+                        Debug.LogError($"Spawner {spawner.name} is missing the NoteSpawningScript!");
+                    }
+                }
+                else
+                {
+                    //Debug.LogWarning($"No spawner found for note {noteNumbers[i]}!");
+                }
 
-        if (playingNotes.Count > 0)
-        {
-            Debug.Log($"Time {timeInSeconds:F2}s: Notes Playing -> {string.Join(", ", playingNotes)}");
-        }
-        else
-        {
-            Debug.Log($"Time {timeInSeconds:F2}s: No Notes Playing");
+                // Mark the note as played
+                playedNotes[i] = true;
+            }
         }
     }
 }
