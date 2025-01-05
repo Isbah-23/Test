@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PianoKey : MonoBehaviour
 {
@@ -27,8 +28,13 @@ public class PianoKey : MonoBehaviour
     private readonly float fadeOutDuration = 2f; 
     private float keyPressDuration = 0f;
 
+    private PlayerControllers controls;
+
    void Start()
     {
+        controls = new PlayerControllers();
+        controls.Enable();
+        
         originalRotation = transform.localRotation;
 
         audioSource = gameObject.AddComponent<AudioSource>();
@@ -50,16 +56,16 @@ public class PianoKey : MonoBehaviour
     void Update()
     {
         // check for input
-        if (/*Input.GetKeyDown(keyboardKey)*/ Input.GetMouseButtonDown(0) && !isPressed)
+        if (/*Input.GetKeyDown(keyboardKey) Input.GetMouseButtonDown(0) */ controls.Interact.Interact.WasPerformedThisFrame() && !isPressed)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (Physics.Raycast(ray, out RaycastHit hit) && hit.transform == transform)
             {
                 PressKey();
             }
             // PressKey();
         }
-        else if (/*Input.GetKeyUp(keyboardKey)*/ Input.GetMouseButtonUp(0) && isPressed)
+        else if (/*Input.GetKeyUp(keyboardKey) Input.GetMouseButtonUp(0)*/ controls.Interact.Interact.WasReleasedThisFrame() && isPressed)
         {
             ReleaseKey();
         }
