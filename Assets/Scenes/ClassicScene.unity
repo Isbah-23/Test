@@ -5503,105 +5503,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 598456813960029556, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1291160765520440508, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 1.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 2039381621365222695, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 2.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2502245150474077354, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 4.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2833879023373444243, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 3.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3755976225485098583, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 3.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3758473874783980424, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 5.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4094029245955847439, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 6.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4161004387278833828, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4567898712805703688, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4711088497134994974, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 1.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4761305800068726964, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4978360075011652892, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5308807896410775772, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 3.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5588648166022725831, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 1.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6280088791977438655, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 4.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6300423451218196931, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 2.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6476909012021673922, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 3.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6686682440344482667, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6822349780091654124, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7314172051633091029, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 4.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7635614209241329246, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7671964768706959654, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 5.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7988811051005758053, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 4.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 8013815725602758231, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 5.8
+    - target: {fileID: 5639148293155833924, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
+      propertyPath: midiFilePath
+      value: Beethoven - Moonlight Sonata.midi
       objectReference: {fileID: 0}
     - target: {fileID: 8420217539931534547, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5643,29 +5547,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8627527869191710861, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8637400827815081871, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 2.4
-      objectReference: {fileID: 0}
     - target: {fileID: 9125909308711621593, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
       propertyPath: m_Name
       value: VisualCues
       objectReference: {fileID: 0}
-    - target: {fileID: 9194891861447455932, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      propertyPath: givenSpawnLength
-      value: 2.9
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 9125909308711621593, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1709907633}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
 --- !u!1 &1268659005
 GameObject:
@@ -6088,24 +5977,6 @@ Transform:
   - {fileID: 1592172311}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1709907632 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9125909308711621593, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-  m_PrefabInstance: {fileID: 661285500}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1709907633
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1709907632}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5bec90147c8cc6439328a5989841aab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  midiFilePath: Beethoven - Moonlight Sonata.midi
 --- !u!1 &1780412511
 GameObject:
   m_ObjectHideFlags: 0
