@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PianoKey : MonoBehaviour
+public class PianoKey : MonoBehaviour, IInteractable
 {
     // Parameters for key press and release
     private Quaternion originalRotation; 
@@ -10,6 +10,7 @@ public class PianoKey : MonoBehaviour
     private readonly float releaseSpeed = 10f;
     public KeyCode keyboardKey; // temporary
     private bool isPressed = false;
+    // private bool isReleased = false;
     
     // Parameters for sound playback
     public AudioClip pianoSound; 
@@ -28,13 +29,8 @@ public class PianoKey : MonoBehaviour
     private readonly float fadeOutDuration = 2f; 
     private float keyPressDuration = 0f;
 
-    private PlayerControllers controls;
-
    void Start()
     {
-        controls = new PlayerControllers();
-        controls.Enable();
-        
         originalRotation = transform.localRotation;
 
         audioSource = gameObject.AddComponent<AudioSource>();
@@ -55,46 +51,40 @@ public class PianoKey : MonoBehaviour
 
     void Update()
     {
-        // check for input
-        if (/*Input.GetKeyDown(keyboardKey) Input.GetMouseButtonDown(0) */ controls.Interact.Interact.WasPerformedThisFrame() && !isPressed)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-            if (Physics.Raycast(ray, out RaycastHit hit) && hit.transform == transform)
-            {
-                PressKey();
-            }
-            // PressKey();
-        }
-        else if (/*Input.GetKeyUp(keyboardKey) Input.GetMouseButtonUp(0)*/ controls.Interact.Interact.WasReleasedThisFrame() && isPressed)
-        {
-            ReleaseKey();
-        }
-
         if (isPressed)
         {
             keyPressDuration += Time.deltaTime;
         }
-        else
+        else //if (isReleased)
         {
             keyPressDuration = 0f;
-        }
-
-        if (!isPressed)
-        {
+                
             transform.localRotation = Quaternion.Slerp(transform.localRotation, originalRotation, Time.deltaTime * releaseSpeed);
             keyRenderer.material.color = originalColor;
+
+            // isReleased = false;
         }
+    }
+
+    public void Interact()
+    {
+        PressKey();
+    }
+
+    public void InteractReleased()
+    {
+        ReleaseKey();
     }
 
     public void PressKey()
     {
+        Debug.Log("Press Key called");
         // rotate the key downwards
         transform.localRotation = originalRotation * Quaternion.Euler(-rotationAngle, 0, 0);
         isPressed = true;
 
         if (pianoSound != null)
         {
-            // audioSource.Play();
             if (fadeCoroutine != null)
             {
                 StopCoroutine(fadeCoroutine);
@@ -113,7 +103,8 @@ public class PianoKey : MonoBehaviour
 
     public void ReleaseKey()
     {
-        // transform.localRotation = originalRotation;
+        Debug.Log("Release Key called");
+        // isReleased = true;
         isPressed = false;
 
         if (keyPressDuration < sustainTime && audioSource.isPlaying)
