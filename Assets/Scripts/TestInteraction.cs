@@ -33,6 +33,10 @@ public class TestInteraction : MonoBehaviour, IInteractable,VrInteractable
         Debug.Log("Interacting with the object");
         changeScene();
     }
+    public void InteractReleased()
+    {
+        
+    }
     private void changeScene()
     {
         //change scene to the next scene
