@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class PianoKey : MonoBehaviour, IInteractable
 {
@@ -29,6 +30,37 @@ public class PianoKey : MonoBehaviour, IInteractable
     private readonly float fadeOutDuration = 2f; 
     private float keyPressDuration = 0f;
 
+    //For VR
+    private XRBaseInteractable interactable;
+
+    private void Awake()
+    {
+        interactable = GetComponent<XRBaseInteractable>();
+    }
+
+    private void OnEnable()
+    {
+        interactable.selectEntered.AddListener(OnTriggerPressed);
+        interactable.selectExited.AddListener(OnTriggerReleased);
+    }
+
+    private void OnDisable()
+    {
+        interactable.selectEntered.RemoveListener(OnTriggerPressed);
+        interactable.selectExited.RemoveListener(OnTriggerReleased);
+    }
+
+    public void OnTriggerPressed(SelectEnterEventArgs args)
+    {
+        Debug.Log("Trigger Pressed on object!");
+        Interact();
+    }
+
+    public void OnTriggerReleased(SelectExitEventArgs args)
+    {
+        Debug.Log("Trigger Released from object!");
+        InteractReleased();
+    }
    void Start()
     {
         originalRotation = transform.localRotation;
