@@ -1,3 +1,6 @@
+//<summary>
+// Handles note spawning logic
+//<summary>
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,18 +11,11 @@ public class NoteSpawningScript : MonoBehaviour
     public float spawnTimestamp = 2f;
     public float givenSpawnLength;
     public float zOffset = 0;
-    //private float timer = 0f;
-    //private bool spawn = true;
 
-    void Update() // Logic check, remove when done making spawner control script in parent
-    {
-        //timer += Time.deltaTime;
-        //if (spawn && timer >= 2f)
-        //{
-        //    SpawnNote(givenSpawnLength);
-        //    spawn = false;
-        //}
-    }
+    //<summary>
+    // Spawns note of given length
+    // spawnLength - length (y-scale) of the note to be spawned
+    //<summary>
     public void SpawnNote(float spawnLength)
     {
         Vector3 spawnPosition = transform.position;
