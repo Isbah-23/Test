@@ -78,7 +78,7 @@ public class MidiReader : MonoBehaviour
     //<summary>
     void Update()
     {
-        accumulatedTime += (Time.deltaTime * speed);
+        accumulatedTime += (Time.deltaTime * playbackSpeed);
 
         if (accumulatedTime >= timeStep)
         {
@@ -104,7 +104,7 @@ public class MidiReader : MonoBehaviour
                     if (spawnerScript != null)
                     {
                         spawnerScript.givenSpawnLength = noteDuration;
-                        spawnerScript.SpawnNote(noteDuration* (1/speed)); // note falls 1 unit length per unit delta time
+                        spawnerScript.SpawnNote(noteDuration* (1/playbackSpeed)); // note falls 1 unit length per unit delta time
                     }
                     else
                     {
