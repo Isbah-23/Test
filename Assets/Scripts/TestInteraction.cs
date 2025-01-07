@@ -41,7 +41,15 @@ public class TestInteraction : MonoBehaviour, IInteractable,VrInteractable
     {
         //change scene to the next scene
         Debug.Log("Changing scene");
-        SceneManager.LoadScene(1);
+        int y = SceneManager.GetActiveScene().buildIndex;
+        if(y==1)
+        {
+            SceneManager.LoadScene(0);
+        }
+        else
+        {
+            SceneManager.LoadScene(1);
+        }
     }
 }
 

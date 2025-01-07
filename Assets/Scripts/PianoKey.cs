@@ -40,27 +40,25 @@ public class PianoKey : MonoBehaviour, IInteractable
 
     private void OnEnable()
     {
-        interactable.selectEntered.AddListener(OnTriggerPressed);
-        interactable.selectExited.AddListener(OnTriggerReleased);
+        interactable.selectEntered.AddListener(OnSelected);
+        interactable.selectExited.AddListener(OnUnselected);
     }
 
     private void OnDisable()
     {
-        interactable.selectEntered.RemoveListener(OnTriggerPressed);
-        interactable.selectExited.RemoveListener(OnTriggerReleased);
+        interactable.selectEntered.RemoveListener(OnSelected);
+        interactable.selectExited.RemoveListener(OnUnselected);
     }
 
-    public void OnTriggerPressed(SelectEnterEventArgs args)
+    public void OnSelected(SelectEnterEventArgs args)
     {
-        Debug.Log("Trigger Pressed on object!");
         Interact();
     }
-
-    public void OnTriggerReleased(SelectExitEventArgs args)
+    public void OnUnselected(SelectExitEventArgs args)
     {
-        Debug.Log("Trigger Released from object!");
         InteractReleased();
     }
+
    void Start()
     {
         originalRotation = transform.localRotation;
