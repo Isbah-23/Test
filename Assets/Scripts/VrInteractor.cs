@@ -20,8 +20,8 @@ public class VrInteractor : MonoBehaviour
 
     void Update()
     {
-        //check for mouse button press
-        if(/*Input.GetMouseButtonDown(0)*/ controls.XRIRightHandInteraction.UIPress.WasPressedThisFrame())
+        //check for button press
+        if(controls.XRIRightHandInteraction.UIPress.WasPressedThisFrame())
         {
             Ray r = new Ray(InteractorSource.position, InteractorSource.forward);
             if(Physics.Raycast(r,out RaycastHit hit, InteractorRange))

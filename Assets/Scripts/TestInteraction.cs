@@ -15,12 +15,18 @@ public class TestInteraction : MonoBehaviour, IInteractable,VrInteractable
 
     private void OnEnable()
     {
-        interactable.selectEntered.AddListener(OnSelected);
+        if (interactable != null)
+        {
+            interactable.selectEntered.AddListener(OnSelected);
+        }
     }
 
     private void OnDisable()
     {
-        interactable.selectEntered.RemoveListener(OnSelected);
+        if (interactable != null)
+        {   
+            interactable.selectEntered.RemoveListener(OnSelected);
+        }
     }
 
     public void OnSelected(SelectEnterEventArgs args)

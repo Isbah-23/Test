@@ -40,14 +40,21 @@ public class PianoKey : MonoBehaviour, IInteractable
 
     private void OnEnable()
     {
-        interactable.selectEntered.AddListener(OnSelected);
-        interactable.selectExited.AddListener(OnUnselected);
+        if (interactable != null)
+        {
+            interactable.selectEntered.AddListener(OnSelected);
+            interactable.selectExited.AddListener(OnUnselected);
+        }
+        
     }
 
     private void OnDisable()
     {
-        interactable.selectEntered.RemoveListener(OnSelected);
-        interactable.selectExited.RemoveListener(OnUnselected);
+        if (interactable != null)
+        {
+            interactable.selectEntered.RemoveListener(OnSelected);
+            interactable.selectExited.RemoveListener(OnUnselected);
+        }
     }
 
     public void OnSelected(SelectEnterEventArgs args)
