@@ -5519,11 +5519,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5639148293155833924, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
       propertyPath: midiFilePath
-      value: Easy.midi
+      value: test.midi
       objectReference: {fileID: 0}
     - target: {fileID: 5639148293155833924, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
       propertyPath: playbackSpeed
-      value: 0.15
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8420217539931534547, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5531,7 +5531,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8420217539931534547, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.52
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8420217539931534547, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
       propertyPath: m_LocalPosition.z

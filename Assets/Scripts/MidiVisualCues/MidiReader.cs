@@ -27,11 +27,14 @@ public class MidiReader : MonoBehaviour
 
     private Dictionary<int, Transform> noteSpawners; // Maps note numbers to their 
 
+    float n = 0.3f; // should match n in NoteFallingScript
+    public static bool isPlaying = true;
     //<summary>
     // Initializes the arrays with note information and note spawners
     //<summary>
     void Start()
     {
+        InvokeRepeating(nameof(TogglePlayback), 0f, 5f);
         // Load the MIDI file
         string fullPath = Application.streamingAssetsPath + "/" + midiFilePath;
         try
@@ -73,13 +76,20 @@ public class MidiReader : MonoBehaviour
         }
     }
 
+    void TogglePlayback()
+    {
+        isPlaying = !isPlaying;
+        Debug.Log($"Is playing: {isPlaying}");
+    }
+
     //<summary>
     // Updates cumulative elapsed time and calls notes processor at current time
     //<summary>
     void Update()
     {
-        accumulatedTime += (Time.deltaTime * playbackSpeed);
+        if (!isPlaying) return;
 
+        accumulatedTime += (Time.deltaTime * playbackSpeed);
         if (accumulatedTime >= timeStep)
         {
             currentTime += accumulatedTime;
@@ -104,7 +114,7 @@ public class MidiReader : MonoBehaviour
                     if (spawnerScript != null)
                     {
                         spawnerScript.givenSpawnLength = noteDuration;
-                        spawnerScript.SpawnNote(noteDuration* (1/playbackSpeed)); // note falls 1 unit length per unit delta time
+                        spawnerScript.SpawnNote(noteDuration* (1/playbackSpeed) * n); // note falls 1 unit length per unit delta time
                     }
                     else
                     {
