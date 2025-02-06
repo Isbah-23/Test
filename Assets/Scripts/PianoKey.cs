@@ -10,7 +10,7 @@ public class PianoKey : MonoBehaviour, IInteractable
     private readonly float rotationAngle = 7f; // angle of rotation for key press
     private readonly float releaseSpeed = 10f;
     public KeyCode keyboardKey; // temporary
-    private bool isPressed = false;
+    public bool isPressed = false; // changing accessibility cause i need to check state for visual cues ~Isbah
     // private bool isReleased = false;
     
     // Parameters for sound playback

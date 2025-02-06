@@ -9,6 +9,7 @@ using Melanchall.DryWetMidi.Interaction;
 
 public class MidiReader : MonoBehaviour
 {
+
     public string midiFilePath; // Path to your MIDI file (relative to StreamingAssets)
     public float playbackSpeed = 1; //playback speed
 
@@ -27,14 +28,23 @@ public class MidiReader : MonoBehaviour
 
     private Dictionary<int, Transform> noteSpawners; // Maps note numbers to their 
 
-    float n = 0.3f; // should match n in NoteFallingScript
+    float n = 0.3f; // should match n in NoteFallingScript - for note length
+    
+    // for practice mode
+    public bool practiceMode = true;
     public static bool isPlaying = true;
+    float time_diff = 9.6f;
+    private GameObject grandPiano;
+    private Dictionary<int, PianoKey> pianoKeysDict = new Dictionary<int, PianoKey>(); // Dictionary to store key references
+    private bool allKeysPressed;
+
     //<summary>
     // Initializes the arrays with note information and note spawners
     //<summary>
     void Start()
     {
-        InvokeRepeating(nameof(TogglePlayback), 0f, 5f);
+
+        time_diff = time_diff * playbackSpeed;
         // Load the MIDI file
         string fullPath = Application.streamingAssetsPath + "/" + midiFilePath;
         try
@@ -69,6 +79,12 @@ public class MidiReader : MonoBehaviour
                 }
             }
 
+            grandPiano = GameObject.Find("GrandPiano");
+            if (grandPiano != null)
+                InitializeKeys();
+            else
+                Debug.LogError("GrandPiano object not found in the scene!");
+
         }
         catch (System.Exception ex)
         {
@@ -76,10 +92,59 @@ public class MidiReader : MonoBehaviour
         }
     }
 
-    void TogglePlayback()
+    void InitializeKeys()
     {
-        isPlaying = !isPlaying;
-        Debug.Log($"Is playing: {isPlaying}");
+        Transform pianoKeysTransform = grandPiano.transform.Find("PianoKeys");
+        for (int i = 1; i <= 88; i++)
+        {
+            string keyName = "PianoKey." + i.ToString("D3");  // Construct key name, e.g. "PianoKey.001"
+            Transform keyTransform = pianoKeysTransform.transform.Find(keyName);
+
+            if (keyTransform != null)
+            {
+                PianoKey keyScript = keyTransform.GetComponent<PianoKey>();
+
+                if (keyScript != null)
+                    pianoKeysDict.Add(i, keyScript);
+                else
+                    Debug.LogError("PianoKey script not found on " + keyName);
+            }
+            else
+                Debug.LogError("Key " + keyName + " not found in the hierarchy.");
+        }
+    }
+
+    bool CheckKeysPressed(List<int> keyNumbersToCheck)
+    {
+        HashSet<int> keysToCheckSet = new HashSet<int>(keyNumbersToCheck);
+
+        bool allKeysPressed = true;
+
+        foreach (var keyEntry in pianoKeysDict)
+        {
+            bool isKeyInList = keysToCheckSet.Contains(keyEntry.Key);
+            bool isKeyPressed = keyEntry.Value.isPressed;
+
+            if (isKeyInList)
+            {
+                if (!isKeyPressed)
+                {
+                    allKeysPressed = false;
+                    break;
+                }
+            }
+            else
+            {
+                if (isKeyPressed)
+                {
+                    allKeysPressed = false;
+                    Debug.Log("An extra key is pressed: " + keyEntry.Key);
+                    break;
+                }
+            }
+        }
+
+        return allKeysPressed;
     }
 
     //<summary>
@@ -87,14 +152,15 @@ public class MidiReader : MonoBehaviour
     //<summary>
     void Update()
     {
-        if (!isPlaying) return;
-
         accumulatedTime += (Time.deltaTime * playbackSpeed);
         if (accumulatedTime >= timeStep)
         {
-            currentTime += accumulatedTime;
+            isPlaying = (practiceMode && CheckKeysPressed(UpdateActiveNotesAtKeys()));
+            if (isPlaying){
+                currentTime += accumulatedTime;
+                ProcessNotesAtCurrentTime();
+            }
             accumulatedTime = 0f;
-            ProcessNotesAtCurrentTime();
         }
     }
 
@@ -128,5 +194,24 @@ public class MidiReader : MonoBehaviour
                 playedNotes[i] = true;
             }
         }
+    }
+
+    List<int> UpdateActiveNotesAtKeys()
+    {
+        List<int> activeNotes = new List<int>();
+
+        for (int i = 0; i < startTimes.Count; i++)
+        {
+            float noteReachTime = startTimes[i] + time_diff;
+            float noteEndTime = noteReachTime + ((endTimes[i] - startTimes[i]));
+
+            if (playedNotes[i] && currentTime >= noteReachTime && currentTime <= noteEndTime)
+            {
+                activeNotes.Add(noteNumbers[i]);
+            }
+        }
+
+        Debug.Log("Active notes at key level: " + string.Join(", ", activeNotes));
+        return activeNotes;
     }
 }

@@ -24,7 +24,7 @@ public class NoteSpawningScript : MonoBehaviour
         if (noteRenderer != null)
         {
             float noteHeight = noteRenderer.bounds.size.y;
-            spawnPosition.y += spawnLength * 0.5f;
+            spawnPosition.y += spawnLength * 0.5f; // 0.5 = half up
         }
         Vector3 customRotation = new Vector3(0f, 90f, 0f);
         //Quaternion rotation = Quaternion.Euler(customRotation);
