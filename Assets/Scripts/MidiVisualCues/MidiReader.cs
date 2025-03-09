@@ -37,11 +37,12 @@ public class MidiReader : MonoBehaviour
     private GameObject grandPiano;
     private Dictionary<int, PianoKey> pianoKeysDict = new Dictionary<int, PianoKey>(); // Dictionary to store key references
     private bool allKeysPressed;
+    private bool isStarted = false;
 
     //<summary>
     // Initializes the arrays with note information and note spawners
     //<summary>
-    void Start()
+    public void StartPlaying()
     {
 
         time_diff = time_diff * playbackSpeed;
@@ -90,6 +91,7 @@ public class MidiReader : MonoBehaviour
         {
             Debug.LogError($"Error loading MIDI file: {ex.Message}");
         }
+        isStarted = true;
     }
 
     void InitializeKeys()
@@ -152,6 +154,7 @@ public class MidiReader : MonoBehaviour
     //<summary>
     void Update()
     {
+        if (!isStarted) return;
         accumulatedTime += (Time.deltaTime * playbackSpeed);
         if (accumulatedTime >= timeStep)
         {
