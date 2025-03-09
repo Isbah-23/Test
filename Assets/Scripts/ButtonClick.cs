@@ -5,13 +5,15 @@ public class ButtonClicker : MonoBehaviour
 {
     public Button myButton; // Assign in Inspector
 
-    void Update()
+    void Start()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) // Press Spacebar to "click"
-        {
-            Debug.Log("Song will play now");
-            myButton.onClick.Invoke();
-        }
+        Invoke("StartCues", 10f); // Calls MyFunction after 2 seconds
+    }
+
+    void StartCues()
+    {
+        Debug.Log("Button clicked i hope");
+        myButton.onClick.Invoke();
     }
 
 }

@@ -45,6 +45,7 @@ public class MidiReader : MonoBehaviour
     public void StartPlaying()
     {
 
+        Debug.Log("Button clicked indeed");
         time_diff = time_diff * playbackSpeed;
         // Load the MIDI file
         string fullPath = Application.streamingAssetsPath + "/" + midiFilePath;
