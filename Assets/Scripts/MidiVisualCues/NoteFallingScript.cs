@@ -8,8 +8,14 @@ using UnityEngine;
 public class NoteFallingScript : MonoBehaviour
 {
     public float velocity = 1.0f;
-    public float maxY = -1f;
+    float maxY = 2.086f;
     float n = 0.3f; // should match n in MidiReader - for note length
+
+
+    void Start()
+    {
+        maxY = 2.086f;
+    }
 
     //<summary>
     // Handles falling velocity of note and its destruction
