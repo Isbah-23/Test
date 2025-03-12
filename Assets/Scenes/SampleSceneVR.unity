@@ -1633,6 +1633,10 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 572320937552180922, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 572320937552180922, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.7071068
       objectReference: {fileID: 0}
@@ -1655,10 +1659,14 @@ PrefabInstance:
     - target: {fileID: 1251461958051051041, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
       propertyPath: m_ModelPrefab
       value: 
-      objectReference: {fileID: 7072478885644867327, guid: a543ce027c5ec3a4788c4f633673c3de, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4122018755719109767, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
       propertyPath: m_Name
       value: 'VR '
+      objectReference: {fileID: 0}
+    - target: {fileID: 4171066039922377315, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5138865252460597987, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1703,13 +1711,19 @@ PrefabInstance:
     - target: {fileID: 9145280933801827678, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
       propertyPath: m_ModelPrefab
       value: 
-      objectReference: {fileID: 3240524871626806228, guid: 534053b397750e74588f25f926e8da72, type: 3}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 762289931789103333, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
     - {fileID: 972858684148745939, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
-    m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 572320937552180922, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 806489422}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1115630313951840265, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 427205481}
   m_SourcePrefab: {fileID: 100100000, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
 --- !u!114 &427205476 stripped
 MonoBehaviour:
@@ -1722,6 +1736,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83e4e6cca11330d4088d729ab4fc9d9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &427205477 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 572320937552180922, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
+  m_PrefabInstance: {fileID: 427205475}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &427205478 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7873266036295170516, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
+  m_PrefabInstance: {fileID: 427205475}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &427205479 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5963923821552876253, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
+  m_PrefabInstance: {fileID: 427205475}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &427205480 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1115630313951840265, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
+  m_PrefabInstance: {fileID: 427205475}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &427205481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427205480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82bc72d2ecc8add47b2fe00d40318500, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_LeftHand: {fileID: 1467509152}
+  m_RightHand: {fileID: 556031120}
+  m_LeftController: {fileID: 427205479}
+  m_RightController: {fileID: 427205478}
+  m_TrackedHandModeStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  m_TrackedHandModeEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  m_MotionControllerModeStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  m_MotionControllerModeEnded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &429946746 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 292425443053539951, guid: 44372660c22479f4a807d043c2db00a2, type: 3}
@@ -2899,6 +2961,37 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &556031120
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 556031121}
+  m_Layer: 0
+  m_Name: Xr Right Hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &556031121
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556031120}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 806489422}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &558606455 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7931787348354354697, guid: 44372660c22479f4a807d043c2db00a2, type: 3}
@@ -3742,6 +3835,40 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &806489421
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 806489422}
+  m_Layer: 0
+  m_Name: Xr Hands
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &806489422
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806489421}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1279849998}
+  - {fileID: 1467509153}
+  - {fileID: 556031121}
+  m_Father: {fileID: 427205477}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &849290278 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6506581400562776566, guid: 44372660c22479f4a807d043c2db00a2, type: 3}
@@ -5989,6 +6116,59 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1279849997
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1279849998}
+  - component: {fileID: 1279849999}
+  m_Layer: 0
+  m_Name: Hand Visualizer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1279849998
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279849997}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 806489422}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1279849999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279849997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e9813c68d7d6f44282ace8bd2d1fd46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UseOptimizedControls: 0
+  m_LeftHandMesh: {fileID: 919132149155446097, guid: bf7151579c38e2a44be94ba8773876c1, type: 3}
+  m_RightHandMesh: {fileID: 919132149155446097, guid: 56186ccf27ad7864681108ed88349071, type: 3}
+  m_HandMeshMaterial: {fileID: 5329859126516784187, guid: 5776e8890b9a6c94081a43f1d809ed33, type: 3}
+  m_DrawMeshes: 1
+  m_DebugDrawPrefab: {fileID: 6507399986997092475, guid: 254b742d65a15d14b9df756ae77de868, type: 3}
+  m_DebugDrawJoints: 1
+  m_VelocityPrefab: {fileID: 8538602047018081646, guid: 629fd7882ec6bfc499a5fcf20035282b, type: 3}
+  m_VelocityType: 2
 --- !u!1 &1315648908 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3841125015009256897, guid: 44372660c22479f4a807d043c2db00a2, type: 3}
@@ -6952,6 +7132,37 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1467509152
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1467509153}
+  m_Layer: 0
+  m_Name: Xr Left Hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1467509153
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467509152}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 806489422}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1498460838 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4220500172624664976, guid: 44372660c22479f4a807d043c2db00a2, type: 3}
