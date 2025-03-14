@@ -7,7 +7,7 @@ public class ButtonClicker : MonoBehaviour
 
     void Start()
     {
-        Invoke("StartCues", 10f); // Calls MyFunction after 2 seconds
+        Invoke("StartCues", 0f); // Calls MyFunction after 2 seconds
     }
 
     void StartCues()

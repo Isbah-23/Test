@@ -21,7 +21,9 @@ public class PianoKey : MonoBehaviour, IInteractable
 
     // Parameters for color change
     private readonly bool changeColor = true; // true = color of key changes when pressed
-    public Color pressedColor = Color.yellow; // temporary
+    // public Color pressedColor = Color.yellow; // temporary
+    public Color pressedColor = Color.green;
+    public Color wrongPress = Color.red;
     private Color originalColor;
     private Renderer keyRenderer; 
 
@@ -132,9 +134,23 @@ public class PianoKey : MonoBehaviour, IInteractable
             audioSource.Play();
         }
 
-        if (keyRenderer != null && changeColor)
+        // if (keyRenderer != null && changeColor)
+        // {
+        //     keyRenderer.material.color = pressedColor;
+        // }
+    }
+
+    public void ChangeKeyColor(bool type)
+    {
+        if (keyRenderer != null && changeColor && type)
         {
+            Debug.Log("Type True color should be Pressed Color");
             keyRenderer.material.color = pressedColor;
+        }
+        else if (keyRenderer != null && changeColor && !type)
+        {
+            keyRenderer.material.color = wrongPress;
+            Debug.Log("Type False color should be Wrong Colour");
         }
     }
 

@@ -21,7 +21,7 @@ public class MidiFileSelector : MonoBehaviour
         foreach (Transform child in songListContent)
             Destroy(child.gameObject);  // Clear previous entries
 
-        string[] midiFiles = Directory.GetFiles(midiFolderPath, "*.mid");
+        string[] midiFiles = Directory.GetFiles(midiFolderPath, "*.midi");
 
         foreach (string file in midiFiles)
         {

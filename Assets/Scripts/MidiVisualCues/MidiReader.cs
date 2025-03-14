@@ -38,7 +38,6 @@ public class MidiReader : MonoBehaviour
     private Dictionary<int, PianoKey> pianoKeysDict = new Dictionary<int, PianoKey>(); // Dictionary to store key references
     private bool allKeysPressed;
     private bool isStarted = false;
-
     //<summary>
     // Initializes the arrays with note information and note spawners
     //<summary>
@@ -133,16 +132,16 @@ public class MidiReader : MonoBehaviour
                 if (!isKeyPressed)
                 {
                     allKeysPressed = false;
-                    break;
                 }
+                else
+                    keyEntry.Value.ChangeKeyColor(true);
             }
             else
             {
                 if (isKeyPressed)
                 {
                     allKeysPressed = false;
-                    Debug.Log("An extra key is pressed: " + keyEntry.Key);
-                    break;
+                    keyEntry.Value.ChangeKeyColor(false);
                 }
             }
         }
@@ -215,7 +214,7 @@ public class MidiReader : MonoBehaviour
             }
         }
 
-        Debug.Log("Active notes at key level: " + string.Join(", ", activeNotes));
+        // Debug.Log("Active notes at key level: " + string.Join(", ", activeNotes));
         return activeNotes;
     }
 }
