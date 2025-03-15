@@ -23,7 +23,7 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        transform.DOScale(originalScale * 1.1f, 0.2f).SetEase(Ease.OutBack);
+        transform.DOScale(originalScale * 1.05f, 0.2f).SetEase(Ease.OutBack); // 5% scale, in 0.2 seconds
     }
 
     public void OnPointerExit(PointerEventData eventData)
