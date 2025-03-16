@@ -1,10 +1,17 @@
 using UnityEngine;
-using UnityEngine.UI;
 
-public class ButtonClickDebug : MonoBehaviour
+public class ButtonClickDebugger : MonoBehaviour
 {
-    void Start()
+    void Update()
     {
-        GetComponent<Button>().onClick.AddListener(() => Debug.Log("Button Click Registered!"));
+        if (Input.GetMouseButtonDown(0)) // Left mouse button click
+        {
+            Debug.Log("Mouse Click Detected");
+        }
+    }
+
+    public void OnButtonClick()
+    {
+        Debug.Log($"UI Button Click Detected: {gameObject.name}");
     }
 }
