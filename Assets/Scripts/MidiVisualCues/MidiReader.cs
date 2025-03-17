@@ -6,11 +6,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using System.IO;
 
 public class MidiReader : MonoBehaviour
 {
 
-    public string midiFilePath; // Path to your MIDI file (relative to StreamingAssets)
+    private string midiFilePath;
+    public TMPro.TextMeshProUGUI selectedSongText;
     public float playbackSpeed = 1; //playback speed
 
     private MidiFile midiFile;
@@ -43,8 +45,16 @@ public class MidiReader : MonoBehaviour
     //<summary>
     public void StartPlaying()
     {
+        string prefix = "Current Song: ";
+        string textValue = selectedSongText.text;
 
-        Debug.Log("Button clicked indeed");
+        // Extract the part after the prefix
+        string songName = textValue.Substring(prefix.Length);
+
+        // Now build the final file path
+        midiFilePath = Path.Combine(songName + ".midi");
+        Debug.Log($"Button clicked with path: {midiFilePath}");
+
         time_diff = time_diff * playbackSpeed;
         // Load the MIDI file
         string fullPath = Application.streamingAssetsPath + "/" + midiFilePath;
