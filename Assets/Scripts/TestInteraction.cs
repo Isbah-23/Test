@@ -7,10 +7,14 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class TestInteraction : MonoBehaviour, IInteractable,VrInteractable
 {
     private XRBaseInteractable interactable;
+    private AudioSource audioSource;
+    public AudioClip clickSound;
+    public AudioClip hoverSound;
 
     private void Awake()
     {
         interactable = GetComponent<XRBaseInteractable>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void OnEnable()
@@ -37,13 +41,13 @@ public class TestInteraction : MonoBehaviour, IInteractable,VrInteractable
     {
         //change scene to the next scene
         Debug.Log("Interacting with the object");
-        changeScene();
+        ChangeScene();
     }
     public void InteractReleased()
     {
         
     }
-    private void changeScene()
+    private void ChangeScene()
     {
         //change scene to the next scene
         Debug.Log("Changing scene");
@@ -55,6 +59,29 @@ public class TestInteraction : MonoBehaviour, IInteractable,VrInteractable
         else
         {
             SceneManager.LoadScene(1);
+        }
+    }
+
+    public void PlayClickAudio()
+    {
+        if (clickSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
+        else
+        {
+            Debug.Log("Couldnt play click sound");
+        }
+    }
+    public void PlayHoverAudio()
+    {
+        if (hoverSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(hoverSound);
+        }
+        else
+        {
+            Debug.Log("Couldnt play hover sound");
         }
     }
 }

@@ -9,10 +9,21 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private Vector3 originalScale;
     private Image buttonImage;
     private Color normalColor;
+    public GameObject CubeObj;
+    TestInteraction script;
 
     private void Start()
     {
         originalScale = transform.localScale;
+
+        if (CubeObj != null)
+        {
+            script = CubeObj.GetComponent<TestInteraction>();
+        }
+        else
+        {
+            Debug.Log("CubeObj is null");
+        }
         
         buttonImage = GetComponent<Image>();
         if (buttonImage != null)
@@ -24,6 +35,16 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnPointerEnter(PointerEventData eventData)
     {
         transform.DOScale(originalScale * 1.05f, 0.2f).SetEase(Ease.OutBack); // 5% scale, in 0.2 seconds
+
+        // call funtion in testinteraction script
+        if (script != null)
+        {
+            script.PlayHoverAudio();
+        }
+        else
+        {
+            Debug.Log("Script is null");
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -37,4 +58,5 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         transform.localScale = originalScale;
     }
+    
 }
