@@ -7,12 +7,13 @@ public class MidiFileSelector : MonoBehaviour
 {
     public GameObject songButtonPrefab; // Prefab for song button
     public Transform songListContent; // Parent object for buttons
-    public MidiReader midiReader; // Reference to the MidiReader script
+    //public MidiReader midiReader; // Reference to the MidiReader script
     private string midiFolderPath;
 
     void Start()
     {
         midiFolderPath = Application.streamingAssetsPath;
+        Debug.Log($"MIDI Folder Path: {midiFolderPath}");
         PopulateSongList();
     }
 
@@ -25,16 +26,18 @@ public class MidiFileSelector : MonoBehaviour
 
         foreach (string file in midiFiles)
         {
+            Debug.Log("Found file: " + file);
             GameObject button = Instantiate(songButtonPrefab, songListContent);
+            // button.transform.SetParent(songListContent, false);
             string fileName = Path.GetFileName(file);
-            button.GetComponentInChildren<Text>().text = fileName;
+            button.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = fileName;
             button.GetComponent<Button>().onClick.AddListener(() => SelectSong(fileName));
         }
     }
 
     void SelectSong(string fileName)
     {
-        midiReader.midiFilePath = fileName;
+        //midiReader.midiFilePath = fileName;
         Debug.Log($"Selected MIDI: {fileName}");
     }
 }

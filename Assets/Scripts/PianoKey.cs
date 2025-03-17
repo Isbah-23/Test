@@ -22,8 +22,8 @@ public class PianoKey : MonoBehaviour, IInteractable
     // Parameters for color change
     private readonly bool changeColor = true; // true = color of key changes when pressed
     // public Color pressedColor = Color.yellow; // temporary
-    public Color pressedColor = Color.green;
-    public Color wrongPress = Color.red;
+    private Color pressedColor = Color.green;
+    private Color wrongPress = Color.red;
     private Color originalColor;
     private Renderer keyRenderer; 
 
