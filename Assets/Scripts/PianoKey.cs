@@ -117,7 +117,7 @@ public class PianoKey : MonoBehaviour, IInteractable
 
     public void PressKey()
     {
-        Debug.Log("Press Key called");
+        // Debug.Log("Press Key called");
         // rotate the key downwards
         transform.localRotation = originalRotation * Quaternion.Euler(-rotationAngle, 0, 0);
         isPressed = true;
@@ -144,19 +144,19 @@ public class PianoKey : MonoBehaviour, IInteractable
     {
         if (keyRenderer != null && changeColor && type)
         {
-            Debug.Log("Type True color should be Pressed Color");
+            // Debug.Log("Type True color should be Pressed Color");
             keyRenderer.material.color = pressedColor;
         }
         else if (keyRenderer != null && changeColor && !type)
         {
             keyRenderer.material.color = wrongPress;
-            Debug.Log("Type False color should be Wrong Colour");
+            // Debug.Log("Type False color should be Wrong Colour");
         }
     }
 
     public void ReleaseKey()
     {
-        Debug.Log("Release Key called");
+        // Debug.Log("Release Key called");
         // isReleased = true;
         isPressed = false;
 

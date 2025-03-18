@@ -13,6 +13,7 @@ public class MidiReader : MonoBehaviour
 
     private string midiFilePath;
     public TMPro.TextMeshProUGUI selectedSongText;
+    public GameObject practiceModeButton;
     public float playbackSpeed = 1; //playback speed
 
     private MidiFile midiFile;
@@ -33,20 +34,28 @@ public class MidiReader : MonoBehaviour
     float n = 0.3f; // should match n in NoteFallingScript - for note length
     
     // for practice mode
-    public bool practiceMode = true;
+    private bool practiceMode = true;
     public static bool isPlaying = true;
     float time_diff = 9.7f;
     private GameObject grandPiano;
     private Dictionary<int, PianoKey> pianoKeysDict = new Dictionary<int, PianoKey>(); // Dictionary to store key references
     private bool allKeysPressed;
     private bool isStarted = false;
+
+    public void TogglePracticeMode()
+    {
+        practiceMode = !practiceMode;
+        practiceModeButton.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = practiceMode ? "Practice Mode: On": "Practice Mode: Off";
+    }
+
     //<summary>
     // Initializes the arrays with note information and note spawners
-    //<summary>
+    //<summary>    
     public void StartPlaying()
     {
         string prefix = "Current Song: ";
         string textValue = selectedSongText.text;
+        // string textValue = "Current Song: easy";
 
         // Extract the part after the prefix
         string songName = textValue.Substring(prefix.Length);
@@ -168,8 +177,16 @@ public class MidiReader : MonoBehaviour
         accumulatedTime += (Time.deltaTime * playbackSpeed);
         if (accumulatedTime >= timeStep)
         {
-            isPlaying = (practiceMode && CheckKeysPressed(UpdateActiveNotesAtKeys()));
-            if (isPlaying){
+            if (practiceMode)
+            {
+                isPlaying = CheckKeysPressed(UpdateActiveNotesAtKeys());
+                if (isPlaying){
+                    currentTime += accumulatedTime;
+                    ProcessNotesAtCurrentTime();
+                }
+            }
+            else
+            {
                 currentTime += accumulatedTime;
                 ProcessNotesAtCurrentTime();
             }
