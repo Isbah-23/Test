@@ -7,6 +7,8 @@ using UnityEngine;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using System.IO;
+using UnityEngine.Networking;
+using TMPro;
 
 public class MidiReader : MonoBehaviour
 {
@@ -52,25 +54,53 @@ public class MidiReader : MonoBehaviour
     // Initializes the arrays with note information and note spawners
     //<summary>    
     public void StartPlaying()
+{
+    string prefix = "Current Song: ";
+    string textValue = selectedSongText.text;
+
+    // Extract the song name
+    string songName = textValue.Substring(prefix.Length).Trim();
+
+    // Build the file path
+    midiFilePath = songName + ".midi";
+    Debug.Log($"Button clicked with path: {midiFilePath}");
+
+    time_diff = time_diff * playbackSpeed;
+
+    // Load the MIDI file asynchronously
+    StartCoroutine(LoadMidiFile(midiFilePath));
+}
+
+private IEnumerator LoadMidiFile(string fileName)
+{
+    string fullPath = Path.Combine(Application.streamingAssetsPath, fileName);
+
+    #if UNITY_ANDROID
+    fullPath = Application.streamingAssetsPath + "/" + fileName; // Correct Android path
+    #endif
+
+    Debug.Log($"Attempting to load MIDI file from: {fullPath}");
+
+    using (UnityWebRequest request = UnityWebRequest.Get(fullPath))
     {
-        string prefix = "Current Song: ";
-        string textValue = selectedSongText.text;
-        // string textValue = "Current Song: easy";
+        yield return request.SendWebRequest();
 
-        // Extract the part after the prefix
-        string songName = textValue.Substring(prefix.Length);
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError($"Error loading MIDI file: {request.error}");
+            yield break;
+        }
 
-        // Now build the final file path
-        midiFilePath = Path.Combine(songName + ".midi");
-        Debug.Log($"Button clicked with path: {midiFilePath}");
-
-        time_diff = time_diff * playbackSpeed;
-        // Load the MIDI file
-        string fullPath = Application.streamingAssetsPath + "/" + midiFilePath;
         try
         {
-            midiFile = MidiFile.Read(fullPath);
-            Debug.Log($"Successfully loaded MIDI file: {fullPath}");
+            byte[] midiData = request.downloadHandler.data;
+            using (MemoryStream midiStream = new MemoryStream(midiData))
+            {
+                midiFile = MidiFile.Read(midiStream);
+            }
+
+            Debug.Log($"Successfully loaded MIDI file: {fileName}");
+
             tempoMap = midiFile.GetTempoMap();
             var notes = midiFile.GetNotes();
             foreach (var note in notes)
@@ -81,37 +111,19 @@ public class MidiReader : MonoBehaviour
                 startTimes.Add(startTime);
                 endTimes.Add(endTime);
                 noteNumbers.Add(note.NoteNumber - 21);
-                playedNotes.Add(false); // Initialize all cues as not displayed
+                playedNotes.Add(false);
             }
 
-            // Initialize the note cue spawner mapping
-            noteSpawners = new Dictionary<int, Transform>();
-            for (int i = 1; i <= 88; i++)
-            {
-                Transform spawner = transform.Find($"NoteSpawner{i}");
-                if (spawner != null)
-                {
-                    noteSpawners.Add(i, spawner);
-                }
-                else
-                {
-                    Debug.LogWarning($"NoteSpawner{i} not found in the hierarchy!");
-                }
-            }
-
-            grandPiano = GameObject.Find("GrandPiano");
-            if (grandPiano != null)
-                InitializeKeys();
-            else
-                Debug.LogError("GrandPiano object not found in the scene!");
-
+            isStarted = true;
         }
         catch (System.Exception ex)
         {
-            Debug.LogError($"Error loading MIDI file: {ex.Message}");
+            Debug.LogError($"Error processing MIDI file: {ex.Message}");
         }
-        isStarted = true;
     }
+}
+
+
 
     void InitializeKeys()
     {

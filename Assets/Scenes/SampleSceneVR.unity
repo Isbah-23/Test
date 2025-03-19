@@ -947,6 +947,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VisualCues
       objectReference: {fileID: 0}
+    - target: {fileID: 9125909308711621593, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5907,17 +5911,6 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1226512479 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5639148293155833924, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
-  m_PrefabInstance: {fileID: 196236889}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5296332372d11b34897a1611f3e64668, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1256765049 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3600929592401116407, guid: 44372660c22479f4a807d043c2db00a2, type: 3}
@@ -7309,6 +7302,138 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1001 &1527203337
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 410995076897064927, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 410995076897064927, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 410995076897064927, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 410995076897064927, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 410995076897064927, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3806368259322229922, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_Name
+      value: Piano and Cues
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552292165737151304, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: selectedSongText
+      value: 
+      objectReference: {fileID: 696040890}
+    - target: {fileID: 4552292165737151304, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: practiceModeButton
+      value: 
+      objectReference: {fileID: 1952260082}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -11.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -45.84
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9177451483763669410, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9177451483763669410, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9177451483763669410, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9177451483763669410, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9177451483763669410, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+--- !u!114 &1527203338 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4552292165737151304, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+  m_PrefabInstance: {fileID: 1527203337}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5296332372d11b34897a1611f3e64668, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1552239728 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8223217832479370689, guid: 44372660c22479f4a807d043c2db00a2, type: 3}
@@ -9074,6 +9199,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GrandPiano
       objectReference: {fileID: 0}
+    - target: {fileID: 5426289549308968052, guid: 44372660c22479f4a807d043c2db00a2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10158,7 +10287,7 @@ PrefabInstance:
     - target: {fileID: 3601313790195701523, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 1226512479}
+      objectReference: {fileID: 1527203338}
     - target: {fileID: 3601313790195701523, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SetActive
@@ -10840,3 +10969,4 @@ SceneRoots:
   - {fileID: 196236889}
   - {fileID: 1557889842}
   - {fileID: 1959306466}
+  - {fileID: 1527203337}
