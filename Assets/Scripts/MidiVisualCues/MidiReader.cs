@@ -31,7 +31,7 @@ public class MidiReader : MonoBehaviour
     private List<int> noteNumbers = new List<int>();
     private List<bool> playedNotes = new List<bool>();
 
-    private Dictionary<int, Transform> noteSpawners; // Maps note numbers to their 
+    private Dictionary<int, Transform> noteSpawners = new Dictionary<int, Transform>(); // Maps note numbers to their 
 
     float n = 0.3f; // should match n in NoteFallingScript - for note length
     
@@ -54,22 +54,36 @@ public class MidiReader : MonoBehaviour
     // Initializes the arrays with note information and note spawners
     //<summary>    
     public void StartPlaying()
-{
-    string prefix = "Current Song: ";
-    string textValue = selectedSongText.text;
+    {
+        string prefix = "Current Song: ";
+        string textValue = selectedSongText.text;
 
-    // Extract the song name
-    string songName = textValue.Substring(prefix.Length).Trim();
+        // Extract the song name
+        string songName = textValue.Substring(prefix.Length).Trim();
 
-    // Build the file path
-    midiFilePath = songName + ".midi";
-    Debug.Log($"Button clicked with path: {midiFilePath}");
+        // Build the file path
+        midiFilePath = songName + ".midi";
+        Debug.Log($"Button clicked with path: {midiFilePath}");
 
-    time_diff = time_diff * playbackSpeed;
+        time_diff = time_diff * playbackSpeed;
 
-    // Load the MIDI file asynchronously
-    StartCoroutine(LoadMidiFile(midiFilePath));
-}
+        // Load the MIDI file asynchronously
+        StartCoroutine(LoadMidiFile(midiFilePath));
+
+        for (int i = 1; i <= 88; i++)
+        {
+            Transform spawner = transform.Find($"NoteSpawner{i}");
+            if (spawner != null)
+            {
+                noteSpawners.Add(i, spawner);
+                Debug.Log($"NoteSpawner{i} found");
+            }
+            else
+            {
+                Debug.LogWarning($"NoteSpawner{i} not found in the hierarchy!");
+            }
+        }
+    }
 
 private IEnumerator LoadMidiFile(string fileName)
 {
@@ -216,6 +230,10 @@ private IEnumerator LoadMidiFile(string fileName)
             if (startTimes[i] <= currentTime && !playedNotes[i])
             {
                 float noteDuration = endTimes[i] - startTimes[i];
+                if (!noteSpawners.ContainsKey(noteNumbers[i]))
+                {
+                    Debug.LogError($"noteSpawners does not contain key {noteNumbers[i]}");
+                }
                 if (noteSpawners.TryGetValue(noteNumbers[i], out Transform spawner))
                 {
                     NoteSpawningScript spawnerScript = spawner.GetComponent<NoteSpawningScript>();
