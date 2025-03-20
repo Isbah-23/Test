@@ -50,6 +50,27 @@ public class MidiReader : MonoBehaviour
         practiceModeButton.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = practiceMode ? "Practice Mode: On": "Practice Mode: Off";
     }
 
+    public void DeleteAllNotes()
+    {
+        GameObject[] glowingNotes = GameObject.FindGameObjectsWithTag("GlowingNote");
+        GameObject[] colouredGlowingNotes = GameObject.FindGameObjectsWithTag("ColoredGlowingNote");
+
+        foreach (GameObject note in glowingNotes)
+        {
+            Destroy(note);
+        }
+
+        foreach (GameObject note in colouredGlowingNotes)
+        {
+            Destroy(note);
+        }
+
+        Debug.Log("Deleted all GlowingNote and ColouredGlowingNote objects.");
+        isStarted = false;
+        currentTime = 0;
+        accumulatedTime = 0;
+    }
+
     //<summary>
     // Initializes the arrays with note information and note spawners
     //<summary>    
