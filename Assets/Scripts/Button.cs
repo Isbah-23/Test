@@ -11,10 +11,22 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private Color normalColor;
     public GameObject CubeObj;
     TestInteraction script;
+    private Button uiButton;
 
     private void Start()
     {
         originalScale = transform.localScale;
+
+        uiButton = GetComponent<Button>();
+
+        if (uiButton != null)
+        {
+            uiButton.onClick.AddListener(OnButtonClicked);
+        }
+        else
+        {
+            Debug.LogWarning("Button component not found on this object!");
+        }
 
         script = FindObjectOfType<TestInteraction>();
         if (script != null)
@@ -45,6 +57,16 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
         else
         {
             Debug.Log("Script is null");
+        }
+    }
+
+    private void OnButtonClicked()
+    {
+        Debug.Log($"{gameObject.name} button clicked!");
+
+        if (script != null)
+        {
+            script.PlayClickAudio(); 
         }
     }
 

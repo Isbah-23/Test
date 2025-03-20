@@ -7448,6 +7448,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 410995076897064927, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 410995076897064927, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 410995076897064927, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
@@ -7474,6 +7482,14 @@ PrefabInstance:
     - target: {fileID: 3806368259322229922, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
       propertyPath: m_TagString
       value: PianoAndCues
+      objectReference: {fileID: 0}
+    - target: {fileID: 6821688677041711017, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: interval
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6821688677041711017, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: noteLength
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
       propertyPath: m_LocalScale.x
