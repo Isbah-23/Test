@@ -7819,7 +7819,7 @@ PrefabInstance:
     - target: {fileID: 1251461958051051041, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
       propertyPath: m_ModelPrefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7072478885644867327, guid: a543ce027c5ec3a4788c4f633673c3de, type: 3}
     - target: {fileID: 1513517253017175284, guid: c08ec0b4da48587499f345c970fdc558, type: 3}
       propertyPath: m_BlockUIOnInteractableSelection
       value: 0
