@@ -27,9 +27,10 @@ public class NoteFallingScript : MonoBehaviour
 
         transform.Translate(Vector3.down * velocity * n * Time.deltaTime); // note falls 1 unit length per unit delta time
         float topEdgeY = transform.position.y + (transform.localScale.y * 0.5f);
-        if (topEdgeY < maxY)
-        {
-            Destroy(gameObject);
-        }
+        // if (topEdgeY < maxY)
+        // {
+        //     Debug.Log("DESTROYED NOTE");
+        //     Destroy(gameObject);
+        // }
     }
 }
