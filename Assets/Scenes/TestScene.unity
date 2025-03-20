@@ -958,45 +958,9 @@ PrefabInstance:
       value: --UI ClassicScene
       objectReference: {fileID: 0}
     - target: {fileID: 1487884762419741282, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1487884762419741282, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1487884762419741282, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1723160819}
-    - target: {fileID: 1487884762419741282, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1487884762419741282, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: DeleteAllNotes
-      objectReference: {fileID: 0}
-    - target: {fileID: 1487884762419741282, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MidiReader, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 1487884762419741282, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 2962859663744323673, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
-      propertyPath: m_Name
-      value: Btn Stop
-      objectReference: {fileID: 0}
-    - target: {fileID: 3338775518356897446, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
-      propertyPath: m_text
-      value: Stop
-      objectReference: {fileID: 0}
-    - target: {fileID: 3601313790195701523, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3601313790195701523, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
