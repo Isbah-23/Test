@@ -42,9 +42,9 @@ public class SimpleReader : MonoBehaviour
     private Dictionary<int, PianoKey> pianoKeysDict = new Dictionary<int, PianoKey>(); // Dictionary to store key references
     private bool allKeysPressed;
 
-
-    private float press_leniency = 0.03f;  // Adjust as needed
-    private float release_leniency = 0.1f;
+    // for leniency
+    private float press_leniency = 0.01f;  // Adjust as needed
+    private float release_leniency = 0.02f;
     List<(int noteNumber, bool started_playing, float endingTime, float leniencyTime)> activeNotes = new List<(int, bool, float, float)>();
 
     //<summary>
@@ -178,12 +178,22 @@ public class SimpleReader : MonoBehaviour
                 if (index != -1)
                 {
                     var (noteNumber, startedPlaying, endingTime, leniencyTime) = activeNotes[index];
+                    if (endingTime - currentTime <= release_leniency)
+                    {
+                        if (endingTime - currentTime <= 0) // ok now Allah Hafiz note sahab
+                        {
+                            Debug.Log($"Note {noteNumber} endingTime expired, removing.");
+                            activeNotes.RemoveAt(index);
+                        }
+                        Debug.Log($"MAIN letting {noteNumber} go. Difference: {endingTime-currentTime} <= {release_leniency}");
+                        return true; // shouldve been pressed but it oki, we nice, we let it go
+                    }
+
                     if (isKeyPressed) // wrna once leniency goes to 0, we are stuck
                     {
                         startedPlaying = true;
                         activeNotes[index] = (noteNumber, startedPlaying, endingTime, leniencyTime);
                     }
-
                     if (!startedPlaying) // if the key was never touched/tapped
                     {
                         // Reduce leniency time

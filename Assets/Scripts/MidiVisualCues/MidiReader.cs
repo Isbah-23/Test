@@ -9,6 +9,7 @@ using Melanchall.DryWetMidi.Interaction;
 using System.IO;
 using UnityEngine.Networking;
 using TMPro;
+using System.Linq;
 
 public class MidiReader : MonoBehaviour
 {
@@ -43,6 +44,10 @@ public class MidiReader : MonoBehaviour
     private Dictionary<int, PianoKey> pianoKeysDict = new Dictionary<int, PianoKey>(); // Dictionary to store key references
     private bool allKeysPressed;
     private bool isStarted = false;
+
+    private float press_leniency = 0.01f;  // Adjust as needed
+    private float release_leniency = 0.02f;
+    List<(int noteNumber, bool started_playing, float endingTime, float leniencyTime)> activeNotes = new List<(int, bool, float, float)>();
 
     public void TogglePracticeMode()
     {
@@ -104,6 +109,11 @@ public class MidiReader : MonoBehaviour
                 Debug.LogWarning($"NoteSpawner{i} not found in the hierarchy!");
             }
         }
+        grandPiano = GameObject.Find("GrandPiano");
+        if (grandPiano != null)
+            InitializeKeys();
+        else
+            Debug.LogError("GrandPiano object not found in the scene!");
     }
 
 private IEnumerator LoadMidiFile(string fileName)
@@ -182,36 +192,98 @@ private IEnumerator LoadMidiFile(string fileName)
         }
     }
 
-    bool CheckKeysPressed(List<int> keyNumbersToCheck)
+    bool CheckKeysPressed()
     {
-        HashSet<int> keysToCheckSet = new HashSet<int>(keyNumbersToCheck);
-
+        HashSet<int> expectedKeys = new HashSet<int>(activeNotes.Select(n => n.noteNumber));
         bool allKeysPressed = true;
 
+        // Debug.Log("Checking for keys pressed");
         foreach (var keyEntry in pianoKeysDict)
         {
-            bool isKeyInList = keysToCheckSet.Contains(keyEntry.Key);
+            // Debug.Log("In foreach");
+            int key = keyEntry.Key;
+            bool isKeyExpected = expectedKeys.Contains(keyEntry.Key);
             bool isKeyPressed = keyEntry.Value.isPressed;
 
-            if (isKeyInList)
+            // if (key >= 35 && key <= 45)
+            // {
+            //     Debug.Log($"Key: {key}, isKeyPressed: {isKeyPressed}");
+            // }
+
+            if (isKeyExpected) // For keys that shouldve been pressed
             {
-                if (!isKeyPressed)
+                int index = activeNotes.FindIndex(n => n.noteNumber == keyEntry.Key);
+                if (index != -1)
                 {
-                    allKeysPressed = false;
+                    var (noteNumber, startedPlaying, endingTime, leniencyTime) = activeNotes[index];
+                    if (endingTime - currentTime <= release_leniency)
+                    {
+                        if (endingTime - currentTime <= 0) // ok now Allah Hafiz note sahab
+                        {
+                            Debug.Log($"Note {noteNumber} endingTime expired, removing.");
+                            activeNotes.RemoveAt(index);
+                        }
+                        Debug.Log($"MAIN letting {noteNumber} go. Difference: {endingTime-currentTime} <= {release_leniency}");
+                        return true; // shouldve been pressed but it oki, we nice, we let it go
+                    }
+
+                    if (isKeyPressed) // wrna once leniency goes to 0, we are stuck
+                    {
+                        startedPlaying = true;
+                        activeNotes[index] = (noteNumber, startedPlaying, endingTime, leniencyTime);
+                    }
+                    if (!startedPlaying) // if the key was never touched/tapped
+                    {
+                        // Reduce leniency time
+                        leniencyTime -= (Time.deltaTime * playbackSpeed); // be lenient if allowed
+                        activeNotes[index] = (noteNumber, startedPlaying, endingTime, leniencyTime);
+                        if (leniencyTime <= 0)
+                        {
+                            // Debug.Log("No leniency left, kill");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (isKeyPressed) // else check that the key should still be held
+                        {
+                            if (endingTime - currentTime <= 0) // ok now Allah Hafiz note sahab
+                            {
+                                Debug.Log($"Note {noteNumber} endingTime expired, removing.");
+                                activeNotes.RemoveAt(index);
+                            }
+                            keyEntry.Value.ChangeKeyColor(true);
+                        }
+                        else
+                        {
+                            if (endingTime - currentTime <= release_leniency)
+                            {
+                                if (endingTime - currentTime <= 0) // ok now Allah Hafiz note sahab
+                                {
+                                    Debug.Log($"Note {noteNumber} endingTime expired, removing.");
+                                    activeNotes.RemoveAt(index);
+                                }
+                                Debug.Log($"We letting {noteNumber} go.");
+                                return true; // shouldve been pressed but it oki, we nice, we let it go
+                            }
+                            return false; // Expected key is not pressed
+                        }
+                    }
                 }
-                else
-                    keyEntry.Value.ChangeKeyColor(true);
             }
-            else
+            else // for keys that should not have been pressed
             {
                 if (isKeyPressed)
                 {
-                    allKeysPressed = false;
+                    // Debug.Log("Unexpected Key pressed");
+                    // If an unexpected key is pressed, fail and change color
                     keyEntry.Value.ChangeKeyColor(false);
+                    return false;
                 }
             }
         }
 
+        // Debug.Log("Everything in order");
         return allKeysPressed;
     }
 
@@ -226,7 +298,8 @@ private IEnumerator LoadMidiFile(string fileName)
         {
             if (practiceMode)
             {
-                isPlaying = CheckKeysPressed(UpdateActiveNotesAtKeys());
+                UpdateActiveNotesAtKeys();
+                isPlaying = CheckKeysPressed();
                 if (isPlaying){
                     currentTime += accumulatedTime;
                     ProcessNotesAtCurrentTime();
@@ -277,22 +350,30 @@ private IEnumerator LoadMidiFile(string fileName)
         }
     }
 
-    List<int> UpdateActiveNotesAtKeys()
+    void UpdateActiveNotesAtKeys()
     {
-        List<int> activeNotes = new List<int>();
+        List<int> activeNotesTemp = new List<int>();
+        HashSet<int> existingNotes = new HashSet<int>(activeNotes.Select(n => n.noteNumber)); // Store active notes for quick lookup
 
         for (int i = 0; i < startTimes.Count; i++)
         {
             float noteReachTime = startTimes[i] + time_diff;
-            float noteEndTime = noteReachTime + ((endTimes[i] - startTimes[i]));
 
-            if (playedNotes[i] && currentTime >= noteReachTime && currentTime <= noteEndTime)
+            if (currentTime >= noteReachTime)
             {
-                activeNotes.Add(noteNumbers[i]);
+                int noteNumber = noteNumbers[i];
+                activeNotesTemp.Add(noteNumber);
+                float endingTime = noteReachTime + ((endTimes[i] - startTimes[i])); //ending time
+                // Add the note to the activeNotes list only if it's not already in the list and its not feasible to let it go
+                if (!existingNotes.Contains(noteNumber) && ((endingTime - currentTime) > release_leniency))
+                {
+                    float noteLength = endTimes[i] - startTimes[i];
+                    float leniencyTime = press_leniency;
+                    activeNotes.Add((noteNumber, false, endingTime, leniencyTime)); // Dummy values for started_playing, playTime, and leniencyTime
+                    existingNotes.Add(noteNumber); // Update the HashSet to include the new note
+                    Debug.Log($"Added note {noteNumber} to List");
+                }
             }
         }
-
-        // Debug.Log("Active notes at key level: " + string.Join(", ", activeNotes));
-        return activeNotes;
     }
 }
