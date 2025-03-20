@@ -84,5 +84,15 @@ public class TestInteraction : MonoBehaviour, IInteractable,VrInteractable
             Debug.Log("Couldnt play hover sound");
         }
     }
+    public void QuitGame()
+    {
+        Debug.Log("Quitting Application...");
+        Application.Quit();
+        
+        // To make sure it also works in the Unity Editor
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #endif
+    }
 }
 
