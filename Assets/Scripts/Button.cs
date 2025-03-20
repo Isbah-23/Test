@@ -16,17 +16,16 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         originalScale = transform.localScale;
 
-        if (CubeObj == null)
+        script = FindObjectOfType<TestInteraction>();
+        if (script != null)
         {
-            // find Cube from scene
-            CubeObj = GameObject.Find("Cube");
-            if (CubeObj == null)
-            {
-            Debug.Log("CubeObj is null");  
-            } 
+            CubeObj = script.gameObject;
+            Debug.Log("Script found on: " + CubeObj.name);
         }
-        
-        script = CubeObj.GetComponent<TestInteraction>();
+        else
+        {
+            Debug.Log("Couldn't find script");
+        }
         buttonImage = GetComponent<Image>();
         if (buttonImage != null)
         {
