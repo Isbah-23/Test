@@ -6,6 +6,7 @@ TagManager:
   tags:
   - GlowingNote
   - ColoredGlowingNote
+  - PianoAndCues
   layers:
   - Default
   - TransparentFX

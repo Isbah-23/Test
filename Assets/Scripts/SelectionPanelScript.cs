@@ -19,7 +19,7 @@ public class SelectionPanelController : MonoBehaviour
     private const int buttonCount = 10;
     private const float buttonHeight = 100f;
     private const float buttonWidth = 300f;
-    private bool flag=false;
+    // private bool flag=false;
 
     void Awake()
     {

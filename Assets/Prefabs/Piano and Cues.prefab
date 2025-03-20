@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8540581929876090735}
   m_Layer: 0
   m_Name: Piano and Cues
-  m_TagString: Untagged
+  m_TagString: PianoAndCues
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26,7 +26,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9177451483763669410}
@@ -43,15 +43,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3794240593430488775, guid: 44372660c22479f4a807d043c2db00a2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 32.21
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3794240593430488775, guid: 44372660c22479f4a807d043c2db00a2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3794240593430488775, guid: 44372660c22479f4a807d043c2db00a2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 153.29001
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3794240593430488775, guid: 44372660c22479f4a807d043c2db00a2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -121,15 +121,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8420217539931534547, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 31.66
+      value: -0.55
       objectReference: {fileID: 0}
     - target: {fileID: 8420217539931534547, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -2.8
       objectReference: {fileID: 0}
     - target: {fileID: 8420217539931534547, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 151.66
+      value: -1.63
       objectReference: {fileID: 0}
     - target: {fileID: 8420217539931534547, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -163,13 +163,35 @@ PrefabInstance:
       propertyPath: m_Name
       value: VisualCues
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5639148293155833924, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9125909308711621593, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6821688677041711017}
   m_SourcePrefab: {fileID: 100100000, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
 --- !u!4 &410995076897064927 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8420217539931534547, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
   m_PrefabInstance: {fileID: 8173675869886460684}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138008620293447893 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9125909308711621593, guid: 2187e406b8a07d24cb37a6149a6474f6, type: 3}
+  m_PrefabInstance: {fileID: 8173675869886460684}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6821688677041711017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138008620293447893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edb87007fd02adf44bc852f73b8a4942, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playbackSpeed: 0.3

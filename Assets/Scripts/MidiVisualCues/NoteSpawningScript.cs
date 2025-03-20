@@ -26,13 +26,18 @@ public class NoteSpawningScript : MonoBehaviour
             float noteHeight = noteRenderer.bounds.size.y;
             spawnPosition.y += spawnLength * 0.5f; // 0.5 = half up
         }
-        Vector3 customRotation = new Vector3(0f, 90f, 0f);
         //Quaternion rotation = Quaternion.Euler(customRotation);
         //GameObject note = Instantiate(notePrefab, spawnPosition, rotation);
-        GameObject note = Instantiate(notePrefab, spawnPosition, Quaternion.identity);
+        Quaternion additionalRotation = Quaternion.Euler(0f, 90f, 0f);
+        Quaternion finalRotation = transform.rotation * additionalRotation;
+
+        GameObject note = Instantiate(notePrefab, spawnPosition, finalRotation);// Quaternion.identity);
+        GameObject pianoAndCues = GameObject.FindWithTag("PianoAndCues");
         Vector3 scale = note.transform.localScale;
         note.transform.position = new Vector3(note.transform.position.x, note.transform.position.y, note.transform.position.z + zOffset);
+        scale.x *= pianoAndCues.transform.localScale.x;
         scale.y = spawnLength;
+        scale.z *= pianoAndCues.transform.localScale.z;
         note.transform.localScale = scale;
     }
 }
