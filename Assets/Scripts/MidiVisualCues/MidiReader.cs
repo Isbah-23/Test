@@ -53,7 +53,7 @@ public class MidiReader : MonoBehaviour
     public void DeleteAllNotes()
     {
         GameObject[] glowingNotes = GameObject.FindGameObjectsWithTag("GlowingNote");
-        GameObject[] colouredGlowingNotes = GameObject.FindGameObjectsWithTag("ColoredGlowingNote");
+        GameObject[] colouredGlowingNotes = GameObject.FindGameObjectsWithTag("ColouredGlowingNote");
 
         foreach (GameObject note in glowingNotes)
         {

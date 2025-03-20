@@ -22,7 +22,8 @@ public class NoteFallingScript : MonoBehaviour
     //<summary>
     void Update()
     {
-        if (!MidiReader.isPlaying) return;
+        // if (!MidiReader.isPlaying) return;
+        if (!SimpleReader.isPlaying) return;
 
         transform.Translate(Vector3.down * velocity * n * Time.deltaTime); // note falls 1 unit length per unit delta time
         float topEdgeY = transform.position.y + (transform.localScale.y * 0.5f);

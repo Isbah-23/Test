@@ -205,7 +205,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1502900479}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MidiReader, Assembly-CSharp
         m_MethodName: StartPlaying
         m_Mode: 1
@@ -255,50 +255,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 21233339}
   m_CullTransparentMesh: 1
---- !u!1 &31178540
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 31178542}
-  - component: {fileID: 31178541}
-  m_Layer: 0
-  m_Name: ClickDebugger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &31178541
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 31178540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c472d1cb258d304fa1d42bec0b24f2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &31178542
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 31178540}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 32.09417, y: 2.391215, z: 156.95088}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &127826317
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,7 +682,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e2f42f6d2d55e49ace6abd5eb5305b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myButton: {fileID: 21233341}
 --- !u!4 &223906907
 Transform:
   m_ObjectHideFlags: 0
@@ -6467,7 +6422,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 31178541}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ButtonClickDebugger, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 1
@@ -6517,6 +6472,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1362098768}
   m_CullTransparentMesh: 1
+--- !u!1 &1447188375 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1138008620293447893, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+  m_PrefabInstance: {fileID: 6916578024714396824}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1496589221
 GameObject:
   m_ObjectHideFlags: 0
@@ -6619,17 +6579,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &1502900479 stripped
+--- !u!114 &1502900481
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4552292165737151304, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
-  m_PrefabInstance: {fileID: 6916578024714396824}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1447188375}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5296332372d11b34897a1611f3e64668, type: 3}
+  m_Script: {fileID: 11500000, guid: edb87007fd02adf44bc852f73b8a4942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playbackSpeed: 0.3
 --- !u!1 &1513844568
 GameObject:
   m_ObjectHideFlags: 0
@@ -7730,10 +7692,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4552292165737151304, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1138008620293447893, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1502900481}
   m_SourcePrefab: {fileID: 100100000, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -7747,5 +7713,4 @@ SceneRoots:
   - {fileID: 1682422570}
   - {fileID: 674951740}
   - {fileID: 223906907}
-  - {fileID: 31178542}
   - {fileID: 6916578024714396824}
