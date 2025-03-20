@@ -3243,6 +3243,9 @@ MonoBehaviour:
   selectedSongText: {fileID: 1670180185}
   practiceModeButton: {fileID: 1853193484}
   playbackSpeed: 1
+  noteLength: 1
+  interval: 1.1
+  totalNotes: 88
 --- !u!1 &376567808 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3381041480675990843, guid: 44372660c22479f4a807d043c2db00a2, type: 3}
@@ -14800,7 +14803,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 410995076897064927, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.56
+      value: -0.55
       objectReference: {fileID: 0}
     - target: {fileID: 410995076897064927, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14822,9 +14825,73 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 611902526059495387, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 815185122769812449, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.065
+      objectReference: {fileID: 0}
+    - target: {fileID: 979494826965327842, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 1302878700508876414, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 1403702376012706773, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.195
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419364818422731632, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 1558323551339854713, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2014352431722645693, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.555
+      objectReference: {fileID: 0}
+    - target: {fileID: 2034581625296104452, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.615
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041337543533368136, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.495
+      objectReference: {fileID: 0}
+    - target: {fileID: 2223582858488395046, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.035
+      objectReference: {fileID: 0}
+    - target: {fileID: 2228403019674218745, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.515
+      objectReference: {fileID: 0}
+    - target: {fileID: 2488817013648842245, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.32
+      objectReference: {fileID: 0}
     - target: {fileID: 3806368259322229922, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
       propertyPath: m_Name
       value: Piano and Cues
+      objectReference: {fileID: 0}
+    - target: {fileID: 3929811141557753430, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 4050347609290905308, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.945
+      objectReference: {fileID: 0}
+    - target: {fileID: 4264688180571625421, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.705
       objectReference: {fileID: 0}
     - target: {fileID: 4552292165737151304, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
       propertyPath: selectedSongText
@@ -14833,6 +14900,74 @@ PrefabInstance:
     - target: {fileID: 4552292165737151304, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
       propertyPath: practiceModeButton
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4664713133008626263, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.455
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842229439255418159, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907197347708727572, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 5040339832979514662, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 5711971790900497060, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151628745770241997, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 6708708560405400830, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 7163120383776349101, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.155
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443031039581060022, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.895
+      objectReference: {fileID: 0}
+    - target: {fileID: 7504394569198705680, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 7554690278265306053, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.135
+      objectReference: {fileID: 0}
+    - target: {fileID: 7756622052515790191, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.765
+      objectReference: {fileID: 0}
+    - target: {fileID: 7854704661879974544, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.885
+      objectReference: {fileID: 0}
+    - target: {fileID: 8057670576057960045, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 8297515901718152371, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.095
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359767504197359801, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.185
+      objectReference: {fileID: 0}
+    - target: {fileID: 8388502225958270109, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.95
       objectReference: {fileID: 0}
     - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
       propertyPath: m_LocalScale.x
@@ -14889,6 +15024,18 @@ PrefabInstance:
     - target: {fileID: 8540581929876090735, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9055526164350993074, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 9071221436000573134, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 9142229924085043218, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.31
       objectReference: {fileID: 0}
     - target: {fileID: 9177451483763669410, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
       propertyPath: m_LocalRotation.w
