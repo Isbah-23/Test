@@ -35,7 +35,7 @@ public class SimpleReader : MonoBehaviour
     float n = 0.3f; // should match n in NoteFallingScript - for note length
     
     // for practice mode
-    private bool practiceMode = true;
+    private bool practiceMode = false;
     public static bool isPlaying = true;
     float time_diff = 9.7f;
     private GameObject grandPiano;
@@ -247,19 +247,42 @@ public class SimpleReader : MonoBehaviour
         // Debug.Log("Everything in order");
         return allKeysPressed;
     }
+
+    void CheckKeysPressedAlt(List<int> keyNumbersToCheck)
+    {
+        HashSet<int> keysToCheckSet = new HashSet<int>(keyNumbersToCheck);
+
+        foreach (var keyEntry in pianoKeysDict)
+        {
+            bool isKeyInList = keysToCheckSet.Contains(keyEntry.Key);
+            bool isKeyPressed = keyEntry.Value.isPressed;
+
+            if (isKeyInList)
+            {
+                if (isKeyPressed)
+                    keyEntry.Value.ChangeKeyColor(true);
+            }
+            else
+            {
+                if (isKeyPressed)
+                    keyEntry.Value.ChangeKeyColor(false);
+            }
+        }
+    }
+
     //<summary>
     // Updates cumulative elapsed time and calls notes processor at current time
     //<summary>
     void Update()
     {
+        // if (!isStarted) return;
         accumulatedTime += (Time.deltaTime * playbackSpeed);
         if (accumulatedTime >= timeStep)
         {
-            // Debug.Log($"Is practice mode? {practiceMode}");
             if (practiceMode)
             {
                 UpdateActiveNotesAtKeys();
-                isPlaying = CheckKeysPressed();
+                isPlaying = CheckKeysPressed(); 
                 if (isPlaying){
                     currentTime += accumulatedTime;
                     ProcessNotesAtCurrentTime();
@@ -267,6 +290,9 @@ public class SimpleReader : MonoBehaviour
             }
             else
             {
+                // will light up with Practice mode off bhi ab
+                isPlaying = true; // but wont stop
+                CheckKeysPressedAlt(UpdateActiveNotesAtKeysAlt());
                 currentTime += accumulatedTime;
                 ProcessNotesAtCurrentTime();
             }
@@ -310,35 +336,6 @@ public class SimpleReader : MonoBehaviour
         }
     }
 
-    // void UpdateActiveNotesAtKeys()
-    // {
-    //     for (int i = 0; i < startTimes.Count; i++)
-    //     {
-    //         float noteReachTime = startTimes[i] + time_diff;
-
-    //         // If the note hasn't been played yet and it's time to play it
-    //         if (!playedNotes[i] && currentTime >= noteReachTime)
-    //         {
-    //             float noteLength = endTimes[i] - startTimes[i];
-    //             float playTime = Mathf.Max(noteLength - leniency, minTapTime);
-    //             float leniencyTime = leniency;
-
-    //             // Check if note is already in activeNotes using LINQ (efficient lookup)
-    //             if (activeNotes.Any(n => n.noteNumber == noteNumbers[i]))
-    //             {
-    //                 Debug.LogWarning($"Why try playing a note already played? Number: {noteNumbers[i]}");
-    //                 continue; // Skip adding duplicate notes
-    //             }
-
-    //             // Add note to activeNotes
-    //             activeNotes.Add((noteNumbers[i], false, playTime, leniencyTime));
-    //             playedNotes[i] = true; // Mark as played
-    //         }
-    //     }
-
-    //     Debug.Log("Active notes at key level: " + string.Join(", ", activeNotes.Select(n => n.noteNumber)));
-    // }
-
     void UpdateActiveNotesAtKeys()
     {
         List<int> activeNotesTemp = new List<int>();
@@ -364,6 +361,25 @@ public class SimpleReader : MonoBehaviour
                 }
             }
         }
+    }
+
+    List<int> UpdateActiveNotesAtKeysAlt()
+    {
+        List<int> activeNotesAlt = new List<int>();
+
+        for (int i = 0; i < startTimes.Count; i++)
+        {
+            float noteReachTime = startTimes[i] + time_diff;
+            float noteEndTime = noteReachTime + ((endTimes[i] - startTimes[i]));
+
+            if (playedNotes[i] && currentTime >= noteReachTime && currentTime <= noteEndTime)
+            {
+                activeNotesAlt.Add(noteNumbers[i]);
+            }
+        }
+
+        // Debug.Log("Active notes at key level: " + string.Join(", ", activeNotes));
+        return activeNotesAlt;
     }
 
 }

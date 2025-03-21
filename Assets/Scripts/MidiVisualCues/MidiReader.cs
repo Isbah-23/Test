@@ -74,6 +74,11 @@ public class MidiReader : MonoBehaviour
         isStarted = false;
         currentTime = 0;
         accumulatedTime = 0;
+        activeNotes.Clear(); // Removes all items from the list - This should hopefully fix the Practice Mode switch bug
+        startTimes.Clear();
+        endTimes.Clear();
+        noteNumbers.Clear();
+        playedNotes.Clear();
     }
 
     //<summary>
@@ -295,10 +300,10 @@ private IEnumerator LoadMidiFile(string fileName)
         accumulatedTime += (Time.deltaTime * playbackSpeed);
         if (accumulatedTime >= timeStep)
         {
+            UpdateActiveNotesAtKeys();
+            isPlaying = CheckKeysPressed(); // will light up with Practice mode off bhi ab
             if (practiceMode)
             {
-                UpdateActiveNotesAtKeys();
-                isPlaying = CheckKeysPressed();
                 if (isPlaying){
                     currentTime += accumulatedTime;
                     ProcessNotesAtCurrentTime();
@@ -306,6 +311,7 @@ private IEnumerator LoadMidiFile(string fileName)
             }
             else
             {
+                isPlaying = true; // but wont stop
                 currentTime += accumulatedTime;
                 ProcessNotesAtCurrentTime();
             }
