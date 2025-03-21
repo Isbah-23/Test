@@ -210,7 +210,17 @@ private IEnumerator LoadMidiFile(string fileName)
             //     Debug.Log($"Key: {key}, isKeyPressed: {isKeyPressed}");
             // }
 
-            if (isKeyExpected) // For keys that shouldve been pressed
+            if (!isKeyExpected) // for keys that should not have been pressed
+            {
+                if (isKeyPressed)
+                {
+                    // Debug.Log("Unexpected Key pressed");
+                    // If an unexpected key is pressed, fail and change color
+                    keyEntry.Value.ChangeKeyColor(false);
+                    allKeysPressed = false;
+                }
+            }
+            else // For keys that shouldve been pressed
             {
                 int index = activeNotes.FindIndex(n => n.noteNumber == keyEntry.Key);
                 if (index != -1)
@@ -224,9 +234,8 @@ private IEnumerator LoadMidiFile(string fileName)
                             activeNotes.RemoveAt(index);
                         }
                         Debug.Log($"MAIN letting {noteNumber} go. Difference: {endingTime-currentTime} <= {release_leniency}");
-                        return true; // shouldve been pressed but it oki, we nice, we let it go
+                        continue; // return true; // shouldve been pressed but it oki, we nice, we let it go
                     }
-
                     if (isKeyPressed) // wrna once leniency goes to 0, we are stuck
                     {
                         startedPlaying = true;
@@ -240,7 +249,7 @@ private IEnumerator LoadMidiFile(string fileName)
                         if (leniencyTime <= 0)
                         {
                             // Debug.Log("No leniency left, kill");
-                            return false;
+                            allKeysPressed = false;
                         }
                     }
                     else
@@ -264,21 +273,11 @@ private IEnumerator LoadMidiFile(string fileName)
                                     activeNotes.RemoveAt(index);
                                 }
                                 Debug.Log($"We letting {noteNumber} go.");
-                                return true; // shouldve been pressed but it oki, we nice, we let it go
+                                continue; //return true; // shouldve been pressed but it oki, we nice, we let it go
                             }
-                            return false; // Expected key is not pressed
+                            allKeysPressed = false; // Expected key is not pressed
                         }
                     }
-                }
-            }
-            else // for keys that should not have been pressed
-            {
-                if (isKeyPressed)
-                {
-                    // Debug.Log("Unexpected Key pressed");
-                    // If an unexpected key is pressed, fail and change color
-                    keyEntry.Value.ChangeKeyColor(false);
-                    return false;
                 }
             }
         }
