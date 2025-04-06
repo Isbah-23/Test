@@ -35,16 +35,17 @@ public class SimpleReader : MonoBehaviour
     float n = 0.3f; // should match n in NoteFallingScript - for note length
     
     // for practice mode
-    private bool practiceMode = false;
+    private bool practiceMode = true;
     public static bool isPlaying = true;
-    float time_diff = 9.7f;
+    float time_diff = 2.95f;
     private GameObject grandPiano;
     private Dictionary<int, PianoKey> pianoKeysDict = new Dictionary<int, PianoKey>(); // Dictionary to store key references
     private bool allKeysPressed;
 
     // for leniency
-    private float press_leniency = 0.01f;  // Adjust as needed
+    private float press_leniency = 0.02f;  // Adjust as needed
     private float release_leniency = 0.02f;
+    private float overpress_leniency = 0.03f;
     List<(int noteNumber, bool started_playing, float endingTime, float leniencyTime)> activeNotes = new List<(int, bool, float, float)>();
 
     //<summary>
@@ -190,9 +191,9 @@ public class SimpleReader : MonoBehaviour
                     var (noteNumber, startedPlaying, endingTime, leniencyTime) = activeNotes[index];
                     if (endingTime - currentTime <= release_leniency)
                     {
-                        if (endingTime - currentTime <= 0) // ok now Allah Hafiz note sahab
+                        if (endingTime - currentTime <= -overpress_leniency) // ok now Allah Hafiz note sahab
                         {
-                            Debug.Log($"Note {noteNumber} endingTime expired, removing.");
+                            Debug.Log($"1. Note {noteNumber} endingTime expired: {endingTime-currentTime}, removing.");
                             activeNotes.RemoveAt(index);
                         }
                         Debug.Log($"MAIN letting {noteNumber} go. Difference: {endingTime-currentTime} <= {release_leniency}");
@@ -218,9 +219,9 @@ public class SimpleReader : MonoBehaviour
                     {
                         if (isKeyPressed) // else check that the key should still be held
                         {
-                            if (endingTime - currentTime <= 0) // ok now Allah Hafiz note sahab
+                            if (endingTime - currentTime <= -overpress_leniency) // ok now Allah Hafiz note sahab
                             {
-                                Debug.Log($"Note {noteNumber} endingTime expired, removing.");
+                                Debug.Log($"2. Note {noteNumber} endingTime expired: {endingTime-currentTime}, removing.");
                                 activeNotes.RemoveAt(index);
                             }
                             keyEntry.Value.ChangeKeyColor(true);
@@ -229,9 +230,9 @@ public class SimpleReader : MonoBehaviour
                         {
                             if (endingTime - currentTime <= release_leniency)
                             {
-                                if (endingTime - currentTime <= 0) // ok now Allah Hafiz note sahab
+                                if (endingTime - currentTime <= -overpress_leniency) // ok now Allah Hafiz note sahab
                                 {
-                                    Debug.Log($"Note {noteNumber} endingTime expired, removing.");
+                                    Debug.Log($"3. Note {noteNumber} endingTime expired: {endingTime-currentTime}, removing.");
                                     activeNotes.RemoveAt(index);
                                 }
                                 Debug.Log($"We letting {noteNumber} go.");
