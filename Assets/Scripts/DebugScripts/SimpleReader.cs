@@ -43,9 +43,9 @@ public class SimpleReader : MonoBehaviour
     private bool allKeysPressed;
 
     // for leniency
-    private float press_leniency = 0.02f;  // Adjust as needed
-    private float release_leniency = 0.02f;
-    private float overpress_leniency = 0.03f;
+    private float press_leniency = 0.00f;  // Adjust as needed
+    private float release_leniency = 0.00f;
+    private float overpress_leniency = 0.00f;
     List<(int noteNumber, bool started_playing, float endingTime, float leniencyTime)> activeNotes = new List<(int, bool, float, float)>();
 
     //<summary>
@@ -53,7 +53,7 @@ public class SimpleReader : MonoBehaviour
     //<summary>    
     void Start()
     {
-        midiFilePath = "Easy.midi";
+        midiFilePath = "happy_birthday.midi";
         Debug.Log($"Button clicked with path: {midiFilePath}");
 
         time_diff = time_diff * playbackSpeed;
