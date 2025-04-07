@@ -87,11 +87,11 @@ public class MidiReader : MonoBehaviour
     //<summary>    
     public void StartPlaying()
     {
-        string prefix = "Current Song: ";
-        string textValue = selectedSongText.text;
+        // string prefix = "Current Song: ";
+        string songName = selectedSongText.text;
 
         // Extract the song name
-        string songName = textValue.Substring(prefix.Length).Trim();
+        // string songName = textValue.Substring(prefix.Length).Trim();
 
         // Build the file path
         midiFilePath = songName + ".midi";

@@ -104,7 +104,7 @@ private IEnumerator LoadMidiFiles()
         //midiReader.midiFilePath = fileName;
         selectionPanel.SetActive(false);
         mainOptions.SetActive(true);
-        selectedSongText.text = "Current Song: " + fileName;
+        selectedSongText.text = fileName;
         // Debug.Log($"Selected MIDI: {fileName}");
     }
 
