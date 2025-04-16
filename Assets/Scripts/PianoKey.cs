@@ -104,6 +104,10 @@ public class PianoKey : MonoBehaviour, IInteractable
             // isReleased = false;
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        PressKey();
+    }
 
     public void Interact()
     {
