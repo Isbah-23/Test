@@ -47,7 +47,7 @@ public class TestInteraction : MonoBehaviour, IInteractable,VrInteractable
     {
         
     }
-    private void ChangeScene()
+    public void ChangeScene()
     {
         //change scene to the next scene
         Debug.Log("Changing scene");
