@@ -2830,6 +2830,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 821056805180827985, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 821056805180827985, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 35
+      objectReference: {fileID: 0}
     - target: {fileID: 1208691255719630959, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.9
@@ -2873,6 +2881,22 @@ PrefabInstance:
     - target: {fileID: 1254696570393356081, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_Name
       value: --UI ClassicScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 1358544117870334952, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1358544117870334952, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 269
+      objectReference: {fileID: 0}
+    - target: {fileID: 1465552975092830609, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1465552975092830609, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 468.99994
       objectReference: {fileID: 0}
     - target: {fileID: 1487884762419741282, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Target
@@ -2966,6 +2990,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
       objectReference: {fileID: 1369972119}
+    - target: {fileID: 5693026099973717274, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 5693026099973717274, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 35
+      objectReference: {fileID: 0}
     - target: {fileID: 5815558129352477975, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: CubeObj
       value: 
