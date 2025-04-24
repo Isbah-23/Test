@@ -648,17 +648,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: XR Interaction Hands Setup
       objectReference: {fileID: 0}
+    - target: {fileID: 2580910706292915105, guid: 5eccbf4be2c00e94689ee8062e4e7276, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596136170892101230, guid: 5eccbf4be2c00e94689ee8062e4e7276, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5224629633635038180, guid: 5eccbf4be2c00e94689ee8062e4e7276, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5773256366622995465, guid: 5eccbf4be2c00e94689ee8062e4e7276, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5773256366622995465, guid: 5eccbf4be2c00e94689ee8062e4e7276, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 5773256366622995465, guid: 5eccbf4be2c00e94689ee8062e4e7276, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.36
       objectReference: {fileID: 0}
     - target: {fileID: 5773256366622995465, guid: 5eccbf4be2c00e94689ee8062e4e7276, type: 3}
       propertyPath: m_LocalRotation.w
@@ -692,12 +704,24 @@ PrefabInstance:
       propertyPath: m_HandMeshMaterial
       value: 
       objectReference: {fileID: 5329859126516784187, guid: 5776e8890b9a6c94081a43f1d809ed33, type: 3}
+    - target: {fileID: 7990873189708867121, guid: 5eccbf4be2c00e94689ee8062e4e7276, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990873191126656718, guid: 5eccbf4be2c00e94689ee8062e4e7276, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7990873191187716717, guid: 5eccbf4be2c00e94689ee8062e4e7276, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8733093507751517968, guid: 5eccbf4be2c00e94689ee8062e4e7276, type: 3}
       propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9153272346877832867, guid: 5eccbf4be2c00e94689ee8062e4e7276, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1102,18 +1126,6 @@ PrefabInstance:
       propertyPath: CubeObj
       value: 
       objectReference: {fileID: 1957979914}
-    - target: {fileID: 2493512737753216767, guid: 99bdd7a0380f69949bfa57a4546ef651, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2909378634521408728, guid: 99bdd7a0380f69949bfa57a4546ef651, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2959896151220033465, guid: 99bdd7a0380f69949bfa57a4546ef651, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3278234506447411363, guid: 99bdd7a0380f69949bfa57a4546ef651, type: 3}
       propertyPath: CubeObj
       value: 
@@ -1123,6 +1135,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1957979914}
     - target: {fileID: 3747829952628503398, guid: 99bdd7a0380f69949bfa57a4546ef651, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
+    - target: {fileID: 3963649053545537712, guid: 99bdd7a0380f69949bfa57a4546ef651, type: 3}
       propertyPath: CubeObj
       value: 
       objectReference: {fileID: 1957979914}
@@ -1151,6 +1167,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1957979914}
     - target: {fileID: 6378942820195582602, guid: 99bdd7a0380f69949bfa57a4546ef651, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
+    - target: {fileID: 6702364261222037709, guid: 99bdd7a0380f69949bfa57a4546ef651, type: 3}
       propertyPath: CubeObj
       value: 
       objectReference: {fileID: 1957979914}
@@ -1206,10 +1226,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1957979915}
-    - target: {fileID: 9129445467501011893, guid: 99bdd7a0380f69949bfa57a4546ef651, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 8396492070203283978, guid: 99bdd7a0380f69949bfa57a4546ef651, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
+    - target: {fileID: 9011058744482287102, guid: 99bdd7a0380f69949bfa57a4546ef651, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
     - target: {fileID: 9200404242145626208, guid: 99bdd7a0380f69949bfa57a4546ef651, type: 3}
       propertyPath: CubeObj
       value: 
