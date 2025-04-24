@@ -47,10 +47,11 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        transform.DOScale(originalScale * 1.05f, 0.2f).SetEase(Ease.OutBack); // 5% scale, in 0.2 seconds
+        if (uiButton.interactable)
+            transform.DOScale(originalScale * 1.05f, 0.2f).SetEase(Ease.OutBack); // 5% scale, in 0.2 seconds
 
         // call funtion in testinteraction script
-        if (script != null)
+        if (script != null && uiButton.interactable)
         {
             script.PlayHoverAudio();
         }
@@ -64,7 +65,7 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         Debug.Log($"{gameObject.name} button clicked!");
 
-        if (script != null)
+        if (script != null && uiButton.interactable)
         {
             script.PlayClickAudio(); 
         }
@@ -72,8 +73,11 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutBack);
-        buttonImage.DOColor(normalColor, 0.2f); 
+        if (uiButton.interactable)
+        {
+            transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutBack);
+            buttonImage.DOColor(normalColor, 0.2f); 
+        }
     }
 
     // return to normal size before the button is disabled
