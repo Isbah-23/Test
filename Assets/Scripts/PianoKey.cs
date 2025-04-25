@@ -1,3 +1,4 @@
+
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -34,6 +35,9 @@ public class PianoKey : MonoBehaviour, IInteractable
 
     //For VR
     private XRBaseInteractable interactable;
+
+    // for reader
+    public bool colorValue = false; // 0 - original, 1 - red/ green
 
     private void Awake()
     {
@@ -100,7 +104,7 @@ public class PianoKey : MonoBehaviour, IInteractable
                 
             transform.localRotation = Quaternion.Slerp(transform.localRotation, originalRotation, Time.deltaTime * releaseSpeed);
             keyRenderer.material.color = originalColor;
-
+            colorValue = false;
             // isReleased = false;
         }
     }
@@ -148,13 +152,13 @@ public class PianoKey : MonoBehaviour, IInteractable
     {
         if (keyRenderer != null && changeColor && type)
         {
-            // Debug.Log("Type True color should be Pressed Color");
             keyRenderer.material.color = pressedColor;
+            colorValue = true;
         }
         else if (keyRenderer != null && changeColor && !type)
         {
             keyRenderer.material.color = wrongPress;
-            // Debug.Log("Type False color should be Wrong Colour");
+            colorValue = true;
         }
     }
 
