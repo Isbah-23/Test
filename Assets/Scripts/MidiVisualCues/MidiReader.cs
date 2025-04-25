@@ -31,6 +31,8 @@ public class MidiReader : MonoBehaviour
     private List<float> endTimes = new List<float>();
     private List<int> noteNumbers = new List<int>();
     private List<bool> playedNotes = new List<bool>();
+    private List<GameObject> spawnedNoteObjects = new List<GameObject>();
+    private List<bool> done_and_dusted = new List<bool>();
 
     private Dictionary<int, Transform> noteSpawners = new Dictionary<int, Transform>(); // Maps note numbers to their 
 
@@ -45,14 +47,17 @@ public class MidiReader : MonoBehaviour
     private bool allKeysPressed;
     private bool isStarted = false;
 
-    private float press_leniency = 0.05f;  // Adjust as needed
-    private float release_leniency = 0.02f;
-    private float overpress_leniency = 0.07f;
-    List<(int noteNumber, bool started_playing, float endingTime, float leniencyTime)> activeNotes = new List<(int, bool, float, float)>();
-
+    private float[] tap_time = {0.01f, 0.3f};
+    private float[] hold_time = {0.3f, 0.6f}; //Adjust as needed
+    private float[] long_hold_time = {0.6f, Mathf.Infinity};
+    List<(int key, int noteNumber, int press_type, float press_time, float note_reach_time, float end_time)> activeNotes = new List<(int, int, int, float, float, float)>();
     
+    // for practice mode
+    private int hardScore = 0;
+    // for play mode
     float total_score = 0;
     float obtained_score = 0;
+    float song_end_time = 0f;
 
     string[] pianoNotesNames = new string[88]
     {
@@ -104,6 +109,8 @@ public class MidiReader : MonoBehaviour
         endTimes.Clear();
         noteNumbers.Clear();
         playedNotes.Clear();
+        done_and_dusted.Clear();
+        spawnedNoteObjects.Clear();
     }
 
     //<summary>
@@ -190,8 +197,14 @@ private IEnumerator LoadMidiFile(string fileName)
 
                 startTimes.Add(startTime);
                 endTimes.Add(endTime);
+                if ((startTime + time_diff) + ((endTime - startTime)) > song_end_time)
+                {
+                    song_end_time = (startTime + time_diff) + ((endTime - startTime)) + 1f;
+                }
                 noteNumbers.Add(note.NoteNumber - 21);
                 playedNotes.Add(false);
+                spawnedNoteObjects.Add(null);
+                done_and_dusted.Add(false);
             }
 
             isStarted = true;
@@ -231,94 +244,87 @@ private IEnumerator LoadMidiFile(string fileName)
         bool allKeysPressed = true;
         bool increment_score = true;
 
-        // Debug.Log("Checking for keys pressed");
         foreach (var keyEntry in pianoKeysDict)
         {
-            // Debug.Log("In foreach");
             int key = keyEntry.Key;
-            bool isKeyExpected = expectedKeys.Contains(keyEntry.Key);
-            bool isKeyPressed = keyEntry.Value.isPressed;
+            bool isKeyExpected = expectedKeys.Contains(keyEntry.Key); // should the key be pressed?
+            bool isKeyPressed = keyEntry.Value.isPressed; // is the key pressed?
+            bool keyColor = keyEntry.Value.colorValue; // have we registered the change in state already?
+            
 
-            // if (key >= 35 && key <= 45)
-            // {
-            //     Debug.Log($"Key: {key}, isKeyPressed: {isKeyPressed}");
-            // }
-
-            if (!isKeyExpected) // for keys that should not have been pressed
+            if (!isKeyExpected) // The key should not have been pressed
             {
-                if (isKeyPressed)
+                if (isKeyPressed) // but it is pressed 
                 {
-                    Debug.Log($"Unexpected Key pressed: {pianoNotesNames[key-1]}");
-                    // LogToPrefs($"Unexpected Key pressed: {pianoNotesNames[key-1]}");
-                    // string path = Application.persistentDataPath + "/vr_debug.log";
-                    // string log = $"{currentTime}:: Unexpected Key pressed - {pianoNotesNames[key-1]}";
-                    // File.AppendAllText(path, log); // This creates or appends the file
-                    // If an unexpected key is pressed, fail and change color
-                    keyEntry.Value.ChangeKeyColor(false);
+                    if (!keyColor) // first press?
+                    {
+                        keyEntry.Value.ChangeKeyColor(false);
+                    }
+                    // Debug.Log($"Point B is stopping for note: {key}");
                     allKeysPressed = false;
                     increment_score = false;
                 }
             }
-            else // For keys that shouldve been pressed
+            else // key should have been pressed
             {
-                int index = activeNotes.FindIndex(n => n.noteNumber == keyEntry.Key);
-                if (index != -1)
+                int index = activeNotes.FindIndex(n => n.noteNumber == keyEntry.Key); // get information about the note associated with the key
+                if (index != -1) 
                 {
-                    var (noteNumber, startedPlaying, endingTime, leniencyTime) = activeNotes[index];
-                    if (endingTime - currentTime <= release_leniency)
+                    var (param_key, noteNumber, pressType, pressTime, reachTime, endingTime) = activeNotes[index];
+                    if (isKeyPressed)
                     {
-                        if (endingTime - currentTime <= -overpress_leniency) // ok now Allah Hafiz note sahab
+                        if (!keyColor) // first press?
                         {
-                            // Debug.Log($"Note {noteNumber} endingTime expired, removing.");
-                            activeNotes.RemoveAt(index);
-                        }
-                        // Debug.Log($"MAIN letting {noteNumber} go. Difference: {endingTime-currentTime} <= {release_leniency}");
-                        continue; // return true; // shouldve been pressed but it oki, we nice, we let it go
-                    }
-                    if (isKeyPressed) // wrna once leniency goes to 0, we are stuck
-                    {
-                        startedPlaying = true;
-                        activeNotes[index] = (noteNumber, startedPlaying, endingTime, leniencyTime);
-                    }
-                    else
-                    {
-                        increment_score = false;
-                    }
-                    if (!startedPlaying) // if the key was never touched/tapped
-                    {
-                        // Reduce leniency time
-                        leniencyTime -= (Time.deltaTime * playbackSpeed); // be lenient if allowed
-                        activeNotes[index] = (noteNumber, startedPlaying, endingTime, leniencyTime);
-                        if (leniencyTime <= 0)
-                        {
-                            // Debug.Log("No leniency left, kill");
-                            allKeysPressed = false;
-                        }
-                    }
-                    else
-                    {
-                        if (isKeyPressed) // else check that the key should still be held
-                        {
-                            if (endingTime - currentTime <= -overpress_leniency) // ok now Allah Hafiz note sahab
-                            {
-                                // Debug.Log($"Note {noteNumber} endingTime expired, removing.");
-                                activeNotes.RemoveAt(index);
-                            }
                             keyEntry.Value.ChangeKeyColor(true);
                         }
-                        else
+                        pressTime += (Time.deltaTime * playbackSpeed); // increase press time
+                        activeNotes[index] = (param_key, noteNumber, pressType, pressTime, reachTime, endingTime);
+                        continue;
+                    }
+                    else  // but it is not pressed
+                    {
+                        increment_score = false;
+                        if (practiceMode)
                         {
-                            if (endingTime - currentTime <= release_leniency)
+                            if (pressTime > 0.0f) // just released
                             {
-                                if (endingTime - currentTime <= -overpress_leniency) // ok now Allah Hafiz note sahab
+                                activeNotes.RemoveAt(index);
+                                done_and_dusted[param_key] = true;
+                                Destroy(spawnedNoteObjects[param_key]);
+                                spawnedNoteObjects[param_key] = null;
+                                if (CheckPressTime(pressTime, pressType) == 0) // was pressed for correct amount of time
                                 {
-                                    Debug.Log($"Note {noteNumber} endingTime expired, removing.");
-                                    activeNotes.RemoveAt(index);
+                                    hardScore += 1;
+                                    Debug.Log($"Good Press! Score: {hardScore}");
                                 }
-                                // Debug.Log($"We letting {noteNumber} go.");
-                                continue; //return true; // shouldve been pressed but it oki, we nice, we let it go
+                                else if (CheckPressTime(pressTime, pressType) == 1) // press time was too high
+                                {
+                                    hardScore -= 1;
+                                    Debug.LogWarning($"Too High! Score: {hardScore}");
+                                }
+                                else if (CheckPressTime(pressTime, pressType) == -1) // press time was too low
+                                {
+                                    hardScore -= 1;
+                                    Debug.LogWarning($"Too Low! Score: {hardScore}");
+                                }
                             }
-                            allKeysPressed = false; // Expected key is not pressed
+                            else // was never pressed
+                            {
+                                if (reachTime - currentTime <= -0.2f)
+                                {
+                                    // Debug.Log($"Point A is stopping for note: {noteNumber}");
+                                    allKeysPressed = false; // stop till user plays that note
+                                }
+                            }
+                        }
+                        if (endingTime - currentTime <= 0)
+                        {
+                            // activeNotes.RemoveAt(index);
+                            // if (spawnedNoteObjects[param_key] != null)
+                            //     Destroy(spawnedNoteObjects[param_key]);
+                            // done_and_dusted[param_key] = true;
+                            // Debug.Log($"{noteNumber} should be removed");
+                            // PrintActiveNotes("Out of bounds");
                         }
                     }
                 }
@@ -329,11 +335,9 @@ private IEnumerator LoadMidiFile(string fileName)
         if (increment_score)
             obtained_score += 1;
 
-        Debug.Log($"Accuracy: {((obtained_score / total_score) * 100f).ToString("F2")}%");
-        PlayerPrefs.SetFloat("Accuracy", (obtained_score / total_score) * 100f);
-        PlayerPrefs.Save();
+        if(!practiceMode)
+            Debug.Log($"Accuracy: {((obtained_score / total_score) * 100f).ToString("F2")}%");
 
-        // Debug.Log("Everything in order");
         return allKeysPressed;
     }
 
@@ -363,6 +367,11 @@ private IEnumerator LoadMidiFile(string fileName)
             }
             accumulatedTime = 0f;
         }
+        if (isStarted && (currentTime > song_end_time))
+        {
+            Debug.Log("Song Ended :)");
+            isStarted = false;
+        }
     }
 
     //<summary>
@@ -385,7 +394,8 @@ private IEnumerator LoadMidiFile(string fileName)
                     if (spawnerScript != null)
                     {
                         spawnerScript.givenSpawnLength = noteDuration;
-                        spawnerScript.SpawnNote(noteDuration* (1/playbackSpeed) * n); // note falls 1 unit length per unit delta time
+                        GameObject note = spawnerScript.SpawnNote(noteDuration* (1/playbackSpeed) * n); // note falls 1 unit length per unit delta time
+                        spawnedNoteObjects[i] = note;
                     }
                     else
                     {
@@ -410,32 +420,83 @@ private IEnumerator LoadMidiFile(string fileName)
         {
             float noteReachTime = startTimes[i] + time_diff;
 
-            if (currentTime >= noteReachTime)
+            if (currentTime >= noteReachTime && !done_and_dusted[i])
             {
                 int noteNumber = noteNumbers[i];
                 activeNotesTemp.Add(noteNumber);
-                float endingTime = noteReachTime + ((endTimes[i] - startTimes[i])); //ending time
-                // Add the note to the activeNotes list only if it's not already in the list and its not feasible to let it go
-                if (!existingNotes.Contains(noteNumber) && ((endingTime - currentTime) > release_leniency))
+                float endingTime = noteReachTime + ((endTimes[i] - startTimes[i]));
+                if (endingTime > song_end_time)
+                {
+                    song_end_time = endingTime + 1f;
+                }
+                // Add the note to the activeNotes list only if it's not already in the list
+                if (!existingNotes.Contains(noteNumber))
                 {
                     float noteLength = endTimes[i] - startTimes[i];
-                    float leniencyTime = press_leniency;
-                    activeNotes.Add((noteNumber, false, endingTime, leniencyTime)); // Dummy values for started_playing, playTime, and leniencyTime
+                    activeNotes.Add((i, noteNumber, GetPressType(endTimes[i]-startTimes[i]), 0.0f, noteReachTime, endingTime)); // values for note
                     existingNotes.Add(noteNumber); // Update the HashSet to include the new note
-                    Debug.Log($"Added note {noteNumber} to List");
+                    // Debug.Log($"Added note {noteNumber} to List");
                 }
             }
         }
     }
 
-    public static void LogToPrefs(string message)
+    int GetPressType(float note_length)
     {
-        string existingLog = PlayerPrefs.GetString("debugLog", "");
-        string timestamp = System.DateTime.Now.ToString("HH:mm:ss");
-        existingLog += $"[{timestamp}] {message}\n";
+        if (note_length >= 2.0f)
+        {    
+            Debug.Log($"Note length {note_length} is of type 2");
+            return 2;
+        }
+        if (note_length >= 1.0f)
+        {
+            Debug.Log($"Note length {note_length} is of type 1");
+            return 1;
+        }
+        Debug.Log($"Note length {note_length} is of type 0");
+        return 0;
+    }
 
-        PlayerPrefs.SetString("debugLog", existingLog);
-        PlayerPrefs.Save();
+    int CheckPressTime(float pressTime, int pressType)
+    {
+        Debug.Log($"Press Time was: {pressTime}");
+        if(pressType == 0)
+        {
+            if (pressTime > tap_time[0] && pressTime < tap_time[1])
+                return 0;
+            if (pressTime < tap_time[0])
+                return -1;
+            if (pressTime > tap_time[1])
+                return 1;
+        }
+        if (pressType == 1)
+        {
+            if (pressTime > hold_time[0] && pressTime < hold_time[1])
+                return 0;
+            if (pressTime < hold_time[0])
+                return -1;
+            if (pressTime > hold_time[1])
+                return 1;
+        }
+        if (pressType == 2)
+        {
+            if (pressTime > long_hold_time[0] && pressTime < long_hold_time[1])
+                return 0;
+            if (pressTime < long_hold_time[0])
+                return -1;
+            if (pressTime > long_hold_time[1])
+                return 1;
+        }
+        return 0;
+    }
+
+    void PrintActiveNotes(string origin)
+    {
+        // Join all noteNumbers into a single string, separated by commas
+        string allNoteNumbers = string.Join(", ", activeNotes.Select(note => note.noteNumber.ToString()).ToArray());
+
+        // Print the entire string in one line
+        Debug.Log(origin + " Note Numbers: " + allNoteNumbers);
     }
 
     void OnDestroy()

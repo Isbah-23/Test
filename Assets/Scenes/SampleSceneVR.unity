@@ -17407,8 +17407,12 @@ PrefabInstance:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 4189751197850638223, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+<<<<<<< Updated upstream
     m_RemovedGameObjects:
     - {fileID: 7565144357722903879, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+=======
+    m_RemovedGameObjects: []
+>>>>>>> Stashed changes
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5075197198288965044, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
