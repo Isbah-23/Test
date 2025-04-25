@@ -35,7 +35,7 @@ public class SimpleReader : MonoBehaviour
     float n = 0.3f; // should match n in NoteFallingScript - for note length
     
     // for practice mode
-    private bool practiceMode = true;
+    private bool practiceMode = false;
     public static bool isPlaying = true;
     float time_diff = 2.95f;
     private GameObject grandPiano;
@@ -48,12 +48,15 @@ public class SimpleReader : MonoBehaviour
     private float overpress_leniency = 0.00f;
     List<(int noteNumber, bool started_playing, float endingTime, float leniencyTime)> activeNotes = new List<(int, bool, float, float)>();
 
+    float total_score = 0;
+    float obtained_score = 0;
+    
     //<summary>
     // Initializes the arrays with note information and note spawners
     //<summary>    
     void Start()
     {
-        midiFilePath = "happy_birthday.midi";
+        midiFilePath = "test.midi";
         Debug.Log($"Button clicked with path: {midiFilePath}");
 
         time_diff = time_diff * playbackSpeed;
@@ -252,7 +255,7 @@ public class SimpleReader : MonoBehaviour
     void CheckKeysPressedAlt(List<int> keyNumbersToCheck)
     {
         HashSet<int> keysToCheckSet = new HashSet<int>(keyNumbersToCheck);
-
+        bool increment_score = true;
         foreach (var keyEntry in pianoKeysDict)
         {
             bool isKeyInList = keysToCheckSet.Contains(keyEntry.Key);
@@ -262,13 +265,24 @@ public class SimpleReader : MonoBehaviour
             {
                 if (isKeyPressed)
                     keyEntry.Value.ChangeKeyColor(true);
+                if (!isKeyPressed)
+                    increment_score = false;
             }
             else
             {
                 if (isKeyPressed)
+                {    
                     keyEntry.Value.ChangeKeyColor(false);
+                    increment_score = false;
+                }
             }
         }
+
+        total_score += 1;
+        if (increment_score)
+            obtained_score += 1;
+
+        Debug.Log($"Accuracy: {((obtained_score / total_score) * 100f).ToString("F2")}%");
     }
 
     //<summary>
