@@ -16,7 +16,7 @@ public class NoteSpawningScript : MonoBehaviour
     // Spawns note of given length
     // spawnLength - length (y-scale) of the note to be spawned
     //<summary>
-    public void SpawnNote(float spawnLength)
+    public GameObject SpawnNote(float spawnLength)
     {
         Vector3 spawnPosition = transform.position;
         // Adjust the spawn position to align the bottom edges of notes
@@ -39,5 +39,7 @@ public class NoteSpawningScript : MonoBehaviour
         scale.y = spawnLength;
         scale.z *= pianoAndCues.transform.localScale.z;
         note.transform.localScale = scale;
+
+        return note;
     }
 }
