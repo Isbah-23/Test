@@ -319,10 +319,10 @@ private IEnumerator LoadMidiFile(string fileName)
                         }
                         if (endingTime - currentTime <= 0)
                         {
-                            // activeNotes.RemoveAt(index);
-                            // if (spawnedNoteObjects[param_key] != null)
-                            //     Destroy(spawnedNoteObjects[param_key]);
-                            // done_and_dusted[param_key] = true;
+                            activeNotes.RemoveAt(index);
+                            if (spawnedNoteObjects[param_key] != null)
+                                Destroy(spawnedNoteObjects[param_key]);
+                            done_and_dusted[param_key] = true;
                             // Debug.Log($"{noteNumber} should be removed");
                             // PrintActiveNotes("Out of bounds");
                         }
