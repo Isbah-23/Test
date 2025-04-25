@@ -38,7 +38,7 @@ public class MidiReader : MonoBehaviour
     
     // for practice mode
     private bool practiceMode = true;
-    public static bool isPlaying = true;
+    public static bool isPlaying = false;
     float time_diff = 2.95f;
     private GameObject grandPiano;
     private Dictionary<int, PianoKey> pianoKeysDict = new Dictionary<int, PianoKey>(); // Dictionary to store key references
