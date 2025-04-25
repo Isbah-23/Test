@@ -1,8 +1,8 @@
-test.midi
-Easy.midi
 happy_birthday
 twinkle_twinkle
 old_mcdonald
 london_bridge
 Interstellar
 Beethoven - Moonlight Sonata
+test
+Easy

@@ -56,7 +56,7 @@ public class SimpleReader : MonoBehaviour
     //<summary>    
     void Start()
     {
-        midiFilePath = "test.midi";
+        midiFilePath = "test_2.midi";
         Debug.Log($"Button clicked with path: {midiFilePath}");
 
         time_diff = time_diff * playbackSpeed;
@@ -162,6 +162,7 @@ public class SimpleReader : MonoBehaviour
     {
         HashSet<int> expectedKeys = new HashSet<int>(activeNotes.Select(n => n.noteNumber));
         bool allKeysPressed = true;
+        bool increment_score = true;
 
         // Debug.Log("Checking for keys pressed");
         foreach (var keyEntry in pianoKeysDict)
@@ -180,10 +181,11 @@ public class SimpleReader : MonoBehaviour
             {
                 if (isKeyPressed)
                 {
-                    // Debug.Log("Unexpected Key pressed");
+                    Debug.Log($"Unexpected Key pressed: {key}");
                     // If an unexpected key is pressed, fail and change color
                     keyEntry.Value.ChangeKeyColor(false);
                     allKeysPressed = false;
+                    increment_score = false;
                 }
             }
             else // For keys that shouldve been pressed
@@ -196,16 +198,20 @@ public class SimpleReader : MonoBehaviour
                     {
                         if (endingTime - currentTime <= -overpress_leniency) // ok now Allah Hafiz note sahab
                         {
-                            Debug.Log($"1. Note {noteNumber} endingTime expired: {endingTime-currentTime}, removing.");
+                            // Debug.Log($"Note {noteNumber} endingTime expired, removing.");
                             activeNotes.RemoveAt(index);
                         }
-                        Debug.Log($"MAIN letting {noteNumber} go. Difference: {endingTime-currentTime} <= {release_leniency}");
+                        // Debug.Log($"MAIN letting {noteNumber} go. Difference: {endingTime-currentTime} <= {release_leniency}");
                         continue; // return true; // shouldve been pressed but it oki, we nice, we let it go
                     }
                     if (isKeyPressed) // wrna once leniency goes to 0, we are stuck
                     {
                         startedPlaying = true;
                         activeNotes[index] = (noteNumber, startedPlaying, endingTime, leniencyTime);
+                    }
+                    else
+                    {
+                        increment_score = false;
                     }
                     if (!startedPlaying) // if the key was never touched/tapped
                     {
@@ -224,7 +230,7 @@ public class SimpleReader : MonoBehaviour
                         {
                             if (endingTime - currentTime <= -overpress_leniency) // ok now Allah Hafiz note sahab
                             {
-                                Debug.Log($"2. Note {noteNumber} endingTime expired: {endingTime-currentTime}, removing.");
+                                // Debug.Log($"Note {noteNumber} endingTime expired, removing.");
                                 activeNotes.RemoveAt(index);
                             }
                             keyEntry.Value.ChangeKeyColor(true);
@@ -235,10 +241,10 @@ public class SimpleReader : MonoBehaviour
                             {
                                 if (endingTime - currentTime <= -overpress_leniency) // ok now Allah Hafiz note sahab
                                 {
-                                    Debug.Log($"3. Note {noteNumber} endingTime expired: {endingTime-currentTime}, removing.");
+                                    Debug.Log($"Note {noteNumber} endingTime expired, removing.");
                                     activeNotes.RemoveAt(index);
                                 }
-                                Debug.Log($"We letting {noteNumber} go.");
+                                // Debug.Log($"We letting {noteNumber} go.");
                                 continue; //return true; // shouldve been pressed but it oki, we nice, we let it go
                             }
                             allKeysPressed = false; // Expected key is not pressed
@@ -248,56 +254,61 @@ public class SimpleReader : MonoBehaviour
             }
         }
 
-        // Debug.Log("Everything in order");
-        return allKeysPressed;
-    }
-
-    void CheckKeysPressedAlt(List<int> keyNumbersToCheck)
-    {
-        HashSet<int> keysToCheckSet = new HashSet<int>(keyNumbersToCheck);
-        bool increment_score = true;
-        foreach (var keyEntry in pianoKeysDict)
-        {
-            bool isKeyInList = keysToCheckSet.Contains(keyEntry.Key);
-            bool isKeyPressed = keyEntry.Value.isPressed;
-
-            if (isKeyInList)
-            {
-                if (isKeyPressed)
-                    keyEntry.Value.ChangeKeyColor(true);
-                if (!isKeyPressed)
-                    increment_score = false;
-            }
-            else
-            {
-                if (isKeyPressed)
-                {    
-                    keyEntry.Value.ChangeKeyColor(false);
-                    increment_score = false;
-                }
-            }
-        }
-
         total_score += 1;
         if (increment_score)
             obtained_score += 1;
 
-        // Debug.Log($"Accuracy: {((obtained_score / total_score) * 100f).ToString("F2")}%");
+        Debug.Log($"Accuracy: {((obtained_score / total_score) * 100f).ToString("F2")}%");
+
+        // Debug.Log("Everything in order");
+        return allKeysPressed;
     }
+
+    // void CheckKeysPressedAlt(List<int> keyNumbersToCheck)
+    // {
+    //     HashSet<int> keysToCheckSet = new HashSet<int>(keyNumbersToCheck);
+    //     bool increment_score = true;
+    //     foreach (var keyEntry in pianoKeysDict)
+    //     {
+    //         bool isKeyInList = keysToCheckSet.Contains(keyEntry.Key);
+    //         bool isKeyPressed = keyEntry.Value.isPressed;
+
+    //         if (isKeyInList)
+    //         {
+    //             if (isKeyPressed)
+    //                 keyEntry.Value.ChangeKeyColor(true);
+    //             if (!isKeyPressed)
+    //                 increment_score = false;
+    //         }
+    //         else
+    //         {
+    //             if (isKeyPressed)
+    //             {    
+    //                 keyEntry.Value.ChangeKeyColor(false);
+    //                 increment_score = false;
+    //             }
+    //         }
+    //     }
+
+    //     total_score += 1;
+    //     if (increment_score)
+    //         obtained_score += 1;
+
+    //     // Debug.Log($"Accuracy: {((obtained_score / total_score) * 100f).ToString("F2")}%");
+    // }
 
     //<summary>
     // Updates cumulative elapsed time and calls notes processor at current time
     //<summary>
     void Update()
     {
-        // if (!isStarted) return;
         accumulatedTime += (Time.deltaTime * playbackSpeed);
         if (accumulatedTime >= timeStep)
         {
+            UpdateActiveNotesAtKeys();
+            isPlaying = CheckKeysPressed(); // will light up with Practice mode off bhi ab
             if (practiceMode)
             {
-                UpdateActiveNotesAtKeys();
-                isPlaying = CheckKeysPressed(); 
                 if (isPlaying){
                     currentTime += accumulatedTime;
                     ProcessNotesAtCurrentTime();
@@ -305,9 +316,7 @@ public class SimpleReader : MonoBehaviour
             }
             else
             {
-                // will light up with Practice mode off bhi ab
                 isPlaying = true; // but wont stop
-                CheckKeysPressedAlt(UpdateActiveNotesAtKeysAlt());
                 currentTime += accumulatedTime;
                 ProcessNotesAtCurrentTime();
             }
@@ -378,23 +387,23 @@ public class SimpleReader : MonoBehaviour
         }
     }
 
-    List<int> UpdateActiveNotesAtKeysAlt()
-    {
-        List<int> activeNotesAlt = new List<int>();
+    // List<int> UpdateActiveNotesAtKeysAlt()
+    // {
+    //     List<int> activeNotesAlt = new List<int>();
 
-        for (int i = 0; i < startTimes.Count; i++)
-        {
-            float noteReachTime = startTimes[i] + time_diff;
-            float noteEndTime = noteReachTime + ((endTimes[i] - startTimes[i]));
+    //     for (int i = 0; i < startTimes.Count; i++)
+    //     {
+    //         float noteReachTime = startTimes[i] + time_diff;
+    //         float noteEndTime = noteReachTime + ((endTimes[i] - startTimes[i]));
 
-            if (playedNotes[i] && currentTime >= noteReachTime && currentTime <= noteEndTime)
-            {
-                activeNotesAlt.Add(noteNumbers[i]);
-            }
-        }
+    //         if (playedNotes[i] && currentTime >= noteReachTime && currentTime <= noteEndTime)
+    //         {
+    //             activeNotesAlt.Add(noteNumbers[i]);
+    //         }
+    //     }
 
-        // Debug.Log("Active notes at key level: " + string.Join(", ", activeNotes));
-        return activeNotesAlt;
-    }
+    //     // Debug.Log("Active notes at key level: " + string.Join(", ", activeNotes));
+    //     return activeNotesAlt;
+    // }
 
 }

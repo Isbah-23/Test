@@ -50,6 +50,10 @@ public class MidiReader : MonoBehaviour
     private float overpress_leniency = 0.03f;
     List<(int noteNumber, bool started_playing, float endingTime, float leniencyTime)> activeNotes = new List<(int, bool, float, float)>();
 
+    
+    float total_score = 0;
+    float obtained_score = 0;
+
     public void TogglePracticeMode()
     {
         practiceMode = !practiceMode;
@@ -218,7 +222,7 @@ private IEnumerator LoadMidiFile(string fileName)
             {
                 if (isKeyPressed)
                 {
-                    // Debug.Log("Unexpected Key pressed");
+                    Debug.Log($"Unexpected Key pressed: {key}");
                     // If an unexpected key is pressed, fail and change color
                     keyEntry.Value.ChangeKeyColor(false);
                     allKeysPressed = false;
