@@ -5685,6 +5685,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
       objectReference: {fileID: 373573233}
+    - target: {fileID: 1600383637213008994, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
     - target: {fileID: 1742441459053669777, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -5717,6 +5721,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
       value: SetActive
       objectReference: {fileID: 0}
+    - target: {fileID: 2013272255925821166, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
+    - target: {fileID: 2665362315108874652, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
     - target: {fileID: 3601313790195701523, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Target
       value: 
@@ -5813,6 +5825,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 4703440699492050546, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
     - target: {fileID: 5457290722405279037, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0
@@ -5869,6 +5885,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
       value: SetActive
       objectReference: {fileID: 0}
+    - target: {fileID: 5815558129352477975, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
+    - target: {fileID: 6098740562841995868, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
     - target: {fileID: 6249469881684761680, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0
@@ -5893,6 +5917,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -180
       objectReference: {fileID: 0}
+    - target: {fileID: 7683768811559545523, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
     - target: {fileID: 8439226818437860729, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -5905,6 +5933,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ChangeScene
       objectReference: {fileID: 0}
+    - target: {fileID: 8539715996938724598, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
+    - target: {fileID: 8636819179798367324, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
     - target: {fileID: 8701625031559021775, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_Name
       value: Btn Toggle Key Name On
@@ -5913,6 +5949,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8830316887446012964, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+      propertyPath: CubeObj
+      value: 
+      objectReference: {fileID: 1957979914}
     - target: {fileID: 9084761234017356480, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -5935,6 +5975,22 @@ GameObject:
 --- !u!1 &545724573 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8701625031559021775, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+  m_PrefabInstance: {fileID: 545724570}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &545724574 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2979931342691091924, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+  m_PrefabInstance: {fileID: 545724570}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &545724575 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8714196618502528073, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
   m_PrefabInstance: {fileID: 545724570}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &554833635
@@ -17191,6 +17247,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.52
       objectReference: {fileID: 0}
+    - target: {fileID: 6713911673376267490, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: selectedSongText
+      value: 
+      objectReference: {fileID: 545724574}
+    - target: {fileID: 6713911673376267490, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: practiceModeButton
+      value: 
+      objectReference: {fileID: 545724575}
     - target: {fileID: 6858886069918110398, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
       propertyPath: m_Interactable
       value: 
