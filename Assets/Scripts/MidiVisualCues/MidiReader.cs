@@ -54,6 +54,26 @@ public class MidiReader : MonoBehaviour
     float total_score = 0;
     float obtained_score = 0;
 
+    string[] pianoNotesNames = new string[88]
+    {
+        "A0", "A#0/Bb0", "B0",
+        "C1", "C#1/Db1", "D1", "D#1/Eb1", "E1", "F1", "F#1/Gb1", "G1", "G#1/Ab1",
+        "A1", "A#1/Bb1", "B1",
+        "C2", "C#2/Db2", "D2", "D#2/Eb2", "E2", "F2", "F#2/Gb2", "G2", "G#2/Ab2",
+        "A2", "A#2/Bb2", "B2",
+        "C3", "C#3/Db3", "D3", "D#3/Eb3", "E3", "F3", "F#3/Gb3", "G3", "G#3/Ab3",
+        "A3", "A#3/Bb3", "B3",
+        "C4", "C#4/Db4", "D4", "D#4/Eb4", "E4", "F4", "F#4/Gb4", "G4", "G#4/Ab4",
+        "A4", "A#4/Bb4", "B4",
+        "C5", "C#5/Db5", "D5", "D#5/Eb5", "E5", "F5", "F#5/Gb5", "G5", "G#5/Ab5",
+        "A5", "A#5/Bb5", "B5",
+        "C6", "C#6/Db6", "D6", "D#6/Eb6", "E6", "F6", "F#6/Gb6", "G6", "G#6/Ab6",
+        "A6", "A#6/Bb6", "B6",
+        "C7", "C#7/Db7", "D7", "D#7/Eb7", "E7", "F7", "F#7/Gb7", "G7", "G#7/Ab7",
+        "A7", "A#7/Bb7", "B7",
+        "C8"
+    };
+
     public void TogglePracticeMode()
     {
         practiceMode = !practiceMode;
@@ -91,6 +111,11 @@ public class MidiReader : MonoBehaviour
     //<summary>    
     public void StartPlaying()
     {
+        Debug.Log("Persistent path: " + Application.persistentDataPath);
+        string path = Application.persistentDataPath + "/vr_debug.log";
+        string log = $"[{System.DateTime.Now}] Logging For this session!\n";
+        File.AppendAllText(path, log); // This creates or appends the file
+
         // string prefix = "Current Song: ";
         string songName = selectedSongText.text;
 
@@ -204,6 +229,7 @@ private IEnumerator LoadMidiFile(string fileName)
     {
         HashSet<int> expectedKeys = new HashSet<int>(activeNotes.Select(n => n.noteNumber));
         bool allKeysPressed = true;
+        bool increment_score = true;
 
         // Debug.Log("Checking for keys pressed");
         foreach (var keyEntry in pianoKeysDict)
@@ -222,10 +248,15 @@ private IEnumerator LoadMidiFile(string fileName)
             {
                 if (isKeyPressed)
                 {
-                    Debug.Log($"Unexpected Key pressed: {key}");
+                    Debug.Log($"Unexpected Key pressed: {pianoNotesNames[key-1]}");
+                    // LogToPrefs($"Unexpected Key pressed: {pianoNotesNames[key-1]}");
+                    // string path = Application.persistentDataPath + "/vr_debug.log";
+                    // string log = $"{currentTime}:: Unexpected Key pressed - {pianoNotesNames[key-1]}";
+                    // File.AppendAllText(path, log); // This creates or appends the file
                     // If an unexpected key is pressed, fail and change color
                     keyEntry.Value.ChangeKeyColor(false);
                     allKeysPressed = false;
+                    increment_score = false;
                 }
             }
             else // For keys that shouldve been pressed
@@ -238,7 +269,7 @@ private IEnumerator LoadMidiFile(string fileName)
                     {
                         if (endingTime - currentTime <= -overpress_leniency) // ok now Allah Hafiz note sahab
                         {
-                            Debug.Log($"Note {noteNumber} endingTime expired, removing.");
+                            // Debug.Log($"Note {noteNumber} endingTime expired, removing.");
                             activeNotes.RemoveAt(index);
                         }
                         // Debug.Log($"MAIN letting {noteNumber} go. Difference: {endingTime-currentTime} <= {release_leniency}");
@@ -248,6 +279,10 @@ private IEnumerator LoadMidiFile(string fileName)
                     {
                         startedPlaying = true;
                         activeNotes[index] = (noteNumber, startedPlaying, endingTime, leniencyTime);
+                    }
+                    else
+                    {
+                        increment_score = false;
                     }
                     if (!startedPlaying) // if the key was never touched/tapped
                     {
@@ -266,7 +301,7 @@ private IEnumerator LoadMidiFile(string fileName)
                         {
                             if (endingTime - currentTime <= -overpress_leniency) // ok now Allah Hafiz note sahab
                             {
-                                Debug.Log($"Note {noteNumber} endingTime expired, removing.");
+                                // Debug.Log($"Note {noteNumber} endingTime expired, removing.");
                                 activeNotes.RemoveAt(index);
                             }
                             keyEntry.Value.ChangeKeyColor(true);
@@ -280,7 +315,7 @@ private IEnumerator LoadMidiFile(string fileName)
                                     Debug.Log($"Note {noteNumber} endingTime expired, removing.");
                                     activeNotes.RemoveAt(index);
                                 }
-                                Debug.Log($"We letting {noteNumber} go.");
+                                // Debug.Log($"We letting {noteNumber} go.");
                                 continue; //return true; // shouldve been pressed but it oki, we nice, we let it go
                             }
                             allKeysPressed = false; // Expected key is not pressed
@@ -289,6 +324,14 @@ private IEnumerator LoadMidiFile(string fileName)
                 }
             }
         }
+
+        total_score += 1;
+        if (increment_score)
+            obtained_score += 1;
+
+        Debug.Log($"Accuracy: {((obtained_score / total_score) * 100f).ToString("F2")}%");
+        PlayerPrefs.SetFloat("Accuracy", (obtained_score / total_score) * 100f);
+        PlayerPrefs.Save();
 
         // Debug.Log("Everything in order");
         return allKeysPressed;
@@ -384,4 +427,23 @@ private IEnumerator LoadMidiFile(string fileName)
             }
         }
     }
+
+    public static void LogToPrefs(string message)
+    {
+        string existingLog = PlayerPrefs.GetString("debugLog", "");
+        string timestamp = System.DateTime.Now.ToString("HH:mm:ss");
+        existingLog += $"[{timestamp}] {message}\n";
+
+        PlayerPrefs.SetString("debugLog", existingLog);
+        PlayerPrefs.Save();
+    }
+
+    void OnDestroy()
+    {
+        string path = Application.persistentDataPath + "/vr_debug.log";
+        string log = $"Accuracy: {((obtained_score / total_score) * 100f).ToString("F2")}%";
+        File.AppendAllText(path, log); // This creates or appends the file
+        // Debug.Log("Wrote to: " + path);
+    }
+
 }
