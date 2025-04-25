@@ -45,9 +45,9 @@ public class MidiReader : MonoBehaviour
     private bool allKeysPressed;
     private bool isStarted = false;
 
-    private float press_leniency = 0.02f;  // Adjust as needed
+    private float press_leniency = 0.05f;  // Adjust as needed
     private float release_leniency = 0.02f;
-    private float overpress_leniency = 0.03f;
+    private float overpress_leniency = 0.07f;
     List<(int noteNumber, bool started_playing, float endingTime, float leniencyTime)> activeNotes = new List<(int, bool, float, float)>();
 
     
