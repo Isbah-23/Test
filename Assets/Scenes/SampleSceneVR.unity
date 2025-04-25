@@ -5937,6 +5937,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8701625031559021775, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
   m_PrefabInstance: {fileID: 545724570}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &545724574 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2979931342691091924, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+  m_PrefabInstance: {fileID: 545724570}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &545724575 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8714196618502528073, guid: 5105796ffe1ff7e40b232af971524d6f, type: 3}
+  m_PrefabInstance: {fileID: 545724570}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &554833635
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17191,6 +17207,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.52
       objectReference: {fileID: 0}
+    - target: {fileID: 6713911673376267490, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: selectedSongText
+      value: 
+      objectReference: {fileID: 545724574}
+    - target: {fileID: 6713911673376267490, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
+      propertyPath: practiceModeButton
+      value: 
+      objectReference: {fileID: 545724575}
     - target: {fileID: 6858886069918110398, guid: 2e73f88cd198d4a4eae20f07df46a193, type: 3}
       propertyPath: m_Interactable
       value: 
