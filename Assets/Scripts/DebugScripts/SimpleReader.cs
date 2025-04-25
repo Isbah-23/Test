@@ -282,7 +282,7 @@ public class SimpleReader : MonoBehaviour
         if (increment_score)
             obtained_score += 1;
 
-        Debug.Log($"Accuracy: {((obtained_score / total_score) * 100f).ToString("F2")}%");
+        // Debug.Log($"Accuracy: {((obtained_score / total_score) * 100f).ToString("F2")}%");
     }
 
     //<summary>
