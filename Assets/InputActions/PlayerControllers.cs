@@ -188,28 +188,6 @@ public partial class @PlayerControllers: IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""75b9cfa3-52b7-4883-a1cd-cbf47bd5e4ee"",
-                    ""path"": ""<XRController>{RightHand}/{TriggerButton}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""19381c05-5511-46f2-8ca4-72b76c935380"",
-                    ""path"": ""<XRController>{LeftHand}/{TriggerButton}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
