@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
+using System.Text.RegularExpressions; // for incorrect key press log
 
 public class PianoKey : MonoBehaviour, IInteractable
 {
@@ -37,7 +38,7 @@ public class PianoKey : MonoBehaviour, IInteractable
     private XRBaseInteractable interactable;
 
     // for reader
-    public bool colorValue = false; // 0 - original, 1 - red/ green
+    public int colorValue = 0; // 0 - original, 1 - red, 2 - green
 
     private void Awake()
     {
@@ -104,7 +105,17 @@ public class PianoKey : MonoBehaviour, IInteractable
                 
             transform.localRotation = Quaternion.Slerp(transform.localRotation, originalRotation, Time.deltaTime * releaseSpeed);
             keyRenderer.material.color = originalColor;
-            colorValue = false;
+            if (colorValue == 1) // log the end time of incorrect press
+            {
+                Match match = Regex.Match(gameObject.name, @"\.(\d+)$");
+                if (match.Success)
+                {
+                    int noteNum = int.Parse(match.Groups[1].Value);
+                    // SimpleReader_V2.LogIncorrectPressWrapper(noteNum - 1);
+                    MidiReader.LogIncorrectPressWrapper(noteNum - 1);
+                }
+            }
+            colorValue = 0;
             // isReleased = false;
         }
     }
@@ -153,12 +164,12 @@ public class PianoKey : MonoBehaviour, IInteractable
         if (keyRenderer != null && changeColor && type)
         {
             keyRenderer.material.color = pressedColor;
-            colorValue = true;
+            colorValue = 2;
         }
         else if (keyRenderer != null && changeColor && !type)
         {
             keyRenderer.material.color = wrongPress;
-            colorValue = true;
+            colorValue = 1;
         }
     }
 

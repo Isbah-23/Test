@@ -2,6 +2,7 @@
 //<summary>
 // Reads the midi file and loads the notes and check which cues to spawn
 //<summary>
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,7 @@ using System.Linq;
 public class MidiReader : MonoBehaviour
 {
 
+    // ==================================== VARIABLE DECLARATION =======================================
     private string midiFilePath;
     public TMPro.TextMeshProUGUI selectedSongText;
     public GameObject practiceModeButton;
@@ -80,6 +82,11 @@ public class MidiReader : MonoBehaviour
         "C8"
     };
 
+    List<(int key, float startPressTime)> incorrectPressTracker = new List<(int, float)>();
+    float absoluteTime = 0f;
+
+    // =================================================================================================
+
     public void TogglePracticeMode()
     {
         practiceMode = !practiceMode;
@@ -119,11 +126,6 @@ public class MidiReader : MonoBehaviour
     //<summary>    
     public void StartPlaying()
     {
-        Debug.Log("Persistent path: " + Application.persistentDataPath);
-        string path = Application.persistentDataPath + "/vr_debug.log";
-        string log = $"[{System.DateTime.Now}] Logging For this session!\n";
-        File.AppendAllText(path, log); // This creates or appends the file
-
         // string prefix = "Current Song: ";
         string songName = selectedSongText.text;
 
@@ -132,7 +134,7 @@ public class MidiReader : MonoBehaviour
 
         // Build the file path
         midiFilePath = songName + ".midi";
-        Debug.Log($"Button clicked with path: {midiFilePath}");
+        // Debug.Log($"Button clicked with path: {midiFilePath}");
 
         time_diff = time_diff * playbackSpeed;
 
@@ -145,7 +147,7 @@ public class MidiReader : MonoBehaviour
             if (spawner != null)
             {
                 noteSpawners.Add(i, spawner);
-                Debug.Log($"NoteSpawner{i} found");
+                // Debug.Log($"NoteSpawner{i} found");
             }
             else
             {
@@ -159,63 +161,64 @@ public class MidiReader : MonoBehaviour
             Debug.LogError("GrandPiano object not found in the scene!");
     }
 
-private IEnumerator LoadMidiFile(string fileName)
-{
-    string fullPath = Path.Combine(Application.streamingAssetsPath, fileName);
-
-    #if UNITY_ANDROID
-    fullPath = Application.streamingAssetsPath + "/" + fileName; // Correct Android path
-    #endif
-
-    Debug.Log($"Attempting to load MIDI file from: {fullPath}");
-
-    using (UnityWebRequest request = UnityWebRequest.Get(fullPath))
+    private IEnumerator LoadMidiFile(string fileName)
     {
-        yield return request.SendWebRequest();
+        string fullPath = Path.Combine(Application.streamingAssetsPath, fileName);
 
-        if (request.result != UnityWebRequest.Result.Success)
-        {
-            Debug.LogError($"Error loading MIDI file: {request.error}");
-            yield break;
-        }
+        #if UNITY_ANDROID
+        fullPath = Application.streamingAssetsPath + "/" + fileName; // Correct Android path
+        #endif
 
-        try
+        // Debug.Log($"Attempting to load MIDI file from: {fullPath}");
+
+        using (UnityWebRequest request = UnityWebRequest.Get(fullPath))
         {
-            byte[] midiData = request.downloadHandler.data;
-            using (MemoryStream midiStream = new MemoryStream(midiData))
+            yield return request.SendWebRequest();
+
+            if (request.result != UnityWebRequest.Result.Success)
             {
-                midiFile = MidiFile.Read(midiStream);
+                Debug.LogError($"Error loading MIDI file: {request.error}");
+                yield break;
             }
 
-            Debug.Log($"Successfully loaded MIDI file: {fileName}");
-
-            tempoMap = midiFile.GetTempoMap();
-            var notes = midiFile.GetNotes();
-            foreach (var note in notes)
+            try
             {
-                float startTime = (float)TimeConverter.ConvertTo<MetricTimeSpan>(note.Time, tempoMap).TotalSeconds;
-                float endTime = (float)TimeConverter.ConvertTo<MetricTimeSpan>(note.EndTime, tempoMap).TotalSeconds;
-
-                startTimes.Add(startTime);
-                endTimes.Add(endTime);
-                if ((startTime + time_diff) + ((endTime - startTime)) > song_end_time)
+                byte[] midiData = request.downloadHandler.data;
+                using (MemoryStream midiStream = new MemoryStream(midiData))
                 {
-                    song_end_time = (startTime + time_diff) + ((endTime - startTime)) + 1f;
+                    midiFile = MidiFile.Read(midiStream);
                 }
-                noteNumbers.Add(note.NoteNumber - 21);
-                playedNotes.Add(false);
-                spawnedNoteObjects.Add(null);
-                done_and_dusted.Add(false);
-            }
 
-            isStarted = true;
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"Error processing MIDI file: {ex.Message}");
+                // Debug.Log($"Successfully loaded MIDI file: {fileName}");
+                Logger.Instance.Log($"Successfully loaded MIDI file: {fileName}");
+
+                tempoMap = midiFile.GetTempoMap();
+                var notes = midiFile.GetNotes();
+                foreach (var note in notes)
+                {
+                    float startTime = (float)TimeConverter.ConvertTo<MetricTimeSpan>(note.Time, tempoMap).TotalSeconds;
+                    float endTime = (float)TimeConverter.ConvertTo<MetricTimeSpan>(note.EndTime, tempoMap).TotalSeconds;
+
+                    startTimes.Add(startTime);
+                    endTimes.Add(endTime);
+                    if ((startTime + time_diff) + ((endTime - startTime)) > song_end_time)
+                    {
+                        song_end_time = (startTime + time_diff) + ((endTime - startTime)) + 1f;
+                    }
+                    noteNumbers.Add(note.NoteNumber - 21);
+                    playedNotes.Add(false);
+                    spawnedNoteObjects.Add(null);
+                    done_and_dusted.Add(false);
+                }
+
+                isStarted = true;
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"Error processing MIDI file: {ex.Message}");
+            }
         }
     }
-}
 
     void InitializeKeys()
     {
@@ -237,6 +240,7 @@ private IEnumerator LoadMidiFile(string fileName)
             else
                 Debug.LogError("Key " + keyName + " not found in the hierarchy.");
         }
+        Logger.Instance.Log("Grand Piano Ready to Play");
     }
 
     bool CheckKeysPressed()
@@ -250,16 +254,26 @@ private IEnumerator LoadMidiFile(string fileName)
             int key = keyEntry.Key;
             bool isKeyExpected = expectedKeys.Contains(keyEntry.Key); // should the key be pressed?
             bool isKeyPressed = keyEntry.Value.isPressed; // is the key pressed?
-            bool keyColor = keyEntry.Value.colorValue; // have we registered the change in state already?
+            int keyColor = keyEntry.Value.colorValue; // have we registered the change in state already?
             
 
             if (!isKeyExpected) // The key should not have been pressed
             {
                 if (isKeyPressed) // but it is pressed 
                 {
-                    if (!keyColor) // first press?
+                    if (keyColor == 0) // first press?
                     {
                         keyEntry.Value.ChangeKeyColor(false);
+                        try
+                        {
+                            incorrectPressTracker.Add((key - 1, absoluteTime));
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.Log("Error: " + ex.Message);
+                        }
+                        var keys = incorrectPressTracker.Select(item => item.key).ToList();
+                        string result = string.Join(" ", keys);
                     }
                     // Debug.Log($"Point B is stopping for note: {key}");
                     allKeysPressed = false;
@@ -274,7 +288,7 @@ private IEnumerator LoadMidiFile(string fileName)
                     var (param_key, noteNumber, pressType, pressTime, reachTime, endingTime) = activeNotes[index];
                     if (isKeyPressed)
                     {
-                        if (!keyColor) // first press?
+                        if (keyColor == 0) // first press?
                         {
                             keyEntry.Value.ChangeKeyColor(true);
                         }
@@ -336,8 +350,8 @@ private IEnumerator LoadMidiFile(string fileName)
         if (increment_score)
             obtained_score += 1;
 
-        if(!practiceMode)
-            Debug.Log($"Accuracy: {((obtained_score / total_score) * 100f).ToString("F2")}%");
+        // if(!practiceMode)
+        //     Debug.Log($"Accuracy: {((obtained_score / total_score) * 100f).ToString("F2")}%");
 
         return allKeysPressed;
     }
@@ -351,6 +365,7 @@ private IEnumerator LoadMidiFile(string fileName)
         accumulatedTime += (Time.deltaTime * playbackSpeed);
         if (accumulatedTime >= timeStep)
         {
+            absoluteTime += accumulatedTime;
             UpdateActiveNotesAtKeys();
             isPlaying = CheckKeysPressed(); // will light up with Practice mode off bhi ab
             if (practiceMode)
@@ -370,7 +385,33 @@ private IEnumerator LoadMidiFile(string fileName)
         }
         if (isStarted && (currentTime > song_end_time))
         {
-            Debug.Log("Song Ended :)");
+            // Debug.Log("Song Ended :)");
+            Logger.Instance.Log("Song Ended :)");
+            string songName = selectedSongText.text; 
+            string typeOfPlay = "";
+            float curr_score = 0;
+
+            if (practiceMode)
+            {
+                typeOfPlay = "_Practice";
+                curr_score = hardScore;
+            }
+            else
+            {
+                curr_score = (obtained_score / total_score) * 100f;
+            }
+            
+            float highScore = DataManager.Instance.Get<float>($"{songName}{typeOfPlay}_high_score", 0f); // Default to 0 if no score exist
+            if (curr_score > highScore)
+            {
+                DataManager.Instance.Set($"{songName}{typeOfPlay}_high_score", curr_score);
+                Logger.Instance.Log($"New high score for {songName}{typeOfPlay}: {curr_score:F2}%"); // Log with 2 decimal places
+            }
+            else
+            {
+                Logger.Instance.Log($"Score for {songName}{typeOfPlay}: {curr_score:F2}%"); // Log with 2 decimal places
+            }
+
             isStarted = false;
         }
     }
@@ -446,21 +487,21 @@ private IEnumerator LoadMidiFile(string fileName)
     {
         if (note_length >= 2.0f)
         {    
-            Debug.Log($"Note length {note_length} is of type 2");
+            // Debug.Log($"Note length {note_length} is of type 2");
             return 2;
         }
         if (note_length >= 1.0f)
         {
-            Debug.Log($"Note length {note_length} is of type 1");
+            // Debug.Log($"Note length {note_length} is of type 1");
             return 1;
         }
-        Debug.Log($"Note length {note_length} is of type 0");
+        // Debug.Log($"Note length {note_length} is of type 0");
         return 0;
     }
 
     int CheckPressTime(float pressTime, int pressType)
     {
-        Debug.Log($"Press Time was: {pressTime}");
+        // Debug.Log($"Press Time was: {pressTime}");
         if(pressType == 0)
         {
             if (pressTime > tap_time[0] && pressTime < tap_time[1])
@@ -491,21 +532,24 @@ private IEnumerator LoadMidiFile(string fileName)
         return 0;
     }
 
-    void PrintActiveNotes(string origin)
+    public static void LogIncorrectPressWrapper(int givenKeyNum)
     {
-        // Join all noteNumbers into a single string, separated by commas
-        string allNoteNumbers = string.Join(", ", activeNotes.Select(note => note.noteNumber.ToString()).ToArray());
-
-        // Print the entire string in one line
-        Debug.Log(origin + " Note Numbers: " + allNoteNumbers);
+        MidiReader midiReaderInstance = GameObject.FindObjectOfType<MidiReader>();
+        midiReaderInstance.LogIncorrectPress(givenKeyNum); // cant access current time here so use as wrapper
     }
 
-    void OnDestroy()
+    private void LogIncorrectPress(int givenKeyNum)
     {
-        string path = Application.persistentDataPath + "/vr_debug.log";
-        string log = $"Accuracy: {((obtained_score / total_score) * 100f).ToString("F2")}%";
-        File.AppendAllText(path, log); // This creates or appends the file
-        // Debug.Log("Wrote to: " + path);
+        var keys = incorrectPressTracker.Select(item => item.key).ToList();
+        string result = string.Join(" ", keys);
+        int index = incorrectPressTracker.FindIndex(n => n.key == givenKeyNum);
+        if (index != -1)
+        {
+            var (noteNumber, startIncorrectPress) = incorrectPressTracker[index];
+            incorrectPressTracker.RemoveAt(index);
+            // Debug.Log($"Incorrect Press: {pianoNotesNames[givenKeyNum]}, Start Time: {startIncorrectPress}, End Time: {currentTime}");
+            Logger.Instance.Log($"Incorrect Press: {pianoNotesNames[givenKeyNum]}, Start Time: {startIncorrectPress}, End Time: {currentTime}");
+            // Logger.Instance.Log($"Wrong key: {pianoNotesNames[param_key]} pressed.");
+        }
     }
-
 }
