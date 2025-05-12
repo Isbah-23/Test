@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System;
 using System.Linq;
+using UnityEngine.Networking;
 
 [DefaultExecutionOrder(-100)]
 public class DataManager : MonoBehaviour
@@ -13,7 +14,7 @@ public class DataManager : MonoBehaviour
     
     private string _dataPath;
     private Dictionary<string, UserData> _gameData;
-    private string username = "VRhythm";
+    private string username = "John Doe";
 
     [System.Serializable]
     public class PlaySession
@@ -153,12 +154,6 @@ public class DataManager : MonoBehaviour
 
     private IEnumerator VR_Initialize()
     {
-        #if UNITY_ANDROID && !UNITY_EDITOR
-        _dataPath = Path.Combine(Application.persistentDataPath, "game_data.json");
-        #else
-        _dataPath = Path.Combine(Application.persistentDataPath, "game_data.json");
-        #endif
-
         yield return StartCoroutine(VR_SafeLoadData());
         Debug.Log(GetFormattedGameData());
     }
@@ -253,28 +248,40 @@ public class DataManager : MonoBehaviour
 
     private IEnumerator VR_SafeLoadData()
     {
-        if (!File.Exists(_dataPath))
+        _gameData = new Dictionary<string, UserData>(); // Default init
+
+        #if UNITY_ANDROID && !UNITY_EDITOR
+        string fullPath = Application.persistentDataPath + "/game_data.json";
+        #else
+        string fullPath = Path.Combine(Application.persistentDataPath, "game_data.json");
+        #endif
+
+        if (!File.Exists(fullPath))
         {
-            _gameData = new Dictionary<string, UserData>();
             yield break;
         }
 
-        string json = "";
-        try
+        // Use UnityWebRequest for cross-platform reliability
+        using (UnityWebRequest request = UnityWebRequest.Get(fullPath))
         {
-            using (var reader = new StreamReader(_dataPath))
+            yield return request.SendWebRequest();
+
+            if (request.result != UnityWebRequest.Result.Success)
             {
-                json = reader.ReadToEnd();
+                Debug.LogError($"Failed to load data: {request.error}");
+                yield break;
             }
 
-            // yield return null; // Prevent VR frame drops
-            GameDataWrapper wrapper = JsonUtility.FromJson<GameDataWrapper>(json);
-            _gameData = wrapper?.ToDictionary() ?? new Dictionary<string, UserData>();
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"VR Load failed: {e.Message}");
-            _gameData = new Dictionary<string, UserData>();
+            try
+            {
+                string json = request.downloadHandler.text;
+                GameDataWrapper wrapper = JsonUtility.FromJson<GameDataWrapper>(json);
+                _gameData = wrapper?.ToDictionary() ?? new Dictionary<string, UserData>();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Data parse failed: {e.Message}");
+            }
         }
     }
 
@@ -364,29 +371,33 @@ public class DataManager : MonoBehaviour
     {
         GameDataWrapper wrapper = new GameDataWrapper();
         wrapper.FromDictionary(_gameData);
-        
         string json = JsonUtility.ToJson(wrapper, true);
-        string tempPath = _dataPath + ".tmp";
 
+        #if UNITY_ANDROID && !UNITY_EDITOR
+        string fullPath = Application.persistentDataPath + "/game_data.json";
+        #else
+        string fullPath = Path.Combine(Application.persistentDataPath, "game_data.json");
+        #endif
+
+        // Atomic write: Save to temp file first
+        string tempPath = fullPath + ".tmp";
+
+        // Write using File class (UnityWebRequest doesn't support writing)
         try
         {
-            using (var writer = new StreamWriter(tempPath))
-            {
-                writer.Write(json);
-            }
+            File.WriteAllText(tempPath, json);
             
-            if (File.Exists(_dataPath))
-                File.Delete(_dataPath);
-            
-            File.Move(tempPath, _dataPath);
-            
-            Debug.Log($"VR Data saved to {_dataPath}");
+            // Replace original file
+            if (File.Exists(fullPath))
+                File.Delete(fullPath);
+            File.Move(tempPath, fullPath);
         }
         catch (Exception e)
         {
-            Debug.LogError($"VR Save failed: {e.Message}");
+            Debug.LogError($"Failed to save data: {e.Message}");
         }
-        yield return null; // Yield to maintain VR performance
+
+        yield return null; // Ensure coroutine completes
     }
 
     public string GetPersistentDataPath()
@@ -473,7 +484,7 @@ public class DataManager : MonoBehaviour
     }
 
     // Get performance summary for a song
-    public (float averageScore, float bestScore, float accuracy) GetSongPerformanceSummary(string songName)
+    public (float averageScore, float bestScore) GetSongPerformanceSummary(string songName)
     {
         if (_gameData.TryGetValue(username, out UserData userData) && 
             userData.songStats.TryGetValue(songName, out SongStatistics stats))
@@ -482,8 +493,8 @@ public class DataManager : MonoBehaviour
             float best = stats.last10Scores.Count > 0 ? stats.last10Scores.Max() : 0;
             float accuracy = 100f - (stats.totalWrongPresses / (float)(stats.totalPlays * 100)) * 100f; // Approximation
             
-            return (average, best, Mathf.Clamp(accuracy, 0, 100));
+            return (average, best);
         }
-        return (0, 0, 0);
+        return (0, 0);
     }
 }
