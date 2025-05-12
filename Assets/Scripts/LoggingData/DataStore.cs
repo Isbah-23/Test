@@ -2,6 +2,8 @@ using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
+using System;
+using System.Linq;
 
 [DefaultExecutionOrder(-100)]
 public class DataManager : MonoBehaviour
@@ -13,18 +15,47 @@ public class DataManager : MonoBehaviour
     private string username = "John Doe";
 
     [System.Serializable]
+    public class PlaySession
+    {
+        public string songName;
+        public float score;
+        public string timestamp; // Changed to string for serialization
+        public int wrongKeyPresses;
+        public SerializableDictionary wrongKeys = new SerializableDictionary();
+    }
+
+    [System.Serializable]
+    public class SongStatistics
+    {
+        public List<float> last10Scores = new List<float>();
+        public int totalPlays;
+        public int totalWrongPresses;
+        public SerializableDictionary commonWrongNotes = new SerializableDictionary();
+    }
+
+    [System.Serializable]
     public class UserData
     {
         public Dictionary<string, string> scores = new Dictionary<string, string>();
         public Dictionary<string, string> info = new Dictionary<string, string>();
+        public List<PlaySession> playHistory = new List<PlaySession>();
+        public Dictionary<string, SongStatistics> songStats = new Dictionary<string, SongStatistics>();
 
-        // Helper method for serialization
         public SerializableUserData ToSerializable()
         {
+            var serializableStats = new SerializableDictionary();
+            foreach (var stat in songStats)
+            {
+                serializableStats.keys.Add(stat.Key);
+                serializableStats.values.Add(JsonUtility.ToJson(stat.Value));
+            }
+
             return new SerializableUserData
             {
                 scores = new SerializableDictionary(this.scores),
-                info = new SerializableDictionary(this.info)
+                info = new SerializableDictionary(this.info),
+                playHistory = this.playHistory,
+                songStats = serializableStats
             };
         }
     }
@@ -34,6 +65,8 @@ public class DataManager : MonoBehaviour
     {
         public SerializableDictionary scores;
         public SerializableDictionary info;
+        public List<PlaySession> playHistory;
+        public SerializableDictionary songStats;
     }
 
     [System.Serializable]
@@ -75,11 +108,20 @@ public class DataManager : MonoBehaviour
             var dict = new Dictionary<string, UserData>();
             for (int i = 0; i < usernames.Count; i++)
             {
-                dict[usernames[i]] = new UserData
+                var userData = new UserData
                 {
                     scores = userDataList[i].scores.ToDictionary(),
-                    info = userDataList[i].info.ToDictionary()
+                    info = userDataList[i].info.ToDictionary(),
+                    playHistory = userDataList[i].playHistory
                 };
+
+                // Deserialize song stats
+                foreach (var kvp in userDataList[i].songStats.ToDictionary())
+                {
+                    userData.songStats[kvp.Key] = JsonUtility.FromJson<SongStatistics>(kvp.Value);
+                }
+
+                dict[usernames[i]] = userData;
             }
             return dict;
         }
@@ -216,6 +258,96 @@ public class DataManager : MonoBehaviour
         {
             _gameData = new Dictionary<string, UserData>();
         }
+    }
+
+    public void RecordPlaySession(string songName, float score, Dictionary<string, int> wrongKeyPresses)
+    {
+        Debug.Log("Here received for recording play session");
+        if (!_gameData.ContainsKey(username))
+        {
+            _gameData[username] = new UserData();
+        }
+
+        var user = _gameData[username];
+        
+        // Create new play session
+        var session = new PlaySession
+        {
+            songName = songName,
+            score = score,
+            timestamp = DateTime.Now.ToString("o"), // ISO 8601 format
+            wrongKeyPresses = wrongKeyPresses.Values.Sum(),
+            wrongKeys = new SerializableDictionary()
+        };
+
+        // Add wrong keys to serializable dictionary
+        foreach (var kvp in wrongKeyPresses)
+        {
+            session.wrongKeys.keys.Add(kvp.Key);
+            session.wrongKeys.values.Add(kvp.Value.ToString());
+        }
+
+        // Maintain last 10 plays
+        user.playHistory.Insert(0, session);
+        if (user.playHistory.Count > 10)
+        {
+            user.playHistory.RemoveAt(10);
+        }
+
+        // Update song-specific stats
+        if (!user.songStats.ContainsKey(songName))
+        {
+            user.songStats[songName] = new SongStatistics();
+        }
+
+        var stats = user.songStats[songName];
+        stats.last10Scores.Insert(0, score);
+        if (stats.last10Scores.Count > 10)
+        {
+            stats.last10Scores.RemoveAt(10);
+        }
+
+        stats.totalPlays++;
+        stats.totalWrongPresses += session.wrongKeyPresses;
+
+        // Update common wrong notes
+        foreach (var kvp in wrongKeyPresses)
+        {
+            int index = stats.commonWrongNotes.keys.IndexOf(kvp.Key);
+            if (index >= 0)
+            {
+                // Key exists, update value
+                int currentValue = int.Parse(stats.commonWrongNotes.values[index]);
+                stats.commonWrongNotes.values[index] = (currentValue + kvp.Value).ToString();
+            }
+            else
+            {
+                // New key
+                stats.commonWrongNotes.keys.Add(kvp.Key);
+                stats.commonWrongNotes.values.Add(kvp.Value.ToString());
+            }
+        }
+
+        SaveData();
+    }
+
+    public List<PlaySession> GetPlayHistory(int maxEntries = 10)
+    {
+        if (_gameData.TryGetValue(username, out UserData userData))
+        {
+            return userData.playHistory.Take(maxEntries).ToList();
+        }
+        return new List<PlaySession>();
+    }
+
+    public SongStatistics GetSongStatistics(string songName)
+    {
+        if (_gameData.TryGetValue(username, out UserData userData) && 
+            userData.songStats.TryGetValue(songName, out SongStatistics stats))
+        {
+            return stats;
+        }
+        return new SongStatistics();
     }
 
     private void SaveData()

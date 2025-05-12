@@ -84,6 +84,7 @@ public class MidiReader : MonoBehaviour
 
     List<(int key, float startPressTime)> incorrectPressTracker = new List<(int, float)>();
     float absoluteTime = 0f;
+    private Dictionary<string, int> _wrongKeyPresses = new Dictionary<string, int>();
 
     // =================================================================================================
 
@@ -411,6 +412,10 @@ public class MidiReader : MonoBehaviour
             {
                 Logger.Instance.Log($"Score for {songName}{typeOfPlay}: {curr_score:F2}%"); // Log with 2 decimal places
             }
+            // _wrongKeyPresses = new Dictionary<string, int> { {"C4", 5}, {"A4", 10} };
+            DataManager.Instance.RecordPlaySession($"{songName}{typeOfPlay}", curr_score, _wrongKeyPresses);
+            // Debug.Log("Sent for Logging Session");
+            _wrongKeyPresses.Clear();
 
             isStarted = false;
         }
@@ -550,6 +555,14 @@ public class MidiReader : MonoBehaviour
             // Debug.Log($"Incorrect Press: {pianoNotesNames[givenKeyNum]}, Start Time: {startIncorrectPress}, End Time: {currentTime}");
             Logger.Instance.Log($"Incorrect Press: {pianoNotesNames[givenKeyNum]}, Start Time: {startIncorrectPress}, End Time: {currentTime}");
             // Logger.Instance.Log($"Wrong key: {pianoNotesNames[param_key]} pressed.");
+            if (_wrongKeyPresses.ContainsKey(pianoNotesNames[givenKeyNum]))
+            {
+                _wrongKeyPresses[pianoNotesNames[givenKeyNum]]++;
+            }
+            else
+            {
+                _wrongKeyPresses[pianoNotesNames[givenKeyNum]] = 1;
+            }
         }
     }
 }
