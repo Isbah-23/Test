@@ -412,8 +412,8 @@ public class MidiReader : MonoBehaviour
             {
                 Logger.Instance.Log($"Score for {songName}{typeOfPlay}: {curr_score:F2}%"); // Log with 2 decimal places
             }
-            // _wrongKeyPresses = new Dictionary<string, int> { {"C4", 5}, {"A4", 10} };
-            DataManager.Instance.RecordPlaySession($"{songName}{typeOfPlay}", curr_score, _wrongKeyPresses);
+            // _wrongKeyPresses = new Dictionary<string, int> { {"B1", 1}, {"A1", 1} };
+            StartCoroutine(DataManager.Instance.RecordPlaySession($"{songName}{typeOfPlay}", curr_score, _wrongKeyPresses));
             // Debug.Log("Sent for Logging Session");
             _wrongKeyPresses.Clear();
 

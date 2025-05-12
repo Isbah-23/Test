@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System;
@@ -12,14 +13,14 @@ public class DataManager : MonoBehaviour
     
     private string _dataPath;
     private Dictionary<string, UserData> _gameData;
-    private string username = "John Doe";
+    private string username = "VRhythm";
 
     [System.Serializable]
     public class PlaySession
     {
         public string songName;
         public float score;
-        public string timestamp; // Changed to string for serialization
+        public string timestamp;
         public int wrongKeyPresses;
         public SerializableDictionary wrongKeys = new SerializableDictionary();
     }
@@ -115,7 +116,6 @@ public class DataManager : MonoBehaviour
                     playHistory = userDataList[i].playHistory
                 };
 
-                // Deserialize song stats
                 foreach (var kvp in userDataList[i].songStats.ToDictionary())
                 {
                     userData.songStats[kvp.Key] = JsonUtility.FromJson<SongStatistics>(kvp.Value);
@@ -148,13 +148,18 @@ public class DataManager : MonoBehaviour
         
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        Initialize();
+        StartCoroutine(VR_Initialize());
     }
 
-    private void Initialize()
+    private IEnumerator VR_Initialize()
     {
+        #if UNITY_ANDROID && !UNITY_EDITOR
         _dataPath = Path.Combine(Application.persistentDataPath, "game_data.json");
-        LoadData();
+        #else
+        _dataPath = Path.Combine(Application.persistentDataPath, "game_data.json");
+        #endif
+
+        yield return StartCoroutine(VR_SafeLoadData());
         Debug.Log(GetFormattedGameData());
     }
 
@@ -232,7 +237,7 @@ public class DataManager : MonoBehaviour
             _gameData[username] = new UserData();
         }
         _gameData[username].scores[scoreKey] = value.ToString();
-        SaveData();
+        StartCoroutine(VR_SafeSaveData());
         Debug.Log($"Set score: {scoreKey} = {value}");
     }
 
@@ -243,26 +248,38 @@ public class DataManager : MonoBehaviour
             _gameData[username] = new UserData();
         }
         _gameData[username].info[infoKey] = value.ToString();
-        SaveData();
+        StartCoroutine(VR_SafeSaveData());
     }
 
-    private void LoadData()
+    private IEnumerator VR_SafeLoadData()
     {
-        if (File.Exists(_dataPath))
+        if (!File.Exists(_dataPath))
         {
-            string json = File.ReadAllText(_dataPath);
+            _gameData = new Dictionary<string, UserData>();
+            yield break;
+        }
+
+        string json = "";
+        try
+        {
+            using (var reader = new StreamReader(_dataPath))
+            {
+                json = reader.ReadToEnd();
+            }
+
+            // yield return null; // Prevent VR frame drops
             GameDataWrapper wrapper = JsonUtility.FromJson<GameDataWrapper>(json);
             _gameData = wrapper?.ToDictionary() ?? new Dictionary<string, UserData>();
         }
-        else
+        catch (Exception e)
         {
+            Debug.LogError($"VR Load failed: {e.Message}");
             _gameData = new Dictionary<string, UserData>();
         }
     }
 
-    public void RecordPlaySession(string songName, float score, Dictionary<string, int> wrongKeyPresses)
+    public IEnumerator RecordPlaySession(string songName, float score, Dictionary<string, int> wrongKeyPresses)
     {
-        Debug.Log("Here received for recording play session");
         if (!_gameData.ContainsKey(username))
         {
             _gameData[username] = new UserData();
@@ -270,31 +287,27 @@ public class DataManager : MonoBehaviour
 
         var user = _gameData[username];
         
-        // Create new play session
         var session = new PlaySession
         {
             songName = songName,
             score = score,
-            timestamp = DateTime.Now.ToString("o"), // ISO 8601 format
+            timestamp = DateTime.Now.ToString("o"),
             wrongKeyPresses = wrongKeyPresses.Values.Sum(),
             wrongKeys = new SerializableDictionary()
         };
 
-        // Add wrong keys to serializable dictionary
         foreach (var kvp in wrongKeyPresses)
         {
             session.wrongKeys.keys.Add(kvp.Key);
             session.wrongKeys.values.Add(kvp.Value.ToString());
         }
 
-        // Maintain last 10 plays
         user.playHistory.Insert(0, session);
         if (user.playHistory.Count > 10)
         {
             user.playHistory.RemoveAt(10);
         }
 
-        // Update song-specific stats
         if (!user.songStats.ContainsKey(songName))
         {
             user.songStats[songName] = new SongStatistics();
@@ -310,25 +323,22 @@ public class DataManager : MonoBehaviour
         stats.totalPlays++;
         stats.totalWrongPresses += session.wrongKeyPresses;
 
-        // Update common wrong notes
         foreach (var kvp in wrongKeyPresses)
         {
             int index = stats.commonWrongNotes.keys.IndexOf(kvp.Key);
             if (index >= 0)
             {
-                // Key exists, update value
                 int currentValue = int.Parse(stats.commonWrongNotes.values[index]);
                 stats.commonWrongNotes.values[index] = (currentValue + kvp.Value).ToString();
             }
             else
             {
-                // New key
                 stats.commonWrongNotes.keys.Add(kvp.Key);
                 stats.commonWrongNotes.values.Add(kvp.Value.ToString());
             }
         }
 
-        SaveData();
+        yield return StartCoroutine(VR_SafeSaveData());
     }
 
     public List<PlaySession> GetPlayHistory(int maxEntries = 10)
@@ -350,18 +360,130 @@ public class DataManager : MonoBehaviour
         return new SongStatistics();
     }
 
-    private void SaveData()
+    private IEnumerator VR_SafeSaveData()
     {
         GameDataWrapper wrapper = new GameDataWrapper();
         wrapper.FromDictionary(_gameData);
         
         string json = JsonUtility.ToJson(wrapper, true);
-        File.WriteAllText(_dataPath, json);
-        Debug.Log($"Saved data to {_dataPath}:\n{json}");
+        string tempPath = _dataPath + ".tmp";
+
+        try
+        {
+            using (var writer = new StreamWriter(tempPath))
+            {
+                writer.Write(json);
+            }
+            
+            if (File.Exists(_dataPath))
+                File.Delete(_dataPath);
+            
+            File.Move(tempPath, _dataPath);
+            
+            Debug.Log($"VR Data saved to {_dataPath}");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"VR Save failed: {e.Message}");
+        }
+        yield return null; // Yield to maintain VR performance
     }
 
     public string GetPersistentDataPath()
     {
         return Application.persistentDataPath;
+    }
+
+    // =================================== GET INFO FOR STATS ==================================/
+    public Dictionary<string, float> GetSongPlayDistribution()
+    {
+        var distribution = new Dictionary<string, float>();
+        if (_gameData.TryGetValue(username, out UserData userData))
+        {
+            int totalPlays = userData.playHistory.Count;
+            if (totalPlays > 0)
+            {
+                foreach (var session in userData.playHistory)
+                {
+                    if (distribution.ContainsKey(session.songName))
+                        distribution[session.songName]++;
+                    else
+                        distribution[session.songName] = 1;
+                }
+
+                // Convert counts to percentages
+                foreach (var key in distribution.Keys.ToList())
+                {
+                    distribution[key] = (distribution[key] / totalPlays) * 100f;
+                }
+            }
+        }
+        return distribution;
+    }
+
+    public (List<float> scores, List<string> dates) GetScoreProgression(string songName)
+    {
+        var scores = new List<float>();
+        var dates = new List<string>();
+        
+        if (_gameData.TryGetValue(username, out UserData userData))
+        {
+            foreach (var session in userData.playHistory.Where(s => s.songName == songName))
+            {
+                scores.Add(session.score);
+                dates.Add(DateTime.Parse(session.timestamp).ToString("MMM dd"));
+            }
+        }
+        return (scores, dates);
+    }
+
+    // Get accuracy trend data
+    public (List<float> accuracy, List<string> dates) GetAccuracyTrend(string songName)
+    {
+        var accuracy = new List<float>();
+        var dates = new List<string>();
+        
+        if (_gameData.TryGetValue(username, out UserData userData) && 
+            userData.songStats.TryGetValue(songName, out SongStatistics stats))
+        {
+            for (int i = 0; i < stats.last10Scores.Count; i++)
+            {
+                accuracy.Add(stats.last10Scores[i]);
+                dates.Add(DateTime.Now.AddDays(-(stats.last10Scores.Count - i - 1)).ToString("MMM dd"));
+            }
+        }
+        return (accuracy, dates);
+    }
+
+    // Get mistake heatmap data
+    public Dictionary<string, int> GetMistakeHotspots(string songName)
+    {
+        if (_gameData.TryGetValue(username, out UserData userData) && 
+            userData.songStats.TryGetValue(songName, out SongStatistics stats))
+        {
+            var hotspots = new Dictionary<string, int>();
+            for (int i = 0; i < stats.commonWrongNotes.keys.Count; i++)
+            {
+                hotspots[stats.commonWrongNotes.keys[i]] = int.Parse(stats.commonWrongNotes.values[i]);
+            }
+            return hotspots.OrderByDescending(kvp => kvp.Value)
+                        .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        }
+        return new Dictionary<string, int>();
+    }
+
+    // Get performance summary for a song
+    public (float averageScore, float bestScore, float accuracy) GetSongPerformanceSummary(string songName)
+    {
+        if (_gameData.TryGetValue(username, out UserData userData) && 
+            userData.songStats.TryGetValue(songName, out SongStatistics stats))
+        {
+            float average = stats.last10Scores.Count > 0 ? stats.last10Scores.Average() : 0;
+            float best = stats.last10Scores.Count > 0 ? stats.last10Scores.Max() : 0;
+            float accuracy = 100f - (stats.totalWrongPresses / (float)(stats.totalPlays * 100)) * 100f; // Approximation
+            
+            return (average, best, Mathf.Clamp(accuracy, 0, 100));
+        }
+        return (0, 0, 0);
     }
 }
