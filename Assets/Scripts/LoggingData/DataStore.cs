@@ -491,7 +491,7 @@ public class DataManager : MonoBehaviour
         {
             float average = stats.last10Scores.Count > 0 ? stats.last10Scores.Average() : 0;
             float best = stats.last10Scores.Count > 0 ? stats.last10Scores.Max() : 0;
-            float accuracy = 100f - (stats.totalWrongPresses / (float)(stats.totalPlays * 100)) * 100f; // Approximation
+            // float accuracy = 100f - (stats.totalWrongPresses / (float)(stats.totalPlays * 100)) * 100f; // Approximation
             
             return (average, best);
         }
