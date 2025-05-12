@@ -1,26 +1,103 @@
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using System.Text;
 
-[DefaultExecutionOrder(-100)] // Ensures early initialization
+[DefaultExecutionOrder(-100)]
 public class DataManager : MonoBehaviour
 {
     public static DataManager Instance { get; private set; }
     
     private string _dataPath;
-    private Dictionary<string, object> _gameData;
+    private Dictionary<string, UserData> _gameData;
+    private string username = "John Doe";
 
-    // Wrapper class for serialization
     [System.Serializable]
-    private class GameDataWrapper
+    public class UserData
+    {
+        public Dictionary<string, string> scores = new Dictionary<string, string>();
+        public Dictionary<string, string> info = new Dictionary<string, string>();
+
+        // Helper method for serialization
+        public SerializableUserData ToSerializable()
+        {
+            return new SerializableUserData
+            {
+                scores = new SerializableDictionary(this.scores),
+                info = new SerializableDictionary(this.info)
+            };
+        }
+    }
+
+    [System.Serializable]
+    public class SerializableUserData
+    {
+        public SerializableDictionary scores;
+        public SerializableDictionary info;
+    }
+
+    [System.Serializable]
+    public class SerializableDictionary
     {
         public List<string> keys = new List<string>();
         public List<string> values = new List<string>();
+
+        public SerializableDictionary() { }
+        
+        public SerializableDictionary(Dictionary<string, string> dict)
+        {
+            foreach (var kvp in dict)
+            {
+                keys.Add(kvp.Key);
+                values.Add(kvp.Value);
+            }
+        }
+
+        public Dictionary<string, string> ToDictionary()
+        {
+            var dict = new Dictionary<string, string>();
+            for (int i = 0; i < keys.Count; i++)
+            {
+                dict[keys[i]] = values[i];
+            }
+            return dict;
+        }
+    }
+
+    [System.Serializable]
+    private class GameDataWrapper
+    {
+        public List<string> usernames = new List<string>();
+        public List<SerializableUserData> userDataList = new List<SerializableUserData>();
+
+        public Dictionary<string, UserData> ToDictionary()
+        {
+            var dict = new Dictionary<string, UserData>();
+            for (int i = 0; i < usernames.Count; i++)
+            {
+                dict[usernames[i]] = new UserData
+                {
+                    scores = userDataList[i].scores.ToDictionary(),
+                    info = userDataList[i].info.ToDictionary()
+                };
+            }
+            return dict;
+        }
+
+        public void FromDictionary(Dictionary<string, UserData> source)
+        {
+            usernames.Clear();
+            userDataList.Clear();
+            foreach (var kvp in source)
+            {
+                usernames.Add(kvp.Key);
+                userDataList.Add(kvp.Value.ToSerializable());
+            }
+        }
     }
 
     private void Awake()
     {
-        // Singleton pattern
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -36,35 +113,94 @@ public class DataManager : MonoBehaviour
     {
         _dataPath = Path.Combine(Application.persistentDataPath, "game_data.json");
         LoadData();
-        Debug.Log($"DataManager initialized. Path: {_dataPath}");
+        Debug.Log(GetFormattedGameData());
     }
 
-    public T Get<T>(string key, T defaultValue = default)
+    public void SetUserName(string name)
     {
-        if (_gameData.TryGetValue(key, out object value))
+        username = name;
+    }
+
+    private string GetFormattedGameData()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine("=== Game Data ===");
+        sb.AppendLine($"Data Path: {_dataPath}");
+        sb.AppendLine();
+
+        foreach (var user in _gameData)
         {
-            try
+            sb.AppendLine($"User: {user.Key}");
+            sb.AppendLine("--- Scores ---");
+            foreach (var score in user.Value.scores)
             {
-                if (typeof(T) == typeof(int))
-                    return (T)(object)int.Parse(value.ToString());
-                if (typeof(T) == typeof(float))
-                    return (T)(object)float.Parse(value.ToString());
-                if (typeof(T) == typeof(bool))
-                    return (T)(object)bool.Parse(value.ToString());
-                
-                return (T)value;
+                sb.AppendLine($"{score.Key}: {score.Value}");
             }
-            catch
+            
+            sb.AppendLine("--- Info ---");
+            foreach (var info in user.Value.info)
             {
-                return defaultValue;
+                sb.AppendLine($"{info.Key}: {info.Value}");
             }
+            sb.AppendLine();
+        }
+
+        return sb.ToString();
+    }
+
+    public T GetScore<T>(string scoreKey, T defaultValue = default)
+    {
+        if (_gameData.TryGetValue(username, out UserData userData) && 
+            userData.scores.TryGetValue(scoreKey, out string value))
+        {
+            return ParseValue<T>(value, defaultValue);
         }
         return defaultValue;
     }
 
-    public void Set(string key, object value)
+    public T GetInfo<T>(string infoKey, T defaultValue = default)
     {
-        _gameData[key] = value;
+        if (_gameData.TryGetValue(username, out UserData userData) && 
+            userData.info.TryGetValue(infoKey, out string value))
+        {
+            return ParseValue<T>(value, defaultValue);
+        }
+        return defaultValue;
+    }
+
+    private T ParseValue<T>(string value, T defaultValue)
+    {
+        try
+        {
+            if (typeof(T) == typeof(int)) return (T)(object)int.Parse(value);
+            if (typeof(T) == typeof(float)) return (T)(object)float.Parse(value);
+            if (typeof(T) == typeof(bool)) return (T)(object)bool.Parse(value);
+            return (T)(object)value;
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public void SetScore(string scoreKey, object value)
+    {
+        if (!_gameData.ContainsKey(username))
+        {
+            _gameData[username] = new UserData();
+        }
+        _gameData[username].scores[scoreKey] = value.ToString();
+        SaveData();
+        Debug.Log($"Set score: {scoreKey} = {value}");
+    }
+
+    public void SetInfo(string infoKey, object value)
+    {
+        if (!_gameData.ContainsKey(username))
+        {
+            _gameData[username] = new UserData();
+        }
+        _gameData[username].info[infoKey] = value.ToString();
         SaveData();
     }
 
@@ -74,31 +210,22 @@ public class DataManager : MonoBehaviour
         {
             string json = File.ReadAllText(_dataPath);
             GameDataWrapper wrapper = JsonUtility.FromJson<GameDataWrapper>(json);
-            
-            _gameData = new Dictionary<string, object>();
-            for (int i = 0; i < wrapper.keys.Count; i++)
-            {
-                _gameData[wrapper.keys[i]] = wrapper.values[i];
-            }
+            _gameData = wrapper?.ToDictionary() ?? new Dictionary<string, UserData>();
         }
         else
         {
-            _gameData = new Dictionary<string, object>();
+            _gameData = new Dictionary<string, UserData>();
         }
     }
 
     private void SaveData()
     {
         GameDataWrapper wrapper = new GameDataWrapper();
-        
-        foreach (var pair in _gameData)
-        {
-            wrapper.keys.Add(pair.Key);
-            wrapper.values.Add(pair.Value.ToString());
-        }
+        wrapper.FromDictionary(_gameData);
         
         string json = JsonUtility.ToJson(wrapper, true);
         File.WriteAllText(_dataPath, json);
+        Debug.Log($"Saved data to {_dataPath}:\n{json}");
     }
 
     public string GetPersistentDataPath()

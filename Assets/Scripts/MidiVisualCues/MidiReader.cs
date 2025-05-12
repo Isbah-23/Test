@@ -401,10 +401,10 @@ public class MidiReader : MonoBehaviour
                 curr_score = (obtained_score / total_score) * 100f;
             }
             
-            float highScore = DataManager.Instance.Get<float>($"{songName}{typeOfPlay}_high_score", 0f); // Default to 0 if no score exist
+            float highScore = DataManager.Instance.GetScore<float>($"{songName}{typeOfPlay}_high_score", 0f); // Default to 0 if no score exist
             if (curr_score > highScore)
             {
-                DataManager.Instance.Set($"{songName}{typeOfPlay}_high_score", curr_score);
+                DataManager.Instance.SetScore($"{songName}{typeOfPlay}_high_score", curr_score);
                 Logger.Instance.Log($"New high score for {songName}{typeOfPlay}: {curr_score:F2}%"); // Log with 2 decimal places
             }
             else

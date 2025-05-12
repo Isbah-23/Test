@@ -24,7 +24,7 @@ public class NoteFallingScript : MonoBehaviour
     void Update()
     {
         if (!MidiReader.isPlaying) return;
-        // if (!SimpleReader.isPlaying) return; // -- for testing purposes in Classic Scene
+        // if (!SimpleReader_V2.isPlaying) return; // -- for testing purposes in Classic Scene
 
         transform.Translate(Vector3.down * velocity * n * Time.deltaTime); // note falls 1 unit length per unit delta time
         float topEdgeY = transform.position.y + (transform.localScale.y * 0.5f);
@@ -32,10 +32,5 @@ public class NoteFallingScript : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    public void Rewind(float timeStepCount)
-    {
-        transform.position += Vector3.up * (velocity * n * timeStepCount);
     }
 }
