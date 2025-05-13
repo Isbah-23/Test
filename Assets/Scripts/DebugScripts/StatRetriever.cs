@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 using UnityEngine.UI;
 using System.Linq;
 using XCharts.Runtime;
+using System.Globalization;
 
 public class StatRetriever : MonoBehaviour
 {
@@ -14,12 +16,22 @@ public class StatRetriever : MonoBehaviour
     [SerializeField] XCharts.Runtime.PieChart pieChart; // Changed from PieChart to BaseChart for more flexibility
     [SerializeField] XCharts.Runtime.LineChart lineChart;
     [SerializeField] XCharts.Runtime.BarChart barChart;
+    public List<SongStatData> songStats;
+    private Dictionary<string, Line> lines = new Dictionary<string, Line>();
+
+    [Serializable]
+    public class SongStatData
+    {
+        public string songName;
+        public List<float> values;
+        public List<DateTime> timestamps;
+    }
 
     void Start()
     {
         ShowSummary("london_bridge");
         DrawPieChart(DataManager.Instance.GetSongPlayDistribution());
-        DrawScoreProgression("london_bridge");
+        DrawSongProgressions(new List<string> {"london_bridge","happy_birthday","twinkle_twinkle","test"});
         DrawMistakeBars("london_bridge");
     }
 
@@ -54,57 +66,75 @@ public class StatRetriever : MonoBehaviour
         pieChart.RefreshChart();
     }
 
-    void DrawScoreProgression(string songName)
+    void DrawSongProgressions(List<string> songNames)
+{
+    // First collect all data and find all unique timestamps
+    var allData = new Dictionary<string, (List<float> scores, List<DateTime> timestamps)>();
+    var allTimestamps = new HashSet<DateTime>();
+
+    foreach (var name in songNames)
     {
-        // Initialize chart if needed
-        if (lineChart == null) 
+        var (scores, dateStrings) = DataManager.Instance.GetScoreProgression(name);
+        var parsedDates = new List<DateTime>();
+        
+        foreach (var dateStr in dateStrings)
         {
-            lineChart = gameObject.AddComponent<LineChart>();
-            lineChart.Init();
-            
-            // Basic setup
-            lineChart.SetSize(580, 300);
-            
-            Title title = lineChart.EnsureChartComponent<Title>();
-            title.text = "Score Progression";
-            
-            Tooltip tooltip = lineChart.EnsureChartComponent<Tooltip>();
-            tooltip.show = true;
-            
-            // Configure axes
-            XAxis xAxisComponent = lineChart.EnsureChartComponent<XAxis>();
-            xAxisComponent.type = Axis.AxisType.Category;
-            
-            YAxis yAxisComponent = lineChart.EnsureChartComponent<YAxis>();
-            yAxisComponent.type = Axis.AxisType.Value;
-            yAxisComponent.minMaxType = Axis.AxisMinMaxType.Custom;
-            yAxisComponent.min = 0;
-            yAxisComponent.max = 100;
-            
-            // Add series
-            lineChart.AddSerie<Line>("Score");
+            if (DateTime.TryParseExact(dateStr, "MMM dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+            {
+                parsedDates.Add(parsedDate);
+                allTimestamps.Add(parsedDate);
+            }
         }
-        
-        // Get data
-        var (scores, dates) = DataManager.Instance.GetScoreProgression(songName);
-        
-        // Clear only data (keep series config)
-        lineChart.ClearData();
-        
-        // Set X axis categories (official API method)
-        for (int i = 0; i < dates.Count; i++)
-        {
-            lineChart.AddXAxisData(dates[i]);
-        }
-        
-        // Add Y values
-        foreach (float score in scores)
-        {
-            lineChart.AddData(0, score);
-        }
-        
-        lineChart.RefreshChart();
+
+        allData[name] = (scores, parsedDates);
+        songStats.Add(new SongStatData { songName = name, values = scores, timestamps = parsedDates });
     }
+
+    if (lineChart == null) return;
+
+    lineChart.ClearData();
+    
+    // Sort all timestamps
+    var sortedTimestamps = allTimestamps.OrderBy(t => t).ToList();
+    
+    // Configure X-axis with all timestamps
+    var xAxis = lineChart.GetChartComponent<XAxis>();
+    xAxis.data.Clear();
+    xAxis.type = Axis.AxisType.Category;
+    xAxis.boundaryGap = true;
+    
+    foreach (var timestamp in sortedTimestamps)
+    {
+        xAxis.data.Add(timestamp.ToString("MMM dd HH:mm"));
+    }
+
+    // Add series for each song
+    foreach (var song in allData)
+    {
+        Line serie = lineChart.AddSerie<Line>(song.Key);
+        serie.symbol.type = SymbolType.Circle;
+        serie.symbol.size = 10;
+        serie.lineStyle.width = 2;
+        serie.ignore = true; 
+        serie.ignoreValue = 0;
+        
+        // Align data with master timestamp list
+        for (int i = 0; i < sortedTimestamps.Count; i++)
+        {
+            int dataIndex = song.Value.timestamps.IndexOf(sortedTimestamps[i]);
+            if (dataIndex >= 0 && dataIndex < song.Value.scores.Count)
+            {
+                serie.AddData(song.Value.scores[dataIndex]);
+            }
+            else
+            {
+                serie.AddData(0); // No data at this timestamp
+            }
+        }
+    }
+
+    lineChart.RefreshChart();
+}
 
     void DrawMistakeBars(string songName)
     {
@@ -132,6 +162,7 @@ public class StatRetriever : MonoBehaviour
             
             // Add series
             Bar serie = barChart.AddSerie<Bar>("Mistakes");
+            // serie.connectNulls = false;
             serie.barWidth = 0.6f;
             serie.itemStyle.color = new Color32(255, 100, 100, 255);
             

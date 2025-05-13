@@ -439,10 +439,12 @@ public class DataManager : MonoBehaviour
         
         if (_gameData.TryGetValue(username, out UserData userData))
         {
-            foreach (var session in userData.playHistory.Where(s => s.songName == songName))
+            foreach (var session in userData.playHistory
+                .Where(s => s.songName == songName)
+                .OrderBy(s => DateTime.Parse(s.timestamp)))
             {
-                scores.Add(session.score);
-                dates.Add(DateTime.Parse(session.timestamp).ToString("MMM dd"));
+                scores.Add((float)Math.Round(session.score, 2)); // Round to 2 decimals
+                dates.Add(DateTime.Parse(session.timestamp).ToString("MMM dd HH:mm"));
             }
         }
         return (scores, dates);
