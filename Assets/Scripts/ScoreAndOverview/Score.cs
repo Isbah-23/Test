@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-// using UnityEngine.Networking;
+using UnityEngine.Networking;
 using TMPro;
 
 public class Score : MonoBehaviour
@@ -11,15 +11,6 @@ public class Score : MonoBehaviour
     [SerializeField] TextMeshProUGUI songNameHolder;
     [SerializeField] TextMeshProUGUI playScoreHolder;
     [SerializeField] TextMeshProUGUI practiceScoreHolder;
-
-    // void Start()
-    // {
-    //     songNameHolder.text = "";
-    //     playScoreHolder.text = "";
-    //     practiceScoreHolder.text = "";
-    //     midiFolderPath = Application.streamingAssetsPath;
-    //     StartCoroutine(LoadMidiFiles());
-    // }
 
     private void OnEnable()
     {
