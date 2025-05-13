@@ -5664,7 +5664,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225299735}
-  m_LocalRotation: {x: 0, y: 0, z: 0.6087614, w: 0.7933533}
+  m_LocalRotation: {x: 0, y: 0, z: 0.46174863, w: 0.8870109}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8012,7 +8012,7 @@ MonoBehaviour:
       m_Position: 0
       m_AutoOffset: 0
       m_Offset: {x: 0, y: -50, z: 0}
-      m_Rotate: 75
+      m_Rotate: 55
       m_AutoRotate: 0
       m_Distance: 8
       m_Formatter: 
@@ -8063,7 +8063,7 @@ MonoBehaviour:
       m_ShowStartLabel: 1
       m_ShowEndLabel: 1
       m_TextLimit:
-        m_Enable: 1
+        m_Enable: 0
         m_MaxWidth: 0
         m_Gap: 1
         m_Suffix: ...
@@ -8527,7 +8527,7 @@ MonoBehaviour:
     m_CoordSystem: GridCoord
     m_SerieType: Line
     m_SerieName: serie0
-    m_State: 0
+    m_State: 3
     m_ColorBy: 0
     m_Stack: 
     m_XAxisIndex: 0
@@ -8578,9 +8578,9 @@ MonoBehaviour:
     m_ShowDataDimension: 2
     m_ShowDataName: 0
     m_Clip: 0
-    m_Ignore: 0
+    m_Ignore: 1
     m_IgnoreValue: 0
-    m_IgnoreLineBreak: 0
+    m_IgnoreLineBreak: 1
     m_ShowAsPositiveNumber: 0
     m_Large: 1
     m_LargeThreshold: 200
@@ -15498,7 +15498,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 443270370}
-  m_LocalRotation: {x: 0, y: 0, z: 0.6087614, w: 0.7933533}
+  m_LocalRotation: {x: 0, y: 0, z: 0.46174863, w: 0.8870109}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -27167,7 +27167,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1522322021}
-  m_LocalRotation: {x: 0, y: 0, z: 0.6087614, w: 0.7933533}
+  m_LocalRotation: {x: 0, y: 0, z: 0.46174863, w: 0.8870109}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -30489,6 +30489,7 @@ MonoBehaviour:
   pieChart: {fileID: 841601789}
   lineChart: {fileID: 286729251}
   barChart: {fileID: 217437552}
+  songStats: []
 --- !u!1 &1800437385
 GameObject:
   m_ObjectHideFlags: 0
@@ -34330,7 +34331,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2094195388}
-  m_LocalRotation: {x: 0, y: 0, z: 0.6087614, w: 0.7933533}
+  m_LocalRotation: {x: 0, y: 0, z: 0.46174863, w: 0.8870109}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -34624,7 +34625,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2118058466}
-  m_LocalRotation: {x: 0, y: 0, z: 0.6087614, w: 0.7933533}
+  m_LocalRotation: {x: 0, y: 0, z: 0.46174863, w: 0.8870109}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
