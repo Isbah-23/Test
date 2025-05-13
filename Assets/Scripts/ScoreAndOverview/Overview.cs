@@ -29,6 +29,11 @@ public class Overview : MonoBehaviour
     [SerializeField] XCharts.Runtime.LineChart lineChart;
     [SerializeField] XCharts.Runtime.BarChart barChart;
 
+    public TMPro.TextMeshProUGUI logPath;
+    public TMPro.TextMeshProUGUI bestScore;
+    public TMPro.TextMeshProUGUI bestPracticeScore;
+    public TMPro.TextMeshProUGUI averageScore;
+
     
     private Dictionary<string, Line> lines = new Dictionary<string, Line>();
 
@@ -309,88 +314,88 @@ public class Overview : MonoBehaviour
         }
     }
 
-void DrawMistakeHeatmap(List<string> songNames)
-{
-    // Initialize chart if needed (same as working version)
-    if (barChart == null)
+    void DrawMistakeHeatmap(List<string> songNames)
     {
-        barChart = gameObject.AddComponent<BarChart>();
-        barChart.Init();
-        barChart.SetSize(800, 400);
-        
-        Title title = barChart.EnsureChartComponent<Title>();
-        title.text = "Mistake Hotspots";
-        title.labelStyle.textStyle.color = HexToColor32("#E6A32B");
-        title.labelStyle.textStyle.fontSize = 24;
-        
-        XAxis xAxis = barChart.EnsureChartComponent<XAxis>();
-        xAxis.type = Axis.AxisType.Category;
-        xAxis.boundaryGap = true;
-        
-        YAxis yAxis = barChart.EnsureChartComponent<YAxis>();
-        yAxis.type = Axis.AxisType.Value;
-        
-        // Enable legend since we'll have multiple series
-        Legend legend = barChart.EnsureChartComponent<Legend>();
-        legend.show = true;
-    }
-
-    // Clear existing data
-    barChart.ClearData();
-    barChart.GetChartComponent<XAxis>().data.Clear();
-
-    // Gather all data and piano keys
-    Dictionary<string, Dictionary<string, int>> allSongData = new Dictionary<string, Dictionary<string, int>>();
-    HashSet<string> allPianoKeys = new HashSet<string>();
-
-    foreach (string song in songNames)
-    {
-        var mistakes = DataManager.Instance.GetMistakeHotspots(song);
-        allSongData[song] = mistakes;
-        
-        foreach (string key in mistakes.Keys)
+        // Initialize chart if needed (same as working version)
+        if (barChart == null)
         {
-            allPianoKeys.Add(key);
+            barChart = gameObject.AddComponent<BarChart>();
+            barChart.Init();
+            barChart.SetSize(800, 400);
+            
+            Title title = barChart.EnsureChartComponent<Title>();
+            title.text = "Mistake Hotspots";
+            title.labelStyle.textStyle.color = HexToColor32("#E6A32B");
+            title.labelStyle.textStyle.fontSize = 24;
+            
+            XAxis xAxis = barChart.EnsureChartComponent<XAxis>();
+            xAxis.type = Axis.AxisType.Category;
+            xAxis.boundaryGap = true;
+            
+            YAxis yAxis = barChart.EnsureChartComponent<YAxis>();
+            yAxis.type = Axis.AxisType.Value;
+            
+            // Enable legend since we'll have multiple series
+            Legend legend = barChart.EnsureChartComponent<Legend>();
+            legend.show = true;
         }
-    }
 
-    // Sort piano keys by total mistakes across all songs
-    var sortedKeys = allPianoKeys.OrderByDescending(key => 
-        allSongData.Sum(song => song.Value.ContainsKey(key) ? song.Value[key] : 0)
-    ).ToList();
+        // Clear existing data
+        barChart.ClearData();
+        barChart.GetChartComponent<XAxis>().data.Clear();
 
-    // Add piano keys to X-axis
-    foreach (string key in sortedKeys)
-    {
-        barChart.AddXAxisData(key);
-    }
+        // Gather all data and piano keys
+        Dictionary<string, Dictionary<string, int>> allSongData = new Dictionary<string, Dictionary<string, int>>();
+        HashSet<string> allPianoKeys = new HashSet<string>();
 
-    // Color palette
-    List<Color32> colors = new List<Color32>
-    {
-        HexToColor32("#00FFFF"), HexToColor32("#FF69B4"), HexToColor32("#FFD700"),
-        HexToColor32("#32CD32"), HexToColor32("#FF4500"), HexToColor32("#9370DB")
-    };
+        foreach (string song in songNames)
+        {
+            var mistakes = DataManager.Instance.GetMistakeHotspots(song);
+            allSongData[song] = mistakes;
+            
+            foreach (string key in mistakes.Keys)
+            {
+                allPianoKeys.Add(key);
+            }
+        }
 
-    // Add one series per song
-    for (int i = 0; i < songNames.Count; i++)
-    {
-        string song = songNames[i];
-        string displayName = song.Length > 10 ? song.Substring(0, 10) + "..." : song;
-        
-        Bar serie = barChart.AddSerie<Bar>(displayName);
-        serie.stack = "stack1";
-        serie.barWidth = 0.6f;
-        serie.itemStyle.color = colors[i % colors.Count]; // Cycle through colors
-        
-        // Add data points for this song
+        // Sort piano keys by total mistakes across all songs
+        var sortedKeys = allPianoKeys.OrderByDescending(key => 
+            allSongData.Sum(song => song.Value.ContainsKey(key) ? song.Value[key] : 0)
+        ).ToList();
+
+        // Add piano keys to X-axis
         foreach (string key in sortedKeys)
         {
-            int value = allSongData[song].ContainsKey(key) ? allSongData[song][key] : 0;
-            barChart.AddData(i, value); // Add to current series
+            barChart.AddXAxisData(key);
         }
-    }
 
-    barChart.RefreshChart();
-}
+        // Color palette
+        List<Color32> colors = new List<Color32>
+        {
+            HexToColor32("#00FFFF"), HexToColor32("#FF69B4"), HexToColor32("#FFD700"),
+            HexToColor32("#32CD32"), HexToColor32("#FF4500"), HexToColor32("#9370DB")
+        };
+
+        // Add one series per song
+        for (int i = 0; i < songNames.Count; i++)
+        {
+            string song = songNames[i];
+            string displayName = song.Length > 10 ? song.Substring(0, 10) + "..." : song;
+            
+            Bar serie = barChart.AddSerie<Bar>(displayName);
+            serie.stack = "stack1";
+            serie.barWidth = 0.6f;
+            serie.itemStyle.color = colors[i % colors.Count]; // Cycle through colors
+            
+            // Add data points for this song
+            foreach (string key in sortedKeys)
+            {
+                int value = allSongData[song].ContainsKey(key) ? allSongData[song][key] : 0;
+                barChart.AddData(i, value); // Add to current series
+            }
+        }
+
+        barChart.RefreshChart();
+    }
 }
