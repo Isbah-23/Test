@@ -8,11 +8,13 @@ using UnityEngine.Networking;
 using System.Linq;
 using XCharts.Runtime;
 using System.Globalization;
+using System;
 
 
 public class Overview : MonoBehaviour
 {
     private string midiFolderPath;
+    List<string> allSongs = new List<string>();
     public TMPro.TextMeshProUGUI selectedSong;
     public GameObject selectionPanel;
     public GameObject buttonPrefab;
@@ -24,6 +26,16 @@ public class Overview : MonoBehaviour
     private const float buttonWidth = 300f;
 
     [SerializeField] XCharts.Runtime.PieChart pieChart;
+    [SerializeField] XCharts.Runtime.LineChart lineChart;
+    private Dictionary<string, Line> lines = new Dictionary<string, Line>();
+
+    [Serializable]
+    public class SongStatData
+    {
+        public string songName;
+        public List<float> values;
+        public List<DateTime> timestamps;
+    }
 
     private Color32 HexToColor32(string hex)
     {
@@ -93,7 +105,7 @@ public class Overview : MonoBehaviour
             if (string.IsNullOrEmpty(fileName)) continue; // Skip empty lines
 
             Debug.Log($"Creating button for: {fileName}");
-
+            allSongs.Add(fileName);
             GameObject newButton = Instantiate(buttonPrefab, content);
             RectTransform rectTransform = newButton.GetComponent<RectTransform>();
             rectTransform.sizeDelta = new Vector2(buttonWidth, buttonHeight);
@@ -103,11 +115,20 @@ public class Overview : MonoBehaviour
         }
 
         isSpawned = true;
+        DrawSongProgressions(allSongs); // Do this after allSongs has been populated
     }
 
     void SelectSong(string fileName)
     {
         selectedSong.text = fileName;
+        if (selectedSong.text == "All Songs")
+        {
+            DrawSongProgressions(allSongs);
+        }
+        else
+        {
+            DrawSongProgressions(new List<string> {fileName});
+        }
     }
 
     void DrawPieChart(Dictionary<string, float> distributionData)
@@ -128,19 +149,27 @@ public class Overview : MonoBehaviour
             HexToColor32("#FFD700"), // Gold
             HexToColor32("#32CD32"), // LimeGreen
             HexToColor32("#FF4500"), // OrangeRed
-            HexToColor32("#9370DB")  // MediumPurple
+            HexToColor32("#9370DB"),  // MediumPurple
+            HexToColor32("#00FF7F"),  // SpringGreen (bright cyan-green)
+            HexToColor32("#FF00FF"),  // Magenta (vivid pink-purple)
+            HexToColor32("#7FFFD4"),  // Aquamarine (electric teal)
+            HexToColor32("#FF1493"),  // DeepPink (intense neon pink)
+            HexToColor32("#9400D3"),  // DarkViolet (deep purple)
+            HexToColor32("#00BFFF"),  // DeepSkyBlue (bright azure)
+            HexToColor32("#FF8C00"),  // DarkOrange (vibrant orange)
+            HexToColor32("#E6E6FA")   // Lavender (soft futuristic purple)
         };
 
 
         // Title
         Title title = pieChart.EnsureChartComponent<Title>();
         title.text = "Song Distribution";
-        title.labelStyle.textStyle.color = Color.yellow; // Match your theme
+        title.labelStyle.textStyle.color = HexToColor32("#E6A32B"); // Match your theme
         title.labelStyle.textStyle.fontSize = 24;
 
         // Legend
         Legend legend = pieChart.EnsureChartComponent<Legend>();
-        legend.labelStyle.textStyle.color = Color.yellow;
+        legend.labelStyle.textStyle.color = HexToColor32("#E6A32B");
         legend.show = true;
 
         // Pie Data
@@ -152,5 +181,124 @@ public class Overview : MonoBehaviour
             pieChart.AddData(0, entry.Value / totalCount, entry.Key);
 
         pieChart.RefreshChart();
+    }
+
+    void DrawSongProgressions(List<string> songNames)
+    {
+        List<SongStatData> songStats = new List<SongStatData>();
+        // Define custom color palette
+        List<Color32> customColors = new List<Color32>
+        {
+            HexToColor32("#00FFFF"), // Cyan
+            HexToColor32("#FF69B4"), // HotPink
+            HexToColor32("#FFD700"), // Gold
+            HexToColor32("#32CD32"), // LimeGreen
+            HexToColor32("#FF4500"), // OrangeRed
+            HexToColor32("#9370DB"),  // MediumPurple
+            HexToColor32("#00FF7F"),  // SpringGreen (bright cyan-green)
+            HexToColor32("#FF00FF"),  // Magenta (vivid pink-purple)
+            HexToColor32("#7FFFD4"),  // Aquamarine (electric teal)
+            HexToColor32("#FF1493"),  // DeepPink (intense neon pink)
+            HexToColor32("#9400D3"),  // DarkViolet (deep purple)
+            HexToColor32("#00BFFF"),  // DeepSkyBlue (bright azure)
+            HexToColor32("#FF8C00"),  // DarkOrange (vibrant orange)
+            HexToColor32("#E6E6FA")   // Lavender (soft futuristic purple)
+        };
+
+        // First collect all data and find all unique timestamps
+        var allData = new Dictionary<string, (List<float> scores, List<DateTime> timestamps)>();
+        var allTimestamps = new HashSet<DateTime>();
+
+        foreach (var name in songNames)
+        {
+            var (scores, dateStrings) = DataManager.Instance.GetScoreProgression(name);
+            var parsedDates = new List<DateTime>();
+
+            foreach (var dateStr in dateStrings)
+            {
+                if (DateTime.TryParseExact(dateStr, "MMM dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                {
+                    parsedDates.Add(parsedDate);
+                    allTimestamps.Add(parsedDate);
+                }
+            }
+            string subName = name.Length > 5 ? name.Substring(0, 5) : name;
+            allData[subName] = (scores, parsedDates);
+            songStats.Add(new SongStatData { songName = subName, values = scores, timestamps = parsedDates });
+        }
+
+        if (lineChart == null) return;
+
+        lineChart.ClearData();
+
+        // Title
+        Title title = lineChart.EnsureChartComponent<Title>();
+        title.text = "Score Progression";
+        title.labelStyle.textStyle.color = HexToColor32("#E6A32B"); // Match your theme
+        title.labelStyle.textStyle.fontSize = 24;
+
+        // Lengend
+        Legend legend = lineChart.EnsureChartComponent<Legend>();
+        legend.labelStyle.textStyle.color = HexToColor32("#E6A32B");
+        if (songNames.Count > 1)
+            legend.show = true;
+        else
+            legend.show = false;
+
+        // Sort all timestamps
+        var sortedTimestamps = allTimestamps.OrderBy(t => t).ToList();
+
+        // Configure X-axis with all timestamps
+        var xAxis = lineChart.GetChartComponent<XAxis>();
+        xAxis.data.Clear();
+        xAxis.type = Axis.AxisType.Category;
+        xAxis.boundaryGap = true;
+
+        foreach (var timestamp in sortedTimestamps)
+        {
+            xAxis.data.Add(timestamp.ToString("MMM dd HH:mm"));
+        }
+
+        // Add series for each song
+        int colorIndex = 0;
+        foreach (var song in allData)
+        {
+            Line serie = lineChart.AddSerie<Line>(song.Key);
+            serie.symbol.type = SymbolType.Circle;
+            serie.symbol.size = 10;
+            serie.lineStyle.width = 2;
+            serie.ignore = true;
+            serie.ignoreValue = 0;
+
+            // Set color from palette
+            if (colorIndex < customColors.Count)
+            {
+                serie.lineStyle.color = customColors[colorIndex];
+                serie.itemStyle.color = customColors[colorIndex];
+            }
+            else
+            {
+                serie.lineStyle.color = Color.gray;
+                serie.itemStyle.color = Color.gray;
+            }
+            colorIndex++;
+
+
+            // Align data with master timestamp list
+            for (int i = 0; i < sortedTimestamps.Count; i++)
+            {
+                int dataIndex = song.Value.timestamps.IndexOf(sortedTimestamps[i]);
+                if (dataIndex >= 0 && dataIndex < song.Value.scores.Count)
+                {
+                    float value = song.Value.scores[dataIndex];
+                    serie.AddData(value);
+                }
+                else
+                {
+                    serie.AddData(0);
+                }
+            }
+
+        }
     }
 }
