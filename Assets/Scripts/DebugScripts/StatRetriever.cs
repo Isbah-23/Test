@@ -38,10 +38,10 @@ public class StatRetriever : MonoBehaviour
     void ShowSummary(string songName)
     {
         songNameText.text = songName;
-        var (average, best) = DataManager.Instance.GetSongPerformanceSummary(songName);
+        // var (average, best) = DataManager.Instance.GetSongPerformanceSummary(songName);
         
-        averageScore.text = $"Avg: {average:F1}%";
-        bestScore.text = $"Best: {best:F1}%";
+        // averageScore.text = $"Avg: {average:F1}%";
+        // bestScore.text = $"Best: {best:F1}%";
     }
     
     void DrawPieChart(Dictionary<string, float> distributionData)

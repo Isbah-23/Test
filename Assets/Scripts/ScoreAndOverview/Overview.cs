@@ -15,10 +15,10 @@ public class Overview : MonoBehaviour
 {
     private string midiFolderPath;
     List<string> allSongs = new List<string>();
-    public TMPro.TextMeshProUGUI selectedSong;
-    public GameObject selectionPanel;
-    public GameObject buttonPrefab;
-    public Transform content;
+    [SerializeField] TMPro.TextMeshProUGUI selectedSong;
+    [SerializeField] GameObject selectionPanel;
+    [SerializeField] GameObject buttonPrefab;
+    [SerializeField] Transform content;
 
     private bool isSpawned = false;
     private const int buttonCount = 10;
@@ -29,10 +29,10 @@ public class Overview : MonoBehaviour
     [SerializeField] XCharts.Runtime.LineChart lineChart;
     [SerializeField] XCharts.Runtime.BarChart barChart;
 
-    public TMPro.TextMeshProUGUI logPath;
-    public TMPro.TextMeshProUGUI bestScore;
-    public TMPro.TextMeshProUGUI bestPracticeScore;
-    public TMPro.TextMeshProUGUI averageScore;
+    [SerializeField] TMPro.TextMeshProUGUI logPath;
+    [SerializeField] TMPro.TextMeshProUGUI bestScore;
+    [SerializeField] TMPro.TextMeshProUGUI bestPracticeScore;
+    [SerializeField] TMPro.TextMeshProUGUI averageScore;
 
     
     private Dictionary<string, Line> lines = new Dictionary<string, Line>();
@@ -58,6 +58,7 @@ public class Overview : MonoBehaviour
         midiFolderPath = Application.streamingAssetsPath;
         SpawnButtons();
         DrawPieChart(DataManager.Instance.GetSongPlayDistribution());
+        GetLogPath();
     }
 
     private void SpawnButtons()
@@ -126,6 +127,7 @@ public class Overview : MonoBehaviour
         DrawSongProgressions(allSongs); // Do this after allSongs has been populated
         DrawMistakeHeatmap(allSongs);
         // DrawMistakeHeatmap("london_bridge");
+        GetScores(allSongs);
     }
 
     void SelectSong(string fileName)
@@ -135,11 +137,13 @@ public class Overview : MonoBehaviour
         {
             DrawSongProgressions(allSongs);
             DrawMistakeHeatmap(allSongs);
+            GetScores(allSongs);
         }
         else
         {
             DrawSongProgressions(new List<string> {fileName});
             DrawMistakeHeatmap(new List<string> {fileName});
+            GetScores(new List<string> {fileName});
         }
     }
 
@@ -323,26 +327,28 @@ public class Overview : MonoBehaviour
             barChart.Init();
             barChart.SetSize(800, 400);
             
-            Title title = barChart.EnsureChartComponent<Title>();
-            title.text = "Mistake Hotspots";
-            title.labelStyle.textStyle.color = HexToColor32("#E6A32B");
-            title.labelStyle.textStyle.fontSize = 24;
-            
             XAxis xAxis = barChart.EnsureChartComponent<XAxis>();
             xAxis.type = Axis.AxisType.Category;
             xAxis.boundaryGap = true;
             
             YAxis yAxis = barChart.EnsureChartComponent<YAxis>();
             yAxis.type = Axis.AxisType.Value;
-            
-            // Enable legend since we'll have multiple series
-            Legend legend = barChart.EnsureChartComponent<Legend>();
-            legend.show = true;
         }
 
         // Clear existing data
         barChart.ClearData();
         barChart.GetChartComponent<XAxis>().data.Clear();
+
+        // Title
+        Title title = barChart.EnsureChartComponent<Title>();
+        title.text = "Mistake Hotspots";
+        title.labelStyle.textStyle.color = HexToColor32("#E6A32B"); // Match your theme
+        title.labelStyle.textStyle.fontSize = 24;
+
+        // Lengend
+        Legend legend = barChart.EnsureChartComponent<Legend>();
+        legend.labelStyle.textStyle.color = HexToColor32("#E6A32B");
+        legend.show = songNames.Count > 1;
 
         // Gather all data and piano keys
         Dictionary<string, Dictionary<string, int>> allSongData = new Dictionary<string, Dictionary<string, int>>();
@@ -351,6 +357,7 @@ public class Overview : MonoBehaviour
         foreach (string song in songNames)
         {
             var mistakes = DataManager.Instance.GetMistakeHotspots(song);
+            string subName = name.Length > 4 ? name.Substring(0, 4) : name;
             allSongData[song] = mistakes;
             
             foreach (string key in mistakes.Keys)
@@ -381,7 +388,7 @@ public class Overview : MonoBehaviour
         for (int i = 0; i < songNames.Count; i++)
         {
             string song = songNames[i];
-            string displayName = song.Length > 10 ? song.Substring(0, 10) + "..." : song;
+            string displayName = song.Length > 4 ? song.Substring(0, 4) : song;
             
             Bar serie = barChart.AddSerie<Bar>(displayName);
             serie.stack = "stack1";
@@ -397,5 +404,33 @@ public class Overview : MonoBehaviour
         }
 
         barChart.RefreshChart();
+    }
+
+    void GetLogPath()
+    {
+        logPath.text = "Log Path:" + DataManager.Instance.GetPersistentDataPath();
+    }
+
+    void GetScores(List<string> songNames)
+    {
+        float highScore = 0;
+        float practiceHighScore = 0;
+        float average = 0;
+
+        foreach (string songName in songNames)
+        {
+            float current = 0;
+            current = DataManager.Instance.GetScore<float>($"{songName}_high_score", 0f);
+            if (current > highScore)
+                highScore = current;
+            current = DataManager.Instance.GetScore<float>($"{songName}_Practice_high_score", 0f);
+            if (current > practiceHighScore)
+                practiceHighScore = current;
+            average += DataManager.Instance.GetSongPerformanceSummary(songName);
+        }
+        average = average / songNames.Count();
+        bestScore.text = $"{highScore:F2}%";
+        bestPracticeScore.text = $"{practiceHighScore:F0}pts";
+        averageScore.text = $"{average:F2}%";
     }
 }

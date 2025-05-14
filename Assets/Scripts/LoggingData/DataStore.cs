@@ -486,17 +486,17 @@ public class DataManager : MonoBehaviour
     }
 
     // Get performance summary for a song
-    public (float averageScore, float bestScore) GetSongPerformanceSummary(string songName)
+    public float GetSongPerformanceSummary(string songName)
     {
         if (_gameData.TryGetValue(username, out UserData userData) && 
             userData.songStats.TryGetValue(songName, out SongStatistics stats))
         {
             float average = stats.last10Scores.Count > 0 ? stats.last10Scores.Average() : 0;
-            float best = stats.last10Scores.Count > 0 ? stats.last10Scores.Max() : 0;
+            // float best = stats.last10Scores.Count > 0 ? stats.last10Scores.Max() : 0;
             // float accuracy = 100f - (stats.totalWrongPresses / (float)(stats.totalPlays * 100)) * 100f; // Approximation
             
-            return (average, best);
+            return average;
         }
-        return (0, 0);
+        return 0;
     }
 }
