@@ -74,7 +74,7 @@ public class Overview : MonoBehaviour
     private IEnumerator LoadMidiFiles()
     {
         allSongs.Clear();
-        selectedSong = "All Songs";
+        selectedSong.text = "All Songs";
         List<string> midiFiles = new List<string>();
 
         string path = Application.streamingAssetsPath + "/midi_files.txt";
