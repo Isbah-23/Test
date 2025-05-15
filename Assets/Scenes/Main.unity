@@ -3401,10 +3401,10 @@ MonoBehaviour:
   pieChart: {fileID: 1207495206}
   lineChart: {fileID: 1815747686}
   barChart: {fileID: 1098158257}
-  logPath: {fileID: 0}
-  bestScore: {fileID: 0}
-  bestPracticeScore: {fileID: 0}
-  averageScore: {fileID: 0}
+  logPath: {fileID: 1781589699}
+  bestScore: {fileID: 302428675}
+  bestPracticeScore: {fileID: 2040791518}
+  averageScore: {fileID: 964473122}
 --- !u!114 &344359257
 MonoBehaviour:
   m_ObjectHideFlags: 0
