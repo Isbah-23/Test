@@ -250,40 +250,42 @@ public class DataManager : MonoBehaviour
     {
         _gameData = new Dictionary<string, UserData>(); // Default init
 
-        #if UNITY_ANDROID && !UNITY_EDITOR
-        string fullPath = Application.persistentDataPath + "/game_data.json";
-        #else
-        string fullPath = Path.Combine(Application.persistentDataPath, "game_data.json");
-        #endif
+        string path = Application.streamingAssetsPath + "/game_data.json";
+        string json = null;
 
-        if (!File.Exists(fullPath))
+    #if UNITY_ANDROID
+        UnityWebRequest request = UnityWebRequest.Get(path);
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
         {
+            Debug.LogError("Failed to load game data JSON: " + request.error);
             yield break;
         }
 
-        // Use UnityWebRequest for cross-platform reliability
-        using (UnityWebRequest request = UnityWebRequest.Get(fullPath))
+        json = request.downloadHandler.text;
+    #else
+        try
         {
-            yield return request.SendWebRequest();
-
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError($"Failed to load data: {request.error}");
-                yield break;
-            }
-
-            try
-            {
-                string json = request.downloadHandler.text;
-                GameDataWrapper wrapper = JsonUtility.FromJson<GameDataWrapper>(json);
-                _gameData = wrapper?.ToDictionary() ?? new Dictionary<string, UserData>();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Data parse failed: {e.Message}");
-            }
+            json = File.ReadAllText(path);
         }
+        catch (Exception e)
+        {
+            Debug.LogError("Failed to read game data JSON: " + e.Message);
+            yield break;
+        }
+    #endif
+
+        if (!string.IsNullOrEmpty(json))
+        {
+            GameDataWrapper wrapper = JsonUtility.FromJson<GameDataWrapper>(json);
+            _gameData = wrapper?.ToDictionary() ?? new Dictionary<string, UserData>();
+        }
+
+        yield return null;
     }
+
+
 
     public IEnumerator RecordPlaySession(string songName, float score, Dictionary<string, int> wrongKeyPresses)
     {
@@ -374,9 +376,9 @@ public class DataManager : MonoBehaviour
         string json = JsonUtility.ToJson(wrapper, true);
 
         #if UNITY_ANDROID && !UNITY_EDITOR
-        string fullPath = Application.persistentDataPath + "/game_data.json";
+        string fullPath = Application.streamingAssetsPath + "/game_data.json";
         #else
-        string fullPath = Path.Combine(Application.persistentDataPath, "game_data.json");
+        string fullPath = Path.Combine(Application.streamingAssetsPath, "game_data.json");
         #endif
 
         // Atomic write: Save to temp file first
