@@ -6,3 +6,6 @@ Interstellar
 Beethoven - Moonlight Sonata
 test
 Easy
+Chibuna-Hard
+Chibuna-Medium
+Chibuna_Version1
